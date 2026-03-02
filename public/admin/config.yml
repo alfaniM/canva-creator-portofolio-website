@@ -1,6 +1,8 @@
 backend:
   name: git-gateway
-  branch: main # Branch to update (optional; defaults to master)
+  branch: main
+  repo: alfaniM/canva-creator-portofolio-website # TAMBAHKAN BARIS INI (disesuaikan dengan username/repo)
+
 
 media_folder: "public/uploads" # Media files will be stored in the repo under public/uploads
 public_folder: "/uploads" # The src attribute for uploaded media will begin with /uploads
