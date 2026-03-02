@@ -48,7 +48,7 @@ collections:
               - {label: "Name", name: "name", widget: "string"}
               - {label: "Role", name: "role", widget: "string"}
               - {label: "Bio", name: "bio", widget: "text"}
-              - {label: "Photo URL", name: "photo_url", widget: "string"}
+              - {label: "Photo URL", name: "photo_url", widget: "image"}
           - label: "Contact Info"
             name: "contact"
             widget: "object"
