@@ -1,0 +1,61 @@
+---
+import siteData from '../data/site.json';
+const { personal } = siteData;
+---
+
+<section id="hero" class="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
+  <!-- Blobs -->
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <!-- Decorative shapes -->
+  <div class="deco-shape deco-ring" style="width:80px;height:80px;top:15%;right:12%"></div>
+  <div class="deco-shape deco-ring" style="width:50px;height:50px;bottom:20%;left:8%"></div>
+  <div class="deco-shape deco-dot" style="width:12px;height:12px;top:30%;left:15%"></div>
+  <div class="deco-shape deco-dot" style="width:8px;height:8px;bottom:35%;right:20%;animation-delay:-2s"></div>
+  <div class="deco-cross" style="top:25%;right:25%;animation: decoFloat2 5s ease-in-out infinite"></div>
+  <div class="deco-cross" style="bottom:30%;left:20%;animation: decoFloat2 7s ease-in-out infinite;animation-delay:-3s"></div>
+
+  <div class="max-w-6xl mx-auto px-6 w-full relative z-10">
+    <div class="flex flex-col md:flex-row items-center gap-12 md:gap-16">
+      <!-- Text content -->
+      <div class="flex-1 text-center md:text-left order-2 md:order-1">
+        <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-3 reveal">Hello, I'm</p>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 reveal" style="color: var(--text-primary)">
+          {personal.name}<span class="typing-cursor"></span>
+        </h1>
+        <p class="text-lg sm:text-xl text-[#00C4CC] font-semibold mb-5 reveal">
+          {personal.role}
+        </p>
+        <p class="leading-relaxed max-w-lg mx-auto md:mx-0 mb-8 reveal line-clamp-3" style="color: var(--text-secondary)">
+          {personal.bio}
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center md:justify-start reveal">
+          <a href="/works" class="btn-accent inline-flex items-center gap-2 text-white font-semibold px-8 py-3.5 rounded-full text-sm tracking-wide">
+            VIEW MY WORK
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+          <a href="/about" class="inline-flex items-center gap-2 font-semibold px-8 py-3.5 rounded-full text-sm tracking-wide border transition-all hover:border-[#00C4CC] hover:text-[#00C4CC]" style="color: var(--text-secondary); border-color: var(--border-color)">
+            MORE ABOUT ME
+          </a>
+        </div>
+      </div>
+
+      <!-- Profile image with 3D tilt -->
+      <div class="flex-1 flex justify-center order-1 md:order-2 reveal-scale">
+        <div class="tilt-wrapper relative">
+          <!-- Floating badges -->
+          <div class="float-badge absolute -top-4 -right-4 z-10 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg" style="background: linear-gradient(135deg, #00C4CC, #00A3AA)">
+            <i class="fa-solid fa-star mr-1"></i> Open to Work
+          </div>
+          <div class="float-badge absolute -bottom-3 -left-3 z-10 px-4 py-2 rounded-xl text-xs font-bold shadow-lg" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); animation-delay: -1.5s">
+            <i class="fa-solid fa-pen-nib text-[#00C4CC] mr-1"></i> Since 2019
+          </div>
+          <div id="tilt-card" class="tilt-card w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-xl border-4" style="border-color: var(--bg-card)">
+            <img src={personal.photo_url} alt={personal.name} class="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

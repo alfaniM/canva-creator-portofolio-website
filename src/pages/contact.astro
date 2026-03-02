@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import siteData from '../data/site.json';
+---
+<Layout title={`Contact | ${siteData.personal.name}`}>
+  <section class="pt-32 pb-24 px-6 max-w-4xl mx-auto text-center min-h-[70vh] flex flex-col justify-center">
+    <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-2 reveal">Contact</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-8 reveal" style="color: var(--text-primary)">Get In Touch</h1>
+    <div class="w-16 h-1 bg-[#00C4CC] rounded-full mx-auto mb-8"></div>
+    <p class="text-xl mb-12 max-w-2xl mx-auto reveal" style="color: var(--text-secondary)">
+      I'm currently available for freelance projects and full-time opportunities. If you have a project that needs a creative touch, feel free to reach out!
+    </p>
+    
+    <div class="reveal-scale">
+      <a href={`mailto:${siteData.contact.email}`} class="inline-flex items-center gap-3 bg-[#00C4CC] text-white font-bold px-10 py-5 rounded-full text-lg hover:bg-opacity-90 hover:shadow-xl transition-all hover:-translate-y-1">
+        <i class="fa-solid fa-paper-plane"></i>
+        Say Hello
+      </a>
+    </div>
+    
+    <div class="mt-20 flex justify-center gap-8 reveal">
+      <a href={siteData.contact.instagram} class="text-3xl hover:text-[#00C4CC] transition-colors" style="color: var(--text-muted)" aria-label="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+      <a href={siteData.contact.linkedin} class="text-3xl hover:text-[#00C4CC] transition-colors" style="color: var(--text-muted)" aria-label="LinkedIn">
+        <i class="fa-brands fa-linkedin-in"></i>
+      </a>
+      <a href={siteData.contact.behance} class="text-3xl hover:text-[#00C4CC] transition-colors" style="color: var(--text-muted)" aria-label="Behance">
+        <i class="fa-brands fa-behance"></i>
+      </a>
+    </div>
+  </section>
+</Layout>

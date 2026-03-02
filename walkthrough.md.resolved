@@ -1,0 +1,71 @@
+# Portfolio Website — Walkthrough (v2)
+
+## Project Structure
+
+```
+Portofolio Website/
+├── src/
+│   ├── data/portfolio.json      ← Editable content
+│   ├── pages/index.astro        ← Main page with all sections + JS
+│   └── styles/global.css        ← CSS with dark mode + animations
+├── netlify.toml                 ← Netlify deploy config
+└── package.json
+```
+
+## Enhancements Added
+
+### 🌙 Dark Mode
+- **Auto-detection**: Checks `prefers-color-scheme` on first visit
+- **Toggle button**: In navbar (both desktop and mobile). Moon ↔ Sun icon
+- **Persistence**: Saves preference to `localStorage`
+- **Anti-FOUC**: Inline `<script>` in `<head>` applies dark class before first paint
+- All colors use CSS variables that swap between light/dark
+
+### ✨ Scroll Reveal Animations
+4 animation types, all using `IntersectionObserver`:
+- **reveal** — fade-in-up (default)
+- **reveal-left / reveal-right** — slide from sides (used on timeline cards)
+- **reveal-scale** — scale-up fade (used on hero image)
+- **reveal-stagger** — parent class that auto-staggers children with delays
+
+### 🎨 Decorative Elements
+- Floating geometric shapes (rings, dots, crosses) in Hero, Work, and Timeline sections
+- Grid pattern overlay on stats bar
+- Section connector dots between major sections
+- Floating badges on hero image ("Open to Work", "Since 2019")
+
+### 📊 New Sections
+- **Stats bar** — 50+ Projects, 3+ Years, 2 Companies, 100% Passion (counters animate on scroll)
+- **Skills marquee** — Auto-scrolling carousel of skill tags with icons
+- **Footer CTA card** — Gradient "Let's Work Together" card with glowing animation
+
+### 🔄 Micro-Animations
+- Typing cursor blink after hero name
+- Pulse glow on timeline dots
+- Button shimmer on hover
+- Image zoom on card hover
+- Magnetic hover on social icons
+- Nav link underline draw on hover
+- Float bounce on hero badges
+- Shimmer loading placeholder for images
+
+## Verified Screenshots
+
+### Dark Mode
+![Hero section in dark mode with deep blue background, floating badges, decorative rings, and teal accents](C:/Users/alfan/.gemini/antigravity/brain/704aff36-ce96-41dd-b84c-e290c4c960f4/hero_section_verified_1772387769473.png)
+
+### Light Mode
+![Hero section in light mode with gradient blobs, clean layout, both CTA buttons, and moon toggle icon](C:/Users/alfan/.gemini/antigravity/brain/704aff36-ce96-41dd-b84c-e290c4c960f4/light_mode_hero_1772387825455.png)
+
+### Portfolio Cards (Light)
+![Portfolio grid with category tabs, 3-column card layout, teal OPEN IN CANVA buttons](C:/Users/alfan/.gemini/antigravity/brain/704aff36-ce96-41dd-b84c-e290c4c960f4/light_mode_timeline_1772387835376.png)
+
+## Deployment
+
+```bash
+npm run build    # → dist/
+# Push to GitHub → Netlify auto-deploys via netlify.toml
+```
+
+> [!NOTE]
+> Replace placeholder images in [portfolio.json](file:///d:/WORK/Everlenss/Portofolio%20Website/src/data/portfolio.json) with actual portfolio images. Update social links and email in [index.astro](file:///d:/WORK/Everlenss/Portofolio%20Website/src/pages/index.astro).

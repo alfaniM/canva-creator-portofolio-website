@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StatsBar from '../components/StatsBar.astro';
+import SkillsMarquee from '../components/SkillsMarquee.astro';
+import Timeline from '../components/Timeline.astro';
+import siteData from '../data/site.json';
+---
+<Layout title={`About | ${siteData.personal.name}`}>
+  <section class="pt-32 pb-16 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-8 reveal">
+      <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-2">About Me</p>
+      <h1 class="text-4xl sm:text-5xl font-bold" style="color: var(--text-primary)">
+        {siteData.personal.name}
+      </h1>
+      <div class="w-16 h-1 bg-[#00C4CC] rounded-full mx-auto mt-4"></div>
+    </div>
+    
+    <div class="prose prose-lg dark:prose-invert max-w-none text-lg leading-relaxed text-center reveal" style="color: var(--text-secondary)">
+      <p>{siteData.personal.bio}</p>
+    </div>
+  </section>
+  
+  <StatsBar />
+  <SkillsMarquee />
+  
+  <!-- Section connector dots -->
+  <div class="section-dots" style="background: var(--bg-primary)"><span></span><span></span><span></span></div>
+  
+  <Timeline />
+</Layout>

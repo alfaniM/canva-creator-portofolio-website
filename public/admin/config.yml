@@ -1,0 +1,75 @@
+backend:
+  name: git-gateway
+  branch: main # Branch to update (optional; defaults to master)
+
+media_folder: "public/uploads" # Media files will be stored in the repo under public/uploads
+public_folder: "/uploads" # The src attribute for uploaded media will begin with /uploads
+
+collections:
+  - name: "portfolio" # Used in routes, e.g., /admin/collections/portfolio
+    label: "Portfolio Work" # Used in the UI
+    folder: "src/content/portfolio" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    slug: "{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
+    fields: # The fields for each document, usually in front matter
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Image", name: "image", widget: "image"}
+      - {
+          label: "Category", 
+          name: "category", 
+          widget: "select", 
+          options: ["Designer at Swana", "Designer at Elhaqq", "Personal Project", "Other"]
+        }
+      - {label: "Canva Link", name: "canva_link", widget: "string", required: false}
+      - {label: "Order", name: "order", widget: "number", default: 0, required: false}
+      - {
+          label: "Layout Template", 
+          name: "layout_template", 
+          widget: "select", 
+          options: ["basic", "side-by-side"],
+          default: "basic"
+        }
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "site_data"
+    label: "Site Global Data"
+    files:
+      - label: "Site Configuration"
+        name: "site"
+        file: "src/data/site.json"
+        fields:
+          - label: "Personal Info"
+            name: "personal"
+            widget: "object"
+            fields:
+              - {label: "Name", name: "name", widget: "string"}
+              - {label: "Role", name: "role", widget: "string"}
+              - {label: "Bio", name: "bio", widget: "text"}
+              - {label: "Photo URL", name: "photo_url", widget: "string"}
+          - label: "Contact Info"
+            name: "contact"
+            widget: "object"
+            fields:
+              - {label: "Email", name: "email", widget: "string"}
+              - {label: "Instagram URL", name: "instagram", widget: "string"}
+              - {label: "LinkedIn URL", name: "linkedin", widget: "string"}
+              - {label: "Behance URL", name: "behance", widget: "string"}
+          - label: "Stats"
+            name: "stats"
+            widget: "list"
+            fields:
+              - {label: "Number", name: "number", widget: "string"}
+              - {label: "Label", name: "label", widget: "string"}
+          - label: "Experience"
+            name: "experience"
+            widget: "list"
+            fields:
+              - {label: "Year", name: "year", widget: "string"}
+              - {label: "Company", name: "company", widget: "string"}
+              - {label: "Role", name: "role", widget: "string"}
+              - {label: "Description", name: "description", widget: "text"}
+          - label: "Work Categories (Filters)"
+            name: "work_categories"
+            widget: "list"
+            field: {label: "Category", name: "category", widget: "string"}

@@ -1,0 +1,341 @@
+---
+import siteData from '../data/site.json';
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = `${siteData.personal.name} — ${siteData.personal.role}`, description = siteData.personal.bio.substring(0, 150) } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- View Transitions for seamless SPA-like navigation -->
+    <ClientRouter />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Netlify Identity Widget -->
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Inline script to prevent FOUC: detect dark mode before paint and handle view transitions -->
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+      
+      if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+      } else {
+          document.documentElement.classList.remove('dark');
+      }
+      window.localStorage.setItem('theme', theme);
+
+      // Re-apply theme on Astro view transitions
+      document.addEventListener('astro:after-swap', () => {
+         if (localStorage.getItem('theme') === 'dark') {
+             document.documentElement.classList.add('dark');
+         } else {
+             document.documentElement.classList.remove('dark');
+         }
+      });
+    </script>
+  </head>
+
+  <body>
+
+    <!-- ============================== NAVBAR ============================== -->
+    <nav id="navbar" class="navbar fixed top-0 left-0 w-full z-50 py-4 transition-all duration-300">
+      <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
+        <a href="/" class="text-xl font-bold tracking-tight" style="color: var(--text-primary)">
+          M<span class="text-[#00C4CC]">A</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="/" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">Home</a>
+          <a href="/about" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">About</a>
+          <a href="/works" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">Work</a>
+          <a href="/contact" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">Contact</a>
+          <!-- Dark mode toggle -->
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-3 md:hidden">
+          <button id="theme-toggle-mobile" class="theme-toggle" aria-label="Toggle dark mode">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button id="mobile-toggle" class="text-xl focus:outline-none" style="color: var(--text-primary)" aria-label="Toggle menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 pt-2 backdrop-blur-sm shadow-xl absolute top-full left-0 w-full border-b" style="background: var(--navbar-bg); border-color: var(--border-color)">
+        <a href="/" class="nav-link block py-3 text-sm font-medium transition-colors" style="color: var(--text-secondary)">Home</a>
+        <a href="/about" class="nav-link block py-3 text-sm font-medium transition-colors" style="color: var(--text-secondary)">About</a>
+        <a href="/works" class="nav-link block py-3 text-sm font-medium transition-colors" style="color: var(--text-secondary)">Work</a>
+        <a href="/contact" class="nav-link block py-3 text-sm font-medium transition-colors" style="color: var(--text-secondary)">Contact</a>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <!-- ============================== FOOTER CTA + FOOTER ============================== -->
+    <footer id="footer" class="py-16" style="background: var(--bg-secondary)">
+      <div class="max-w-6xl mx-auto px-6">
+        <!-- CTA Card -->
+        <div class="footer-cta-card mb-12 reveal-scale">
+          <h3 class="text-2xl sm:text-3xl font-bold text-white mb-3 relative z-10">Let's Work Together</h3>
+          <p class="text-white/80 max-w-md mx-auto mb-6 text-sm relative z-10">
+            Have a project in mind? I'd love to help bring your ideas to life with clean, engaging design.
+          </p>
+          <a href={`mailto:${siteData.contact.email}`} class="relative z-10 inline-flex items-center gap-2 bg-white text-[#00C4CC] font-bold px-8 py-3 rounded-full text-sm hover:shadow-lg transition-all hover:scale-105">
+            <i class="fa-solid fa-envelope"></i>
+            GET IN TOUCH
+          </a>
+        </div>
+
+        <!-- Footer bottom -->
+        <div class="text-center reveal">
+          <a href="/" class="text-2xl font-bold tracking-tight inline-block mb-6" style="color: var(--text-primary)">
+            M<span class="text-[#00C4CC]">A</span>
+          </a>
+          <div class="flex justify-center gap-4 mb-6">
+            <a href={`mailto:${siteData.contact.email}`} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="Email">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href={siteData.contact.instagram} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href={siteData.contact.linkedin} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="LinkedIn">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+            <a href={siteData.contact.behance} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="Behance">
+              <i class="fa-brands fa-behance"></i>
+            </a>
+          </div>
+          <p class="text-sm" style="color: var(--text-muted)">&copy; {new Date().getFullYear()} {siteData.personal.name}. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================== CLIENT-SIDE JAVASCRIPT ============================== -->
+    <script>
+      // Make active link state work with ViewTransitions
+      function applyActiveLink() {
+        const path = window.location.pathname;
+        let foundExact = false;
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('text-[#00C4CC]'); // Assuming this is your active color class
+          // We can also reset inline style if it conflicts
+          const href = link.getAttribute('href');
+          if (href === path) {
+            link.style.color = '#00C4CC';
+            foundExact = true;
+          } else {
+            link.style.color = 'var(--text-secondary)';
+          }
+        });
+        
+        // Match /works or /works/*
+        if (path.startsWith('/works')) {
+          document.querySelectorAll('.nav-link[href="/works"]').forEach(link => {
+             link.style.color = '#00C4CC';
+          });
+        }
+      }
+
+      function applyThemeIcon() {
+        const isDark = document.documentElement.classList.contains('dark');
+        document.querySelectorAll('#theme-toggle i, #theme-toggle-mobile i').forEach(icon => {
+          icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        });
+      }
+
+      function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        applyThemeIcon();
+      }
+
+      function initScripts() {
+        // Theme
+        applyThemeIcon();
+        applyActiveLink();
+
+        // 3D Tilt
+        const tiltCard = document.getElementById('tilt-card');
+        if (tiltCard) {
+          tiltCard.addEventListener('mousemove', (e) => {
+            const rect = tiltCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -12;
+            const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 12;
+            tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          });
+          tiltCard.addEventListener('mouseleave', () => {
+            tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+          });
+        }
+
+        // Scroll Reveal
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+        );
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .fade-in-up').forEach(el => {
+          revealObserver.observe(el);
+        });
+
+        // Counters
+        const counters = document.querySelectorAll('.stat-number');
+        const counterObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const el = entry.target;
+              // Add a slight delay just to ensure the element is painted
+              setTimeout(() => {
+                  const text = el.getAttribute('data-target') || el.textContent || '';
+                  if (!el.getAttribute('data-target')) el.setAttribute('data-target', text);
+                  const match = text.match(/^(\d+)/);
+                  if (match) {
+                    const target = parseInt(match[1]);
+                    const suffix = text.replace(match[1], '');
+                    let current = 0;
+                    const step = Math.max(1, Math.floor(target / 40));
+                    const timer = setInterval(() => {
+                      current += step;
+                      if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                      }
+                      el.textContent = current + suffix;
+                    }, 30);
+                  }
+              }, 100);
+              counterObserver.unobserve(el);
+            }
+          });
+        }, { threshold: 0.5 });
+        counters.forEach(c => counterObserver.observe(c));
+
+        // Tab Filtering
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        if (tabBtns.length > 0 && !window.tabListenerAdded) {
+          window.tabListenerAdded = true;
+          document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.tab-btn');
+            if (btn) {
+              document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+
+              const category = btn.getAttribute('data-category');
+              document.querySelectorAll('.portfolio-card').forEach(card => {
+                const match = category === 'All' || card.getAttribute('data-category') === category;
+                card.classList.toggle('hidden-card', !match);
+              });
+            }
+          });
+        }
+      }
+
+      // Initializing on first load
+      initScripts();
+      
+      // Initializing after view transitions
+      document.addEventListener('astro:after-swap', initScripts);
+
+      // Delegated events for theme toggle and mobile menu
+      if (!window.globalEventsAdded) {
+        window.globalEventsAdded = true;
+        
+        // Theme toggle
+        document.addEventListener('click', (e) => {
+          if (e.target.closest('#theme-toggle, #theme-toggle-mobile')) {
+            toggleTheme();
+          }
+        });
+        
+        // Mobile menu
+        document.addEventListener('click', (e) => {
+          const toggle = e.target.closest('#mobile-toggle');
+          const menu = document.getElementById('mobile-menu');
+          if (toggle) {
+            menu?.classList.toggle('hidden');
+            const icon = toggle.querySelector('i');
+            icon?.classList.toggle('fa-bars');
+            icon?.classList.toggle('fa-xmark');
+          } else if (e.target.closest('#mobile-menu a')) {
+            menu?.classList.add('hidden');
+            const toggleIcon = document.querySelector('#mobile-toggle i');
+            toggleIcon?.classList.add('fa-bars');
+            toggleIcon?.classList.remove('fa-xmark');
+          }
+        });
+
+        // Navbar scroll
+        window.addEventListener('scroll', () => {
+          const navbar = document.getElementById('navbar');
+          if (navbar) {
+             if (window.scrollY > 50) {
+                 navbar.classList.add('scrolled');
+             } else {
+                 navbar.classList.remove('scrolled');
+             }
+          }
+        }, { passive: true });
+        
+        // System preference listener
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (!localStorage.getItem('theme')) {
+            document.documentElement.classList.toggle('dark', e.matches);
+            applyThemeIcon();
+          }
+        });
+      }
+      
+      // Netlify Identity Redirection setup
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

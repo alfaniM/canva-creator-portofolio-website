@@ -1,0 +1,99 @@
+{
+    "personal": {
+        "name": "Muhammad Aulia",
+        "role": "Graphic Designer",
+        "bio": "Passionate graphic designer and active Canva user since 2019. I specialize in turning complex ideas into clean, engaging visuals. I am eager to step up as a Template Creator to design high-quality, versatile templates that help users worldwide bring their ideas to life.",
+        "photo_url": "https://via.placeholder.com/500"
+    },
+    "contact": {
+        "email": "hello@muhammadaulia.com",
+        "instagram": "#",
+        "linkedin": "#",
+        "behance": "#"
+    },
+    "skills": [
+        {
+            "name": "Canva",
+            "icon": "fa-solid fa-paintbrush"
+        },
+        {
+            "name": "Social Media Design",
+            "icon": "fa-solid fa-mobile-screen"
+        },
+        {
+            "name": "Branding",
+            "icon": "fa-solid fa-palette"
+        },
+        {
+            "name": "Typography",
+            "icon": "fa-solid fa-font"
+        },
+        {
+            "name": "Layout Design",
+            "icon": "fa-solid fa-table-columns"
+        },
+        {
+            "name": "Wedding Invitation",
+            "icon": "fa-solid fa-heart"
+        },
+        {
+            "name": "Print Design",
+            "icon": "fa-solid fa-print"
+        },
+        {
+            "name": "Poster Design",
+            "icon": "fa-solid fa-image"
+        },
+        {
+            "name": "Infographic",
+            "icon": "fa-solid fa-chart-pie"
+        },
+        {
+            "name": "Presentation",
+            "icon": "fa-solid fa-display"
+        }
+    ],
+    "stats": [
+        {
+            "number": "50+",
+            "label": "Projects Done"
+        },
+        {
+            "number": "3+",
+            "label": "Years Experience"
+        },
+        {
+            "number": "2",
+            "label": "Companies"
+        },
+        {
+            "number": "100%",
+            "label": "Passion"
+        }
+    ],
+    "experience": [
+        {
+            "year": "2025 — Present",
+            "company": "Everlenss",
+            "role": "Creative Founder",
+            "description": "Founded a creative studio focused on branding, social media content, and Canva template design."
+        },
+        {
+            "year": "2025 — Present",
+            "company": "Swana Wedding Organizer",
+            "role": "Graphic Designer",
+            "description": "Designing elegant wedding invitations, branding materials, and social media content."
+        },
+        {
+            "year": "2023 — 2024",
+            "company": "Elhaqq Tour & Travel",
+            "role": "Graphic Designer",
+            "description": "Created promotional graphics, brochures, and social media assets for Hajj & Umrah packages."
+        }
+    ],
+    "work_categories": [
+        "All",
+        "Designer at Swana",
+        "Designer at Elhaqq"
+    ]
+}

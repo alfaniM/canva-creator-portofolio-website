@@ -1,0 +1,17 @@
+---
+import siteData from '../data/site.json';
+const { stats } = siteData;
+---
+<div class="py-12 relative overflow-hidden" style="background: var(--bg-secondary)">
+  <div class="grid-pattern absolute inset-0 pointer-events-none"></div>
+  <div class="max-w-4xl mx-auto px-6 relative z-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal-stagger">
+      {stats.map((s, i) => (
+        <div class="stat-item reveal" style={`--i:${i}`}>
+          <div class="stat-number">{s.number}</div>
+          <div class="stat-label">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

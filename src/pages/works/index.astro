@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PortfolioGrid from '../../components/PortfolioGrid.astro';
+import siteData from '../../data/site.json';
+---
+<Layout title={`Works | ${siteData.personal.name}`}>
+  <div class="pt-20">
+    <PortfolioGrid showFilters={true} />
+  </div>
+</Layout>

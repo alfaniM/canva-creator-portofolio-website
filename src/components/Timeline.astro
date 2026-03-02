@@ -1,0 +1,46 @@
+---
+import siteData from '../data/site.json';
+const { experience } = siteData;
+---
+<section id="timeline" class="parallax-section py-24 relative">
+  <!-- Decorative shapes -->
+  <div class="deco-shape deco-ring" style="width:70px;height:70px;top:10%;right:10%"></div>
+  <div class="deco-shape deco-dot" style="width:10px;height:10px;top:50%;left:6%;animation-delay:-3s"></div>
+  <div class="deco-cross" style="bottom:15%;right:12%;animation: decoFloat2 8s ease-in-out infinite"></div>
+
+  <div class="max-w-5xl mx-auto px-6 relative z-10">
+    <!-- Section header -->
+    <div class="text-center mb-16 reveal">
+      <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-2">Experience</p>
+      <h2 class="text-3xl sm:text-4xl font-bold" style="color: var(--text-primary)">Professional Journey</h2>
+      <div class="w-16 h-1 bg-[#00C4CC] rounded-full mx-auto mt-4"></div>
+      <p class="mt-4 max-w-md mx-auto text-sm" style="color: var(--text-muted)">
+        From passion projects to professional roles — here's my creative path.
+      </p>
+    </div>
+
+    <!-- Timeline -->
+    <div id="timeline-container" class="relative">
+      <div class="timeline-line"></div>
+
+      {experience.map((item, idx) => {
+        const isLeft = idx % 2 === 0;
+        return (
+          <div class={`timeline-item relative mb-12 ${isLeft ? 'reveal-left' : 'reveal-right'}`}>
+            <div class="timeline-dot pulse-glow"></div>
+            <div class={`md:w-5/12 ${isLeft ? 'md:mr-auto md:pr-12' : 'md:ml-auto md:pl-12'} pl-14 md:pl-0`}>
+              <div class="timeline-card rounded-2xl p-6 shadow-md border" style="border-color: var(--border-color)">
+                <span class="inline-block text-xs font-bold text-[#00C4CC] bg-[#00C4CC]/10 px-3 py-1 rounded-full mb-3">
+                  {item.year}
+                </span>
+                <h3 class="text-lg font-bold" style="color: var(--text-primary)">{item.company}</h3>
+                <p class="text-[#00C4CC] font-medium text-sm mb-2">{item.role}</p>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted)">{item.description}</p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

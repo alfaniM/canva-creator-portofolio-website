@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import PortfolioGrid from '../components/PortfolioGrid.astro';
+---
+<Layout>
+  <Hero />
+  
+  <!-- Section connector dots -->
+  <div class="section-dots" style="background: var(--bg-primary)"><span></span><span></span><span></span></div>
+  
+  <PortfolioGrid limit={3} showFilters={false} />
+</Layout>

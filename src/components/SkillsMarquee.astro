@@ -1,0 +1,14 @@
+---
+import siteData from '../data/site.json';
+const { skills } = siteData;
+---
+<div class="py-10 overflow-hidden" style="background: var(--bg-primary)">
+  <div class="marquee-track">
+    {[...skills, ...skills, ...skills].map((s) => (
+      <span class="skill-tag">
+        <i class={s.icon}></i>
+        {s.name}
+      </span>
+    ))}
+  </div>
+</div>

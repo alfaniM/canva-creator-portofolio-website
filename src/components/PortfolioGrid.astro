@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import siteData from '../data/site.json';
+
+// Fetch items from Astro Content Collections
+const allPortfolio = await getCollection('portfolio');
+const portfolioItems = allPortfolio.sort((a, b) => a.data.order - b.data.order);
+const { work_categories } = siteData;
+
+interface Props {
+  limit?: number; // Optional limit for Home page
+  showFilters?: boolean; // Whether to show category filters
+}
+
+const { limit, showFilters = true } = Astro.props;
+const displayItems = limit ? portfolioItems.slice(0, limit) : portfolioItems;
+---
+<section id="my-work" class="py-24 relative" style="background: var(--bg-secondary)">
+  <!-- Decorative shapes -->
+  <div class="deco-shape deco-ring" style="width:100px;height:100px;top:8%;left:5%"></div>
+  <div class="deco-shape deco-dot" style="width:10px;height:10px;bottom:15%;right:8%;animation-delay:-1s"></div>
+  <div class="deco-cross" style="top:12%;right:8%;animation: decoFloat2 6s ease-in-out infinite"></div>
+
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <!-- Section header -->
+    <div class="text-center mb-14 reveal">
+      <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-2">Portfolio</p>
+      <h2 class="text-3xl sm:text-4xl font-bold" style="color: var(--text-primary)">
+        {limit ? 'Featured Works' : 'My Work'}
+      </h2>
+      <div class="w-16 h-1 bg-[#00C4CC] rounded-full mx-auto mt-4"></div>
+      <p class="mt-4 max-w-md mx-auto text-sm" style="color: var(--text-muted)">
+        A curated collection of design work across branding, social media, and print.
+      </p>
+    </div>
+
+    <!-- Category tabs -->
+    {showFilters && (
+      <div id="work-tabs" class="flex flex-wrap justify-center gap-4 mb-12 reveal">
+        {work_categories.map((cat, i) => (
+          <button
+            class={`tab-btn px-5 py-2 text-sm font-medium rounded-full ${i === 0 ? 'active' : ''}`}
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    )}
+
+    <!-- Portfolio grid -->
+    <div id="portfolio-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 reveal-stagger">
+      {displayItems.map((item, idx) => (
+        <a 
+          href={`/works/${item.id || item.slug}`} 
+          class="portfolio-card block rounded-2xl overflow-hidden shadow-md reveal transition-transform hover:-translate-y-2 hover:shadow-xl"
+          data-category={item.data.category}
+          style={`--i:${idx}`}
+        >
+          <div class="overflow-hidden h-52 relative">
+            <div class="img-shimmer absolute inset-0"></div>
+            <img src={item.data.image} alt={item.data.title} class="w-full h-full object-cover relative z-10 transition-transform duration-500 hover:scale-110" loading="lazy" />
+          </div>
+          <div class="p-5" style="background: var(--bg-card)">
+            <span class="text-xs font-semibold text-[#00C4CC] uppercase tracking-wider">{item.data.category}</span>
+            <h3 class="text-lg font-bold mt-1 mb-2" style="color: var(--text-primary)">{item.data.title}</h3>
+            <p class="text-sm leading-relaxed mb-4 line-clamp-2" style="color: var(--text-muted)">{item.data.description}</p>
+            <div class="text-[#00C4CC] text-xs font-semibold inline-flex items-center gap-2">
+              VIEW DETAILS 
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    {limit && (
+      <div class="mt-12 text-center reveal">
+        <a href="/works" class="btn-accent inline-flex items-center gap-2 text-white font-semibold px-8 py-3.5 rounded-full text-sm">
+           SEE ALL WORKS
+        </a>
+      </div>
+    )}
+  </div>
+</section>
