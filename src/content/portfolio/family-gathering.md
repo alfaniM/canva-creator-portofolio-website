@@ -2,8 +2,8 @@
 title: Family Gathering
 description: Family Gathering PT. Persada Cipta Usaha
 image: /uploads/feed-m.alfaniii.png
-category: Personal Project
+category: Designer at Swana
 order: 0
-layout_template: side-by-side
+layout_template: basic
 ---
 Ini hasil foto dongs
