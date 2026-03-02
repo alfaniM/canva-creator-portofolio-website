@@ -15,23 +15,61 @@ const { Content } = await render(entry);
 const { layout_template = 'basic' } = entry.data;
 ---
 <Layout title={`${entry.data.title} | Portfolio`}>
-  <section class="pt-32 pb-24 px-6 max-w-6xl mx-auto min-h-screen">
+  <section class="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
     <div class="mb-12 text-center reveal">
       <a href="/works" class="text-sm font-semibold text-[#00C4CC] uppercase tracking-wider hover:underline mb-4 inline-block">
         <i class="fa-solid fa-arrow-left mr-2"></i>Back to Works
       </a>
-      <h1 class="text-4xl md:text-5xl font-extrabold mt-2 mb-6" style="color: var(--text-primary)">{entry.data.title}</h1>
-      <p class="text-xl max-w-2xl mx-auto" style="color: var(--text-secondary)">{entry.data.description}</p>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mt-2 mb-6 tracking-tight" style="color: var(--text-primary)">{entry.data.title}</h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed" style="color: var(--text-secondary)">{entry.data.description}</p>
     </div>
     
-    {layout_template === 'basic' ? (
+    {layout_template === 'bento' ? (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 reveal max-w-6xl mx-auto">
+        <!-- Main Image Span -->
+        <div class="md:col-span-2 rounded-3xl overflow-hidden shadow-xl border-4 h-full min-h-[400px]" style="border-color: var(--bg-card)">
+          <img src={entry.data.image} alt={entry.data.title} class="w-full h-full object-cover" />
+        </div>
+        
+        <!-- Info Cards Stack -->
+        <div class="flex flex-col gap-6 h-full">
+          <div class="p-8 rounded-3xl border flex-1 flex flex-col justify-center transition-transform hover:-translate-y-1" style="background: var(--bg-card); border-color: var(--border-color)">
+             <div class="text-[#00C4CC] mb-3 text-3xl"><i class="fa-solid fa-tag"></i></div>
+             <p class="text-sm font-semibold tracking-wide uppercase mb-1" style="color: var(--text-muted)">Category</p>
+             <h3 class="text-xl font-bold" style="color: var(--text-primary)">{entry.data.category}</h3>
+          </div>
+          
+          <div class="p-8 rounded-3xl border flex-1 flex flex-col justify-center transition-transform hover:-translate-y-1" style="background: var(--bg-card); border-color: var(--border-color)">
+             <div class="text-[#00C4CC] mb-3 text-3xl"><i class="fa-solid fa-layer-group"></i></div>
+             <p class="text-sm font-semibold tracking-wide uppercase mb-1" style="color: var(--text-muted)">Project Type</p>
+             <h3 class="text-xl font-bold" style="color: var(--text-primary)">Template Design</h3>
+          </div>
+
+          {entry.data.canva_link && entry.data.canva_link !== '#' && (
+            <div class="p-6 rounded-3xl border flex items-center justify-center transition-transform hover:scale-[1.02]" style="background: var(--bg-primary); border-color: var(--border-color)">
+               <a href={entry.data.canva_link} target="_blank" rel="noopener noreferrer" class="btn-accent w-full text-center text-white font-bold px-6 py-4 rounded-full text-sm flex items-center justify-center gap-2">
+                 OPEN IN CANVA
+                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
+               </a>
+            </div>
+          )}
+        </div>
+        
+        <!-- Full Width Content Area -->
+        <div class="md:col-span-3 mt-8 p-8 md:p-12 rounded-3xl border shadow-sm" style="background: var(--bg-card); border-color: var(--border-color)">
+          <div class="prose prose-xl md:prose-2xl dark:prose-invert max-w-4xl mx-auto leading-loose" style="color: var(--text-secondary)">
+            <Content />
+          </div>
+        </div>
+      </div>
+    ) : layout_template === 'basic' ? (
       <>
         <div class="rounded-3xl overflow-hidden shadow-2xl mb-16 reveal-scale relative border-4 w-full max-w-4xl mx-auto" style="border-color: var(--bg-card)">
           <img src={entry.data.image} alt={entry.data.title} class="w-full h-auto object-cover" />
         </div>
         
-        <div class="flex flex-col md:flex-row gap-12 reveal max-w-4xl mx-auto">
-          <div class="flex-1 prose prose-lg dark:prose-invert" style="color: var(--text-secondary)">
+        <div class="flex flex-col md:flex-row gap-16 reveal max-w-5xl mx-auto">
+          <div class="flex-1 prose prose-xl dark:prose-invert leading-relaxed" style="color: var(--text-secondary)">
             <Content />
           </div>
           
@@ -67,12 +105,12 @@ const { layout_template = 'basic' } = entry.data;
             <Content />
           </div>
           
-          <div class="p-8 rounded-2xl border w-full" style="background: var(--bg-card); border-color: var(--border-color)">
+          <div class="p-8 rounded-3xl border shadow-sm" style="background: var(--bg-card); border-color: var(--border-color)">
             <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary)">Project Info</h3>
-            <ul class="space-y-4 text-sm" style="color: var(--text-secondary)">
+            <ul class="space-y-6 text-base" style="color: var(--text-secondary)">
               <li>
-                <strong style="color: var(--text-primary)">Category:</strong><br/>
-                {entry.data.category}
+                <p class="text-sm font-semibold tracking-wide uppercase mb-1" style="color: var(--text-muted)">Category</p>
+                <span class="font-medium text-lg" style="color: var(--text-primary)">{entry.data.category}</span>
               </li>
               {entry.data.canva_link && entry.data.canva_link !== '#' && (
                 <li>
@@ -87,5 +125,71 @@ const { layout_template = 'basic' } = entry.data;
         </div>
       </div>
     )}
+
+    {/* Swipeable Gallery Section */}
+    {entry.data.gallery && entry.data.gallery.length > 0 && (
+      <div class="mt-24 mb-12 max-w-7xl mx-auto reveal">
+        <div class="flex items-center justify-between mb-8 px-2">
+          <h2 class="text-3xl font-bold" style="color: var(--text-primary)">Project Gallery</h2>
+          <div class="flex gap-3">
+             <button id="scroll-left" class="w-12 h-12 rounded-full border flex items-center justify-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800" style="border-color: var(--border-color); color: var(--text-primary)" aria-label="Scroll left">
+                <i class="fa-solid fa-chevron-left"></i>
+             </button>
+             <button id="scroll-right" class="w-12 h-12 rounded-full border flex items-center justify-center transition-colors hover:bg-gray-100 dark:hover:bg-gray-800" style="border-color: var(--border-color); color: var(--text-primary)" aria-label="Scroll right">
+                <i class="fa-solid fa-chevron-right"></i>
+             </button>
+          </div>
+        </div>
+        
+        <div id="gallery-container" class="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide" style="-webkit-overflow-scrolling: touch; scroll-behavior: smooth;">
+          {entry.data.gallery.map((img: string, index: number) => (
+            <div class="flex-none w-[85%] md:w-[60%] lg:w-[45%] snap-center rounded-3xl overflow-hidden shadow-lg border-2 h-[300px] sm:h-[400px] md:h-[500px]" style="border-color: var(--bg-card)">
+              <img src={img} alt={`${entry.data.title} gallery image ${index + 1}`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
   </section>
+
+  <style>
+    /* Hide scrollbar for gallery but keep functionality */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+  </style>
+
+  <script>
+    // Initialize gallery scroll buttons
+    function initGallery() {
+      const container = document.getElementById('gallery-container');
+      const leftBtn = document.getElementById('scroll-left');
+      const rightBtn = document.getElementById('scroll-right');
+
+      if (container && leftBtn && rightBtn) {
+        // Scroll amount is roughly one card width
+        const getScrollAmount = () => {
+          const card = container.firstElementChild as HTMLElement;
+          return card ? card.offsetWidth + 24 : 400; // 24 is the gap
+        };
+
+        leftBtn.addEventListener('click', () => {
+          container.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+
+        rightBtn.addEventListener('click', () => {
+          container.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+      }
+    }
+
+    // Run on initial load and after view transitions
+    initGallery();
+    document.addEventListener('astro:after-swap', initGallery);
+  </script>
 </Layout>

@@ -9,7 +9,8 @@ const portfolioCollection = defineCollection({
         category: z.string(),
         canva_link: z.string().optional(),
         order: z.number().default(0),
-        layout_template: z.enum(['basic', 'side-by-side']).default('basic'),
+        gallery: z.array(z.string()).optional(),
+        layout_template: z.enum(['basic', 'side-by-side', 'bento']).default('basic'),
     }),
 });
 

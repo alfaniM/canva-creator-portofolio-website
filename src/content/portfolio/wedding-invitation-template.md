@@ -5,7 +5,11 @@ image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1469
 category: "Designer at Swana"
 canva_link: "https://canva.com"
 order: 1
-layout_template: "side-by-side"
+layout_template: "bento"
+gallery:
+  - "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1510076857176-7cefa3ac81eb?q=80&w=1471&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1327&auto=format&fit=crop"
 ---
 
 ## Project Overview
@@ -20,9 +24,4 @@ Couples often struggle to find templates that feel luxurious without being overl
 
 1. **Typography First:** Selected a classic serif font paired with a clean sans-serif for readability.
 2. **Subtle Accents:** Added a muted floral motif that doesn't overpower the text.
-3. **Color Palette:** Focused on champagne, ivory, and soft gold tones.
-
-> "The perfect blend of tradition and modern minimalism. It made our special day feel incredibly premium right from the invitation." - Happy Client
-
-### Gallery
-*(You can imagine more details or images here in a real scenario)*
+...

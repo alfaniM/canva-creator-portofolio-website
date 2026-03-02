@@ -26,10 +26,17 @@ collections:
       - {label: "Canva Link", name: "canva_link", widget: "string", required: false}
       - {label: "Order", name: "order", widget: "number", default: 0, required: false}
       - {
+          label: "Gallery Images",
+          name: "gallery",
+          widget: "list",
+          required: false,
+          field: {label: "Image", name: "image", widget: "image"}
+        }
+      - {
           label: "Layout Template", 
           name: "layout_template", 
           widget: "select", 
-          options: ["basic", "side-by-side"],
+          options: ["basic", "side-by-side", "bento"],
           default: "basic"
         }
       - {label: "Body", name: "body", widget: "markdown"}

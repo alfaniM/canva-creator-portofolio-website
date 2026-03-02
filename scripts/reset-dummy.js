@@ -15,7 +15,11 @@ image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1469
 category: "Designer at Swana"
 canva_link: "https://canva.com"
 order: 1
-layout_template: "side-by-side"
+layout_template: "bento"
+gallery:
+  - "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1510076857176-7cefa3ac81eb?q=80&w=1471&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1327&auto=format&fit=crop"
 ---
 
 ## Project Overview
@@ -78,7 +82,10 @@ image: "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1374
 category: "Designer at Elhaqq"
 canva_link: "https://canva.com"
 order: 4
-layout_template: "side-by-side"
+layout_template: "bento"
+gallery:
+  - "https://images.unsplash.com/photo-1564769662533-4f00a87b4156?q=80&w=1454&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1579450841285-d8ae0a8af0fe?q=80&w=1443&auto=format&fit=crop"
 ---
 
 ## Digital Campaign Context
