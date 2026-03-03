@@ -2,14 +2,20 @@
 title: Enggagment Design for Instagram Post
 description: Beautifully crafted bridal shower invitation card with floral
   motifs and pastel watercolor textures.
-image: "/uploads/everlens-instagram-post-engagement.png"
-category: "Everlenss"
-canva_link: "https://www.canva.com/design/DAHCuLF_5Qc/cChCj-npyLmJ24WUgXelNA/edit?utm_content=DAHCuLF_5Qc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+image: /uploads/everlens-instagram-post-engagement.png
+category: Everlenss
+canva_link: https://www.canva.com/design/DAHCuLF_5Qc/cChCj-npyLmJ24WUgXelNA/edit?utm_content=DAHCuLF_5Qc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 order: 1
 gallery:
-  - "/uploads/everlens-instagram-post-engagement.png"
-  - "/uploads/2.png"
-layout_template: "bento"
+  - /uploads/1.png
+  - /uploads/2.png
+  - /uploads/3.png
+  - /uploads/10.png
+  - /uploads/7.png
+  - /uploads/8.png
+  - /uploads/8.png
+  - /uploads/5.png
+layout_template: bento
 ---
 
 ## A Touch of Spring
