@@ -12,7 +12,7 @@ gallery:
   - /uploads/3.png
   - /uploads/10.png
   - /uploads/7.png
-  - /uploads/8.png
+  - /uploads/feed-3.png
   - /uploads/8.png
   - /uploads/5.png
 layout_template: bento
