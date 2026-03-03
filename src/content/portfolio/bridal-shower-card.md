@@ -2,11 +2,16 @@
 title: Bridal Shower Card
 description: Beautifully crafted bridal shower invitation card with floral
   motifs and pastel watercolor textures.
-image: /uploads/feed-m.alfaniii.png
-category: Designer at Swana
-canva_link: https://canva.com
+image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1470&auto=format&fit=crop"
+category: "Swana Wedding Organizer"
+canva_link: "https://canva.com"
 order: 2
-layout_template: basic
+layout_template: "bento"
+gallery:
+  - "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?q=80&w=1374&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1470&auto=format&fit=crop"
 ---
 
 ## A Touch of Spring

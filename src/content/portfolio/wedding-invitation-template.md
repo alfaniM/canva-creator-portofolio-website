@@ -1,18 +1,18 @@
 ﻿---
 title: "Wedding Invitation Template"
 description: "Clean, elegant wedding invitation template with a modern minimalist design, featuring delicate typography and soft floral accents."
-image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1469&auto=format&fit=crop"
+image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1470&auto=format&fit=crop"
 category: "Swana Wedding Organizer"
 canva_link: "https://canva.com"
 order: 1
 layout_template: "bento"
 gallery:
-  - "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1470&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1510076857176-7cefa3ac81eb?q=80&w=1471&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1327&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1606216840922-4dd05ba8d0e5?q=80&w=1474&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1374&auto=format&fit=crop"
   - "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1470&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1482849297070-f4fae2173efe?q=80&w=1527&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?q=80&w=1374&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1470&auto=format&fit=crop"
   - "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1374&auto=format&fit=crop"
 ---
 

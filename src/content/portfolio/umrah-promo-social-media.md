@@ -1,18 +1,18 @@
 ﻿---
 title: "Umrah Promo Social Media"
 description: "Engaging feed post design for travel agency social media campaigns focusing on spiritual journeys."
-image: "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1374&auto=format&fit=crop"
+image: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1470&auto=format&fit=crop"
 category: "Elhaqq Tour & Travel"
 canva_link: "https://canva.com"
 order: 4
 layout_template: "bento"
 gallery:
-  - "https://images.unsplash.com/photo-1564769662533-4f00a87b4156?q=80&w=1454&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1579450841285-d8ae0a8af0fe?q=80&w=1443&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1527&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1591604466107-ec97de577aff?q=80&w=1471&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1608236415053-8fa36b407714?q=80&w=1374&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1574685807095-f4481c4c85e0?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1374&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1374&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=1470&auto=format&fit=crop"
+  - "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1469&auto=format&fit=crop"
 ---
 
 ## Digital Campaign Context

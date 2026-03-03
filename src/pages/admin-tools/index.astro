@@ -1,0 +1,422 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Admin Tools | Portfolio Manager">
+  <div class="pt-28 pb-20 px-6 max-w-6xl mx-auto min-h-screen" style="color: var(--text-primary)">
+    
+    <div class="mb-10">
+      <h1 class="text-4xl font-extrabold mb-3">Admin Tools</h1>
+      <p class="text-lg" style="color: var(--text-secondary)">
+        Local utility for bulk importing portfolio items and managing gallery images.
+      </p>
+    </div>
+
+    <!-- Tool Tabs -->
+    <div class="flex gap-4 border-b mb-8" style="border-color: var(--border-color)">
+      <button class="tool-tab active" data-target="csv">CSV Bulk Import</button>
+      <button class="tool-tab" data-target="gallery">Image Gallery Builder</button>
+    </div>
+
+    <!-- 1. CSV BULK IMPORT -->
+    <div id="csv-tool" class="tool-view active glass-panel">
+      <h2 class="text-2xl font-bold mb-4">CSV to Portfolio Items</h2>
+      <p class="mb-4 text-sm max-w-2xl" style="color: var(--text-secondary)">
+        Paste your CSV data here. It should have headers: <code>title, description, image, category, canva_link, order, layout_template</code>. 
+        Clicking 'Generate ZIP' will create a zip file with <code>.md</code> files ready to extract into <code>src/content/portfolio/</code>.
+      </p>
+      
+      <textarea id="csv-input" class="w-full h-48 p-4 rounded-xl border mb-4 font-mono text-sm" 
+        style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)"
+        placeholder="title,description,image,category,canva_link,order,layout_template&#10;My New Post,Awesome design,/uploads/cover.jpg,All,https://canva.com,1,bento"
+      ></textarea>
+      
+      <button id="btn-csv-zip" class="btn-primary">
+        <i class="fa-solid fa-file-zipper mr-2"></i> Generate Markdown ZIP
+      </button>
+    </div>
+
+    <!-- 2. IMAGE GALLERY BUILDER -->
+    <div id="gallery-tool" class="tool-view hidden glass-panel">
+      <h2 class="text-2xl font-bold mb-4">Mass Image Upload & Reorder</h2>
+      <p class="mb-4 text-sm max-w-2xl" style="color: var(--text-secondary)">
+        Select or drop multiple images here. Drag to reorder them (Instagram style). Click an image to crop it. 
+        When done, export a ZIP containing the images for <code>public/uploads/</code> and get the YAML code to paste into your CMS.
+      </p>
+
+      <!-- Dropzone -->
+      <div id="dropzone" class="border-2 border-dashed rounded-2xl p-10 text-center mb-8 transition-colors cursor-pointer" 
+        style="border-color: #00C4CC; background: rgba(0,196,204,0.05)">
+        <i class="fa-solid fa-cloud-arrow-up text-4xl text-[#00C4CC] mb-4"></i>
+        <p class="text-lg font-bold">Drag & Drop images here</p>
+        <p class="text-sm" style="color: var(--text-muted)">or click to select files (.jpg, .png, .webp)</p>
+        <input type="file" id="file-input" multiple accept="image/*" class="hidden" />
+      </div>
+
+      <!-- Sorting Grid -->
+      <div id="sortable-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-8 min-h-[100px]">
+        <!-- Images injected here by JS -->
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-wrap gap-4 items-center">
+        <button id="btn-export-gallery" class="btn-primary">
+          <i class="fa-solid fa-download mr-2"></i> Export Gallery ZIP
+        </button>
+        <button id="btn-copy-yaml" class="btn-outline hidden">
+          <i class="fa-solid fa-copy mr-2"></i> Copy YAML snippet
+        </button>
+        <button id="btn-clear-gallery" class="text-red-500 text-sm font-bold ml-auto hover:underline">
+          Clear All
+        </button>
+      </div>
+
+      <pre id="yaml-output" class="mt-6 p-4 rounded-xl hidden text-sm font-mono" style="background: var(--bg-secondary); overflow-x: auto; color: #00C4CC;"></pre>
+    </div>
+  </div>
+
+  <!-- Crop Modal -->
+  <dialog id="crop-modal" class="bg-transparent backdrop:bg-black/80 backdrop:backdrop-blur-sm p-0 border-0 w-full max-w-4xl">
+    <div class="glass-panel p-6 m-4 flex flex-col items-center">
+      <h3 class="text-xl font-bold mb-4 w-full text-white">Crop Image</h3>
+      <div class="w-full max-h-[60vh] bg-black/50 overflow-hidden rounded-xl mb-4 relative flex justify-center items-center">
+        <img id="crop-image-target" class="max-w-full max-h-[60vh] block" src="" alt="To crop" />
+      </div>
+      <div class="flex gap-4 w-full justify-end">
+        <button id="btn-crop-cancel" class="px-6 py-2 rounded-full font-bold text-white hover:bg-white/10">Cancel</button>
+        <button id="btn-crop-save" class="btn-primary">Apply Crop</button>
+      </div>
+    </div>
+  </dialog>
+
+  <style>
+    .glass-panel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    
+    .tool-tab {
+      padding: 1rem 1.5rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .tool-tab:hover { color: var(--text-primary); }
+    .tool-tab.active {
+      color: #00C4CC;
+      border-bottom-color: #00C4CC;
+    }
+
+    .tool-view { display: none; }
+    .tool-view.active { display: block; animation: fadeIn 0.4s ease; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00C4CC, #00A3AA);
+      color: white; font-weight: 700; padding: 0.75rem 1.5rem;
+      border-radius: 9999px; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,196,204,0.3); }
+
+    .btn-outline {
+      border: 2px solid #00C4CC; color: #00C4CC;
+      font-weight: 700; padding: 0.6rem 1.5rem;
+      border-radius: 9999px; transition: background 0.2s;
+    }
+    .btn-outline:hover { background: rgba(0,196,204,0.1); }
+
+    /* Sortable grid items */
+    .grid-img-wrap {
+      aspect-ratio: 1;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      position: relative;
+      cursor: grab;
+      border: 2px solid transparent;
+      background: var(--bg-card);
+    }
+    .grid-img-wrap:active { cursor: grabbing; }
+    .grid-img-wrap:hover { border-color: #00C4CC; }
+    .grid-img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .img-actions {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; gap: 1rem;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .grid-img-wrap:hover .img-actions { opacity: 1; }
+    
+    .action-btn {
+      width: 2.5rem; height: 2.5rem; border-radius: 50%;
+      background: white; color: black; display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    .action-btn:hover { transform: scale(1.1); }
+    
+    .sortable-ghost { opacity: 0.4; }
+    .sortable-drag { cursor: grabbing !important; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+
+  <!-- External libraries for ZIP, Sorting, and Cropping -->
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
+  <script>
+    // ===== TAB LOGIC =====
+    document.querySelectorAll('.tool-tab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tool-view').forEach(v => v.classList.remove('active'));
+        
+        const target = (e.target as HTMLElement).dataset.target;
+        (e.target as HTMLElement).classList.add('active');
+        document.getElementById(`${target}-tool`)?.classList.add('active');
+      });
+    });
+
+    // ===== 1. CSV BULK IMPORT =====
+    document.getElementById('btn-csv-zip')?.addEventListener('click', async () => {
+      const csvData = (document.getElementById('csv-input') as HTMLTextAreaElement).value.trim();
+      if (!csvData) return alert('Please paste CSV data first');
+
+      const lines = csvData.split('\n');
+      if (lines.length < 2) return alert('CSV must have a header row and at least one data row');
+
+      const headers = lines[0].split(',').map(h => h.trim());
+      const zip = new window.JSZip();
+      
+      for (let i = 1; i < lines.length; i++) {
+        // Simple split (doesn't handle commas inside quotes, but fine for simple cases)
+        const cols = lines[i].split(',').map(c => c.trim());
+        if (cols.length < headers.length) continue;
+
+        let fm = '---\n';
+        let slug = '';
+        headers.forEach((h, idx) => {
+          if (h === 'title') slug = cols[idx].toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          if (cols[idx]) fm += `${h}: ${cols[idx]}\n`;
+        });
+        fm += '---\n';
+
+        if (!slug) slug = `item-${i}`;
+        zip.file(`${slug}.md`, fm);
+      }
+
+      const content = await zip.generateAsync({ type: 'blob' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(content);
+      a.download = 'portfolio-items.zip';
+      a.click();
+    });
+
+    // ===== 2. IMAGE GALLERY BUILDER =====
+    interface GalleryFile {
+      id: string;
+      file: File;
+      url: string;
+    }
+    
+    let galleryFiles: GalleryFile[] = [];
+    let cropper: any = null;
+    let currentCropId: string | null = null;
+    
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('file-input') as HTMLInputElement;
+    const grid = document.getElementById('sortable-grid');
+
+    // Init sortable
+    new window.Sortable(grid, {
+      animation: 150,
+      ghostClass: 'sortable-ghost',
+      dragClass: 'sortable-drag',
+      onEnd: () => {
+        // Rebuild array based on DOM order
+        const newArray: GalleryFile[] = [];
+        grid?.querySelectorAll('.grid-img-wrap').forEach(el => {
+          const id = (el as HTMLElement).dataset.id;
+          const found = galleryFiles.find(f => f.id === id);
+          if (found) newArray.push(found);
+        });
+        galleryFiles = newArray;
+        updateYamlOutput();
+      }
+    });
+
+    // Dropzone logic
+    dropzone?.addEventListener('click', () => fileInput.click());
+    dropzone?.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.borderColor = '#fff'; });
+    dropzone?.addEventListener('dragleave', () => dropzone.style.borderColor = '#00C4CC');
+    dropzone?.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = '#00C4CC';
+      handleFiles(e.dataTransfer?.files);
+    });
+    fileInput.addEventListener('change', (e) => handleFiles((e.target as HTMLInputElement).files));
+    
+    function generateId() { return Math.random().toString(36).substring(2, 9); }
+
+    function handleFiles(files: FileList | null | undefined) {
+      if (!files) return;
+      
+      Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const gFile: GalleryFile = {
+          id: generateId(),
+          file: file,
+          url: URL.createObjectURL(file)
+        };
+        galleryFiles.push(gFile);
+        renderGalleryItem(gFile);
+      });
+      updateYamlOutput();
+    }
+
+    function renderGalleryItem(gFile: GalleryFile) {
+      if (!grid) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'grid-img-wrap';
+      wrap.dataset.id = gFile.id;
+      
+      wrap.innerHTML = `
+        <img src="${gFile.url}" class="grid-img" />
+        <div class="img-actions">
+          <button class="action-btn btn-crop" title="Crop"><i class="fa-solid fa-crop"></i></button>
+          <button class="action-btn btn-del" title="Delete" style="color:red"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `;
+
+      wrap.querySelector('.btn-del')?.addEventListener('click', () => {
+        galleryFiles = galleryFiles.filter(f => f.id !== gFile.id);
+        wrap.remove();
+        updateYamlOutput();
+      });
+
+      wrap.querySelector('.btn-crop')?.addEventListener('click', () => {
+        openCropper(gFile.id);
+      });
+
+      grid.appendChild(wrap);
+    }
+
+    // Cropper handling
+    const cropModal = document.getElementById('crop-modal') as HTMLDialogElement;
+    const cropImg = document.getElementById('crop-image-target') as HTMLImageElement;
+
+    function openCropper(id: string) {
+      const gFile = galleryFiles.find(f => f.id === id);
+      if (!gFile) return;
+      currentCropId = id;
+      
+      cropImg.src = gFile.url;
+      cropModal.showModal();
+      
+      if (cropper) cropper.destroy();
+      cropper = new window.Cropper(cropImg, {
+        viewMode: 1,
+        dragMode: 'move',
+        autoCropArea: 1,
+        restore: false,
+        guides: true,
+        highlight: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        toggleDragModeOnDblclick: false,
+      });
+    }
+
+    document.getElementById('btn-crop-cancel')?.addEventListener('click', () => {
+      cropModal.close();
+      if (cropper) cropper.destroy();
+    });
+
+    document.getElementById('btn-crop-save')?.addEventListener('click', () => {
+      if (!cropper || !currentCropId) return;
+      
+      cropper.getCroppedCanvas({
+         maxWidth: 2000,
+         maxHeight: 2000
+      }).toBlob((blob: Blob | null) => {
+        if (!blob) return;
+        const index = galleryFiles.findIndex(f => f.id === currentCropId);
+        if (index === -1) return;
+        
+        const oldFile = galleryFiles[index].file;
+        const newFile = new File([blob], oldFile.name, { type: 'image/jpeg' });
+        
+        galleryFiles[index].file = newFile;
+        galleryFiles[index].url = URL.createObjectURL(newFile);
+        
+        const wrap = grid?.querySelector(`[data-id="${currentCropId}"] img`) as HTMLImageElement;
+        if (wrap) wrap.src = galleryFiles[index].url;
+        
+        cropModal.close();
+        cropper.destroy();
+      }, 'image/jpeg', 0.9);
+    });
+
+    // Export & YAML Logic
+    const yamlOut = document.getElementById('yaml-output');
+    const copyBtn = document.getElementById('btn-copy-yaml');
+
+    function updateYamlOutput() {
+      if (!yamlOut || !copyBtn) return;
+      if (galleryFiles.length === 0) {
+        yamlOut.classList.add('hidden');
+        copyBtn.classList.add('hidden');
+        return;
+      }
+      
+      let yaml = `gallery:\n`;
+      galleryFiles.forEach(f => {
+        // Safe filename: replace spaces etc
+        const cleanName = f.file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
+        yaml += `  - /uploads/${cleanName}\n`;
+      });
+      
+      yamlOut.textContent = yaml;
+      yamlOut.classList.remove('hidden');
+      copyBtn.classList.remove('hidden');
+    }
+
+    copyBtn?.addEventListener('click', () => {
+      if (!yamlOut) return;
+      navigator.clipboard.writeText(yamlOut.textContent || '');
+      const original = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Copied!';
+      setTimeout(() => copyBtn.innerHTML = original, 2000);
+    });
+
+    document.getElementById('btn-clear-gallery')?.addEventListener('click', () => {
+      if (!confirm('Clear all images?')) return;
+      galleryFiles = [];
+      if (grid) grid.innerHTML = '';
+      updateYamlOutput();
+      fileInput.value = '';
+    });
+
+    document.getElementById('btn-export-gallery')?.addEventListener('click', async () => {
+      if (galleryFiles.length === 0) return alert('No images to export');
+      
+      const zip = new window.JSZip();
+      const folder = zip.folder('uploads');
+      
+      galleryFiles.forEach(f => {
+        const cleanName = f.file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
+        folder?.file(cleanName, f.file);
+      });
+      
+      const content = await zip.generateAsync({ type: 'blob' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(content);
+      a.download = 'gallery-images.zip';
+      a.click();
+    });
+
+  </script>
+</Layout>

@@ -7,10 +7,38 @@
   },
   "contact": {
     "email": "hello@muhammadaulia.com",
-    "instagram": "instagram.com/m.alfaniii",
-    "linkedin": "#",
-    "behance": "#"
+    "whatsapp": "https://wa.me/6281234567890"
   },
+  "social_links": [
+    {
+      "platform": "Instagram",
+      "icon": "fa-brands fa-instagram",
+      "url": "https://instagram.com/m.alfaniii",
+      "label": "@m.alfaniii",
+      "color": "#E1306C"
+    },
+    {
+      "platform": "LinkedIn",
+      "icon": "fa-brands fa-linkedin-in",
+      "url": "#",
+      "label": "Muhammad Aulia",
+      "color": "#0A66C2"
+    },
+    {
+      "platform": "Behance",
+      "icon": "fa-brands fa-behance",
+      "url": "#",
+      "label": "m.alfani",
+      "color": "#1769FF"
+    },
+    {
+      "platform": "Canva",
+      "icon": "fa-solid fa-paintbrush",
+      "url": "https://canva.com",
+      "label": "Canva Profile",
+      "color": "#00C4CC"
+    }
+  ],
   "skills": [
     {
       "name": "Canva",
@@ -93,7 +121,8 @@
   ],
   "work_categories": [
     "All",
-    "Designer at Swana",
-    "Designer at Elhaqq"
+    "Swana Wedding Organizer",
+    "Elhaqq Tour & Travel",
+    "Everlenss"
   ]
 }

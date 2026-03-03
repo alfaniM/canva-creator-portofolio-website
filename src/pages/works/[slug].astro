@@ -821,4 +821,269 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
     initGallery();
     document.addEventListener('astro:after-swap', initGallery);
   </script>
+
+  <!-- ========== BENTO LIGHTBOX ========== -->
+  <!-- Pass image list to JS via a data attribute on a hidden element -->
+  <div id="lightbox-data" data-images={JSON.stringify(allImages)} style="display:none"></div>
+
+  <dialog id="lb-dialog" class="lb-dialog" aria-label="Image viewer">
+    <div class="lb-backdrop" id="lb-backdrop"></div>
+    <div class="lb-content">
+      <!-- Nav arrows -->
+      <button class="lb-arrow lb-arrow-prev" id="lb-prev" aria-label="Previous image">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button class="lb-arrow lb-arrow-next" id="lb-next" aria-label="Next image">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+
+      <!-- Image -->
+      <div class="lb-img-wrap" id="lb-img-wrap">
+        <img id="lb-img" src="" alt="Gallery image" />
+      </div>
+
+      <!-- Counter pill -->
+      <div class="lb-counter" id="lb-counter">1 / 1</div>
+
+      <!-- Close button -->
+      <button class="lb-close" id="lb-close" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Dot strip -->
+      <div class="lb-dots" id="lb-dots"></div>
+    </div>
+  </dialog>
+
+  <style>
+    /* Clickable bento items hint */
+    .bento-item { cursor: zoom-in; }
+
+    /* ── Lightbox dialog ── */
+    .lb-dialog {
+      position: fixed; inset: 0; z-index: 9999;
+      width: 100%; height: 100%;
+      border: none; padding: 0; margin: 0;
+      background: transparent;
+      max-width: 100%; max-height: 100%;
+    }
+    .lb-dialog::backdrop { display: none; }
+    .lb-dialog[open] { display: flex; align-items: center; justify-content: center; }
+
+    /* Blurred dark backdrop */
+    .lb-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 0;
+      cursor: zoom-out;
+    }
+
+    .lb-content {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+    }
+
+    /* Main image wrapper */
+    .lb-img-wrap {
+      max-width: min(90vw, 1100px);
+      max-height: 85vh;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      animation: lbOpen 0.35s cubic-bezier(0.16,1,0.3,1) both;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+    .lb-img-wrap:active { cursor: grabbing; }
+
+    @keyframes lbOpen {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .lb-img-wrap img {
+      display: block;
+      max-width: min(90vw, 1100px);
+      max-height: 85vh;
+      width: auto; height: auto;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+      transition: transform 0.25s ease;
+    }
+
+    /* Navigation arrows */
+    .lb-arrow {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      z-index: 2;
+      width: 3rem; height: 3rem; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: white; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .lb-arrow:hover { background: rgba(0,196,204,0.55); border-color: rgba(0,196,204,0.5); }
+    .lb-arrow-prev { left: 1.25rem; }
+    .lb-arrow-next { right: 1.25rem; }
+    @media (max-width: 640px) {
+      .lb-arrow-prev { left: 0.5rem; }
+      .lb-arrow-next { right: 0.5rem; }
+    }
+
+    /* Counter */
+    .lb-counter {
+      position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
+      padding: 0.35rem 1rem; border-radius: 9999px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: white; font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.05em;
+      z-index: 2; white-space: nowrap;
+    }
+
+    /* Close button */
+    .lb-close {
+      position: fixed; top: 1rem; right: 1rem;
+      width: 2.75rem; height: 2.75rem; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: white; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 2;
+      transition: all 0.25s ease;
+    }
+    .lb-close:hover { background: rgba(239,68,68,0.65); border-color: rgba(239,68,68,0.4); }
+
+    /* Dots strip at the bottom */
+    .lb-dots {
+      position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.4rem; align-items: center;
+      z-index: 2;
+    }
+    .lb-dot {
+      width: 6px; height: 6px; border-radius: 9999px;
+      background: rgba(255,255,255,0.35); border: none; padding: 0; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .lb-dot.active { background: #00C4CC; width: 18px; }
+  </style>
+
+  <script>
+    function initLightbox() {
+      const dataEl   = document.getElementById('lightbox-data');
+      const dialog   = document.getElementById('lb-dialog') as HTMLDialogElement | null;
+      const backdrop = document.getElementById('lb-backdrop');
+      const imgEl    = document.getElementById('lb-img') as HTMLImageElement | null;
+      const imgWrap  = document.getElementById('lb-img-wrap');
+      const counter  = document.getElementById('lb-counter');
+      const dotsEl   = document.getElementById('lb-dots');
+      const prevBtn  = document.getElementById('lb-prev');
+      const nextBtn  = document.getElementById('lb-next');
+      const closeBtn = document.getElementById('lb-close');
+      if (!dialog || !dataEl || !imgEl) return;
+
+      const images: string[] = JSON.parse(dataEl.dataset.images || '[]');
+      let current = 0;
+
+      // Build dots
+      const buildDots = () => {
+        if (!dotsEl) return;
+        dotsEl.innerHTML = '';
+        images.forEach((_, i) => {
+          const btn = document.createElement('button');
+          btn.className = `lb-dot ${i === 0 ? 'active' : ''}`;
+          btn.setAttribute('aria-label', `Image ${i + 1}`);
+          btn.addEventListener('click', () => goTo(i));
+          dotsEl.appendChild(btn);
+        });
+      };
+
+      const updateDots = (idx: number) => {
+        dotsEl?.querySelectorAll<HTMLElement>('.lb-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === idx);
+        });
+      };
+
+      const goTo = (idx: number) => {
+        const n = images.length;
+        current = ((idx % n) + n) % n;
+        if (imgEl) {
+          // Slide animation
+          imgEl.style.transition = 'none';
+          imgEl.style.opacity = '0';
+          imgEl.style.transform = `translateX(${idx > current ? 40 : -40}px)`;
+          requestAnimationFrame(() => {
+            imgEl.src = images[current];
+            imgEl.alt = `Image ${current + 1}`;
+            requestAnimationFrame(() => {
+              imgEl.style.transition = 'opacity 0.25s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1)';
+              imgEl.style.opacity = '1';
+              imgEl.style.transform = 'translateX(0)';
+            });
+          });
+        }
+        if (counter) counter.textContent = `${current + 1} / ${images.length}`;
+        updateDots(current);
+      };
+
+      const openAt = (idx: number) => {
+        current = idx;
+        buildDots();
+        if (imgEl) { imgEl.src = images[current]; imgEl.alt = `Image ${current + 1}`; }
+        if (counter) counter.textContent = `${current + 1} / ${images.length}`;
+        updateDots(current);
+        dialog.showModal();
+        document.body.style.overflow = 'hidden';
+      };
+
+      const close = () => {
+        dialog.close();
+        document.body.style.overflow = '';
+      };
+
+      // Bento item click
+      document.querySelectorAll<HTMLElement>('.bento-item').forEach((item, idx) => {
+        item.addEventListener('click', () => openAt(idx < images.length ? idx : 0));
+      });
+
+      prevBtn?.addEventListener('click', () => goTo(current - 1));
+      nextBtn?.addEventListener('click', () => goTo(current + 1));
+      closeBtn?.addEventListener('click', close);
+      backdrop?.addEventListener('click', close);
+
+      // Keyboard
+      document.addEventListener('keydown', (e) => {
+        if (!dialog.open) return;
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowRight') goTo(current + 1);
+        if (e.key === 'ArrowLeft')  goTo(current - 1);
+      });
+
+      // Touch/mouse swipe inside lightbox
+      let lbStartX = 0;
+      imgWrap?.addEventListener('mousedown',  (e) => { lbStartX = (e as MouseEvent).clientX; });
+      imgWrap?.addEventListener('mouseup',    (e) => {
+        const dx = (e as MouseEvent).clientX - lbStartX;
+        if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+      });
+      imgWrap?.addEventListener('touchstart', (e) => { lbStartX = (e as TouchEvent).touches[0].clientX; });
+      imgWrap?.addEventListener('touchend',   (e) => {
+        const dx = (e as TouchEvent).changedTouches[0].clientX - lbStartX;
+        if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+      });
+
+      buildDots();
+    }
+
+    initLightbox();
+    document.addEventListener('astro:after-swap', initLightbox);
+  </script>
 </Layout>

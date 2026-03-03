@@ -1,33 +1,363 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import siteData from '../data/site.json';
+
+const { personal, contact, social_links } = siteData;
 ---
-<Layout title={`Contact | ${siteData.personal.name}`}>
-  <section class="pt-32 pb-24 px-6 max-w-4xl mx-auto text-center min-h-[70vh] flex flex-col justify-center">
-    <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-2 reveal">Contact</p>
-    <h1 class="text-5xl md:text-6xl font-extrabold mb-8 reveal" style="color: var(--text-primary)">Get In Touch</h1>
-    <div class="w-16 h-1 bg-[#00C4CC] rounded-full mx-auto mb-8"></div>
-    <p class="text-xl mb-12 max-w-2xl mx-auto reveal" style="color: var(--text-secondary)">
-      I'm currently available for freelance projects and full-time opportunities. If you have a project that needs a creative touch, feel free to reach out!
-    </p>
-    
-    <div class="reveal-scale">
-      <a href={`mailto:${siteData.contact.email}`} class="inline-flex items-center gap-3 bg-[#00C4CC] text-white font-bold px-10 py-5 rounded-full text-lg hover:bg-opacity-90 hover:shadow-xl transition-all hover:-translate-y-1">
-        <i class="fa-solid fa-paper-plane"></i>
-        Say Hello
-      </a>
-    </div>
-    
-    <div class="mt-20 flex justify-center gap-8 reveal">
-      <a href={siteData.contact.instagram} class="text-3xl hover:text-[#00C4CC] transition-colors" style="color: var(--text-muted)" aria-label="Instagram">
-        <i class="fa-brands fa-instagram"></i>
-      </a>
-      <a href={siteData.contact.linkedin} class="text-3xl hover:text-[#00C4CC] transition-colors" style="color: var(--text-muted)" aria-label="LinkedIn">
-        <i class="fa-brands fa-linkedin-in"></i>
-      </a>
-      <a href={siteData.contact.behance} class="text-3xl hover:text-[#00C4CC] transition-colors" style="color: var(--text-muted)" aria-label="Behance">
-        <i class="fa-brands fa-behance"></i>
-      </a>
+<Layout title={`Contact | ${personal.name}`}>
+  <section class="pt-32 pb-24 px-6 min-h-screen" style="background: var(--bg-primary)">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-16 reveal">
+        <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-3">Let's Connect</p>
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-5 leading-tight" style="color: var(--text-primary)">
+          Say Hello 👋
+        </h1>
+        <div class="w-16 h-1 bg-[#00C4CC] rounded-full mx-auto mb-6"></div>
+        <p class="text-lg max-w-xl mx-auto leading-relaxed" style="color: var(--text-secondary)">
+          I'm open to freelance projects, full-time opportunities, and creative collaborations.
+          Got a cool idea? Let's bring it to life together.
+        </p>
+      </div>
+
+      <!-- Main grid -->
+      <div class="contact-grid">
+
+        <!-- LEFT: Contact card -->
+        <div class="contact-card glass-card reveal">
+          <div class="contact-avatar">
+            <img src={personal.photo_url} alt={personal.name} />
+            <div class="avatar-status"></div>
+          </div>
+          <h2 class="contact-name">{personal.name}</h2>
+          <p class="contact-role">{personal.role}</p>
+
+          <div class="contact-divider"></div>
+
+          <!-- Email CTA -->
+          <a href={`mailto:${contact.email}`} class="email-btn">
+            <div class="email-btn-icon">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div class="email-btn-text">
+              <span class="email-btn-label">Send Email</span>
+              <span class="email-btn-addr">{contact.email}</span>
+            </div>
+            <i class="fa-solid fa-arrow-right email-btn-arrow"></i>
+          </a>
+
+          <!-- WhatsApp CTA -->
+          {contact.whatsapp && (
+            <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
+              <i class="fa-brands fa-whatsapp"></i>
+              <span>Message on WhatsApp</span>
+            </a>
+          )}
+        </div>
+
+        <!-- RIGHT: Social links + info -->
+        <div class="contact-right">
+          <!-- Social links grid -->
+          <div class="reveal">
+            <h3 class="section-label">Find me on</h3>
+            <div class="social-grid">
+              {social_links && social_links.map((link: { platform: string; icon: string; url: string; label: string; color: string }) => (
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-card"
+                  style={`--brand-color: ${link.color}`}
+                >
+                  <div class="social-icon-wrap">
+                    <i class={link.icon}></i>
+                  </div>
+                  <div class="social-text">
+                    <span class="social-platform">{link.platform}</span>
+                    <span class="social-handle">{link.label}</span>
+                  </div>
+                  <i class="fa-solid fa-arrow-up-right-from-square social-ext"></i>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- Availability notice -->
+          <div class="avail-card glass-card reveal">
+            <div class="avail-dot"></div>
+            <div>
+              <p class="avail-title">Available for Work</p>
+              <p class="avail-sub">Accepting new projects · Response within 24h</p>
+            </div>
+          </div>
+
+          <!-- Quick facts -->
+          <div class="facts-card glass-card reveal">
+            <div class="fact-item">
+              <i class="fa-solid fa-location-dot fact-icon"></i>
+              <span>Indonesia 🇮🇩</span>
+            </div>
+            <div class="fact-item">
+              <i class="fa-solid fa-clock fact-icon"></i>
+              <span>WIB (UTC+7)</span>
+            </div>
+            <div class="fact-item">
+              <i class="fa-solid fa-language fact-icon"></i>
+              <span>Bahasa Indonesia · English</span>
+            </div>
+            <div class="fact-item">
+              <i class="fa-solid fa-briefcase fact-icon"></i>
+              <span>Freelance &amp; Full-time</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <style>
+    /* Grid layout */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* Glass card base */
+    .glass-card {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.65);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+      border-radius: 1.5rem;
+      padding: 2rem;
+    }
+    html.dark .glass-card {
+      background: rgba(15,23,42,0.65);
+      border-color: rgba(255,255,255,0.08);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    /* Contact card */
+    .contact-card {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .contact-avatar {
+      position: relative;
+      width: 100px; height: 100px;
+    }
+    .contact-avatar img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(0,196,204,0.4);
+    }
+    .avatar-status {
+      position: absolute;
+      bottom: 4px; right: 4px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #22c55e;
+      border: 2px solid var(--bg-card);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+      50%       { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+    }
+
+    .contact-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    .contact-role {
+      font-size: 0.85rem;
+      color: #00C4CC;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .contact-divider {
+      width: 80%;
+      height: 1px;
+      background: var(--border-color);
+      margin: 0.25rem 0;
+    }
+
+    /* Email button */
+    .email-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border-radius: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .email-btn:hover {
+      border-color: rgba(0,196,204,0.4);
+      background: rgba(0,196,204,0.06);
+      transform: translateY(-2px);
+    }
+    .email-btn-icon {
+      width: 2.5rem; height: 2.5rem;
+      border-radius: 0.625rem;
+      background: linear-gradient(135deg, #00C4CC, #00A3AA);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .email-btn-text { flex: 1; text-align: left; }
+    .email-btn-label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-primary); }
+    .email-btn-addr  { display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 1px; }
+    .email-btn-arrow { color: #00C4CC; font-size: 0.75rem; transition: transform 0.3s; }
+    .email-btn:hover .email-btn-arrow { transform: translateX(4px); }
+
+    /* WhatsApp button */
+    .whatsapp-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.875rem;
+      background: rgba(37,211,102,0.12);
+      border: 1px solid rgba(37,211,102,0.25);
+      color: #25D366;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .whatsapp-btn:hover {
+      background: rgba(37,211,102,0.2);
+      transform: translateY(-2px);
+    }
+    .whatsapp-btn i { font-size: 1.1rem; }
+
+    /* Section label */
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin: 0 0 0.75rem;
+    }
+
+    /* Social grid */
+    .social-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 480px) { .social-grid { grid-template-columns: 1fr; } }
+
+    .social-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      border-radius: 1rem;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    html.dark .social-card {
+      background: rgba(15,23,42,0.6);
+      border-color: rgba(255,255,255,0.07);
+    }
+
+    .social-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--brand-color);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: inherit;
+    }
+    .social-card:hover::before { opacity: 0.08; }
+    .social-card:hover {
+      border-color: var(--brand-color);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .social-icon-wrap {
+      position: relative;
+      width: 2.25rem; height: 2.25rem;
+      border-radius: 0.5rem;
+      background: var(--brand-color);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .social-text { flex: 1; min-width: 0; position: relative; }
+    .social-platform { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-primary); }
+    .social-handle   { display: block; font-size: 0.7rem; color: var(--text-muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .social-ext { position: relative; font-size: 0.65rem; color: var(--text-muted); }
+
+    /* Availability card */
+    .avail-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .avail-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #22c55e;
+      flex-shrink: 0;
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    .avail-title { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); }
+    .avail-sub   { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* Facts card */
+    .facts-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 480px) { .facts-card { grid-template-columns: 1fr; } }
+
+    .fact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .fact-icon { color: #00C4CC; width: 1rem; text-align: center; }
+  </style>
 </Layout>
