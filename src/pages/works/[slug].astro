@@ -1,6 +1,7 @@
 ﻿---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import OptimizedImage from '../../components/OptimizedImage.astro';
 
 export async function getStaticPaths() {
   const portfolioEntries = await getCollection('portfolio');
@@ -75,18 +76,16 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           {allImages.length >= 1 && (
             <div class="bento-item bento-hero" style="--delay: 0ms">
               <div class="bento-img-wrap">
-                <img src={allImages[0]} alt={`${entry.data.title} 1`} loading="eager" />
+                <OptimizedImage src={allImages[0]} alt={`${entry.data.title} 1`} width={1200} height={900} quality={82} loading="eager" fetchpriority="high" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
-                <div class="bento-overlay">
-                  <span class="bento-num">01</span>
-                </div>
+                <div class="bento-overlay"><span class="bento-num">01</span></div>
               </div>
             </div>
           )}
           {allImages.length >= 2 && (
             <div class="bento-item bento-tall" style="--delay: 80ms">
               <div class="bento-img-wrap">
-                <img src={allImages[1]} alt={`${entry.data.title} 2`} loading="lazy" />
+                <OptimizedImage src={allImages[1]} alt={`${entry.data.title} 2`} width={600} height={800} quality={82} loading="lazy" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
                 <div class="bento-overlay"><span class="bento-num">02</span></div>
               </div>
@@ -95,7 +94,7 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           {allImages.length >= 3 && (
             <div class="bento-item bento-sm" style="--delay: 160ms">
               <div class="bento-img-wrap">
-                <img src={allImages[2]} alt={`${entry.data.title} 3`} loading="lazy" />
+                <OptimizedImage src={allImages[2]} alt={`${entry.data.title} 3`} width={600} height={400} quality={82} loading="lazy" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
                 <div class="bento-overlay"><span class="bento-num">03</span></div>
               </div>
@@ -104,7 +103,7 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           {allImages.length >= 4 && (
             <div class="bento-item bento-wide" style="--delay: 240ms">
               <div class="bento-img-wrap">
-                <img src={allImages[3]} alt={`${entry.data.title} 4`} loading="lazy" />
+                <OptimizedImage src={allImages[3]} alt={`${entry.data.title} 4`} width={1000} height={500} quality={82} loading="lazy" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
                 <div class="bento-overlay"><span class="bento-num">04</span></div>
               </div>
@@ -113,7 +112,7 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           {allImages.length >= 5 && (
             <div class="bento-item bento-sm" style="--delay: 320ms">
               <div class="bento-img-wrap">
-                <img src={allImages[4]} alt={`${entry.data.title} 5`} loading="lazy" />
+                <OptimizedImage src={allImages[4]} alt={`${entry.data.title} 5`} width={600} height={400} quality={82} loading="lazy" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
                 <div class="bento-overlay"><span class="bento-num">05</span></div>
               </div>
@@ -122,7 +121,7 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           {allImages.length >= 6 && (
             <div class="bento-item bento-md" style="--delay: 400ms">
               <div class="bento-img-wrap">
-                <img src={allImages[5]} alt={`${entry.data.title} 6`} loading="lazy" />
+                <OptimizedImage src={allImages[5]} alt={`${entry.data.title} 6`} width={600} height={800} quality={82} loading="lazy" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
                 <div class="bento-overlay"><span class="bento-num">06</span></div>
               </div>
@@ -131,7 +130,7 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           {allImages.length >= 7 && (
             <div class="bento-item bento-wide-short" style="--delay: 480ms">
               <div class="bento-img-wrap">
-                <img src={allImages[6]} alt={`${entry.data.title} 7`} loading="lazy" />
+                <OptimizedImage src={allImages[6]} alt={`${entry.data.title} 7`} width={1000} height={400} quality={82} loading="lazy" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
                 <div class="bento-overlay"><span class="bento-num">07</span></div>
               </div>
@@ -140,7 +139,7 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           {allImages.length > 7 && allImages.slice(7).map((img: string, i: number) => (
             <div class="bento-item bento-sm" style={`--delay: ${(i + 8) * 80}ms`}>
               <div class="bento-img-wrap">
-                <img src={img} alt={`${entry.data.title} ${i + 8}`} loading="lazy" />
+                <OptimizedImage src={img} alt={`${entry.data.title} ${i + 8}`} width={600} height={400} quality={82} loading="lazy" class="w-full h-full" />
                 <div class="bento-shimmer"></div>
                 <div class="bento-overlay"><span class="bento-num">{String(i + 8).padStart(2, '0')}</span></div>
               </div>

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import siteData from '../data/site.json';
+import OptimizedImage from './OptimizedImage.astro';
 
 const allPortfolio = await getCollection('portfolio');
 const portfolioItems = allPortfolio.sort((a, b) => a.data.order - b.data.order);
@@ -69,11 +70,16 @@ const displayItems = limit ? portfolioItems.slice(0, limit) : portfolioItems;
           <!-- Image -->
           <div class="card-img-wrap">
             <div class="img-shimmer"></div>
-            <img
+            <OptimizedImage
               src={item.data.image}
               alt={item.data.title}
+              width={800}
+              height={600}
+              quality={82}
+              loading={idx < 3 ? 'eager' : 'lazy'}
+              fetchpriority={idx === 0 ? 'high' : 'auto'}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               class="card-img"
-              loading="lazy"
             />
             <!-- Glassmorphism hover overlay -->
             <div class="card-glass-overlay">
