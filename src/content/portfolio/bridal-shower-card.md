@@ -1,17 +1,15 @@
 ---
-title: Bridal Shower Card
+title: Enggagment Design for Instagram Post
 description: Beautifully crafted bridal shower invitation card with floral
   motifs and pastel watercolor textures.
-image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1470&auto=format&fit=crop"
-category: "Swana Wedding Organizer"
-canva_link: "https://canva.com"
-order: 2
-layout_template: "bento"
+image: "/uploads/everlens-instagram-post-engagement.png"
+category: "Everlenss"
+canva_link: "https://www.canva.com/design/DAHCuLF_5Qc/cChCj-npyLmJ24WUgXelNA/edit?utm_content=DAHCuLF_5Qc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+order: 1
 gallery:
-  - "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?q=80&w=1374&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1470&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1470&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1470&auto=format&fit=crop"
+  - "/uploads/everlens-instagram-post-engagement.png"
+  - "/uploads/2.png"
+layout_template: "bento"
 ---
 
 ## A Touch of Spring
