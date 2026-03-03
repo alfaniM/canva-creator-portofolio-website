@@ -17,115 +17,148 @@ const gallery = entry.data.gallery || [];
 const allImages = [entry.data.image, ...gallery].filter(Boolean);
 ---
 <Layout title={`${entry.data.title} | Portfolio`}>
-  <section class="pt-32 pb-24 px-4 sm:px-6 max-w-7xl mx-auto min-h-screen">
+  <section class="pt-28 pb-24 px-4 sm:px-6 max-w-8xl mx-auto min-h-screen">
 
     <!-- Back Link -->
-    <div class="mb-8 reveal">
-      <a href="/works" class="text-sm font-semibold text-[#00C4CC] uppercase tracking-wider hover:underline inline-flex items-center gap-2">
-        <i class="fa-solid fa-arrow-left"></i>Back to Works
+    <div class="mb-10 reveal">
+      <a href="/works" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back to Works</span>
       </a>
     </div>
 
     {layout_template === 'bento' ? (
       <!-- ========== BENTO LAYOUT ========== -->
-      <div class="bento-wrapper reveal">
-        <!-- LEFT: Info Panel (sticky) -->
-        <div class="bento-info-panel">
-          <div class="bento-label">
-            <span class="text-xs font-bold tracking-widest uppercase text-[#00C4CC]">Portfolio</span>
-            <span class="mx-2 text-[#00C4CC] opacity-40">·</span>
-            <span class="text-xs font-bold tracking-widest uppercase" style="color: var(--text-muted)">{entry.data.category}</span>
-          </div>
+      <div class="bento-page reveal">
 
-          <h1 class="bento-title">{entry.data.title}</h1>
+        <!-- LEFT: Info Panel -->
+        <aside class="bento-sidebar">
+          <div class="sidebar-inner">
+            <div class="sidebar-badge">
+              <span class="badge-dot"></span>
+              <span>{entry.data.category}</span>
+            </div>
 
-          <p class="bento-desc">{entry.data.description}</p>
+            <h1 class="sidebar-title">{entry.data.title}</h1>
+            <p class="sidebar-desc">{entry.data.description}</p>
 
-          <div class="bento-meta">
-            <div class="bento-meta-item">
-              <i class="fa-solid fa-tag text-[#00C4CC]"></i>
-              <div>
-                <p class="bento-meta-label">Category</p>
-                <p class="bento-meta-value">{entry.data.category}</p>
+            <div class="sidebar-stats">
+              <div class="stat-pill">
+                <i class="fa-solid fa-images"></i>
+                <span>{allImages.length} photos</span>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-swatchbook"></i>
+                <span>Design</span>
               </div>
             </div>
-            <div class="bento-meta-item">
-              <i class="fa-solid fa-images text-[#00C4CC]"></i>
-              <div>
-                <p class="bento-meta-label">Gallery</p>
-                <p class="bento-meta-value">{allImages.length} Images</p>
+
+            {entry.data.canva_link && entry.data.canva_link !== '#' && (
+              <a href={entry.data.canva_link} target="_blank" rel="noopener noreferrer" class="canva-btn">
+                <span>Open in Canva</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            )}
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-content">
+              <div class="prose-sm" style="color: var(--text-secondary)">
+                <Content />
               </div>
             </div>
           </div>
+        </aside>
 
-          {entry.data.canva_link && entry.data.canva_link !== '#' && (
-            <a href={entry.data.canva_link} target="_blank" rel="noopener noreferrer" class="btn-accent w-full text-center text-white font-bold px-6 py-4 rounded-full text-sm flex items-center justify-center gap-2 mt-6">
-              OPEN IN CANVA
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
-          )}
-
-          {/* Date label */}
-          <p class="bento-date">Design Project</p>
-        </div>
-
-        <!-- RIGHT: Bento Mosaic Gallery Grid -->
-        <div class="bento-grid">
-          {allImages.length === 0 && (
-            <div class="bento-cell bento-cell-main">
-              <img src={entry.data.image} alt={entry.data.title} class="w-full h-full object-cover" />
-            </div>
-          )}
+        <!-- RIGHT: Bento Mosaic Grid -->
+        <div class="bento-mosaic" id="bento-mosaic">
           {allImages.length >= 1 && (
-            <div class="bento-cell bento-cell-main">
-              <img src={allImages[0]} alt={`${entry.data.title} 1`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="eager" />
+            <div class="bento-item bento-hero" style="--delay: 0ms">
+              <div class="bento-img-wrap">
+                <img src={allImages[0]} alt={`${entry.data.title} 1`} loading="eager" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay">
+                  <span class="bento-num">01</span>
+                </div>
+              </div>
             </div>
           )}
           {allImages.length >= 2 && (
-            <div class="bento-cell bento-cell-sm">
-              <img src={allImages[1]} alt={`${entry.data.title} 2`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+            <div class="bento-item bento-tall" style="--delay: 80ms">
+              <div class="bento-img-wrap">
+                <img src={allImages[1]} alt={`${entry.data.title} 2`} loading="lazy" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay"><span class="bento-num">02</span></div>
+              </div>
             </div>
           )}
           {allImages.length >= 3 && (
-            <div class="bento-cell bento-cell-sm">
-              <img src={allImages[2]} alt={`${entry.data.title} 3`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+            <div class="bento-item bento-sm" style="--delay: 160ms">
+              <div class="bento-img-wrap">
+                <img src={allImages[2]} alt={`${entry.data.title} 3`} loading="lazy" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay"><span class="bento-num">03</span></div>
+              </div>
             </div>
           )}
           {allImages.length >= 4 && (
-            <div class="bento-cell bento-cell-wide">
-              <img src={allImages[3]} alt={`${entry.data.title} 4`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+            <div class="bento-item bento-wide" style="--delay: 240ms">
+              <div class="bento-img-wrap">
+                <img src={allImages[3]} alt={`${entry.data.title} 4`} loading="lazy" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay"><span class="bento-num">04</span></div>
+              </div>
             </div>
           )}
           {allImages.length >= 5 && (
-            <div class="bento-cell bento-cell-sm">
-              <img src={allImages[4]} alt={`${entry.data.title} 5`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+            <div class="bento-item bento-sm" style="--delay: 320ms">
+              <div class="bento-img-wrap">
+                <img src={allImages[4]} alt={`${entry.data.title} 5`} loading="lazy" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay"><span class="bento-num">05</span></div>
+              </div>
             </div>
           )}
           {allImages.length >= 6 && (
-            <div class="bento-cell bento-cell-sm bento-cell-accent">
-              <img src={allImages[5]} alt={`${entry.data.title} 6`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+            <div class="bento-item bento-md" style="--delay: 400ms">
+              <div class="bento-img-wrap">
+                <img src={allImages[5]} alt={`${entry.data.title} 6`} loading="lazy" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay"><span class="bento-num">06</span></div>
+              </div>
             </div>
           )}
-          {allImages.length > 6 && allImages.slice(6).map((img: string, i: number) => (
-            <div class="bento-cell bento-cell-sm">
-              <img src={img} alt={`${entry.data.title} ${i + 7}`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
+          {allImages.length >= 7 && (
+            <div class="bento-item bento-wide-short" style="--delay: 480ms">
+              <div class="bento-img-wrap">
+                <img src={allImages[6]} alt={`${entry.data.title} 7`} loading="lazy" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay"><span class="bento-num">07</span></div>
+              </div>
+            </div>
+          )}
+          {allImages.length > 7 && allImages.slice(7).map((img: string, i: number) => (
+            <div class="bento-item bento-sm" style={`--delay: ${(i + 8) * 80}ms`}>
+              <div class="bento-img-wrap">
+                <img src={img} alt={`${entry.data.title} ${i + 8}`} loading="lazy" />
+                <div class="bento-shimmer"></div>
+                <div class="bento-overlay"><span class="bento-num">{String(i + 8).padStart(2, '0')}</span></div>
+              </div>
             </div>
           ))}
-        </div>
-      </div>
 
-      <!-- Content Area -->
-      {Content && (
-        <div class="bento-content-area reveal">
-          <div class="prose prose-lg dark:prose-invert max-w-3xl" style="color: var(--text-secondary)">
-            <Content />
+          <!-- Floating count badge -->
+          <div class="bento-count-badge">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>{allImages.length} shots</span>
           </div>
         </div>
-      )}
+      </div>
 
     ) : layout_template === 'basic' ? (
       <>
         <div class="text-center mb-12 reveal">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#00C4CC] mb-3">{entry.data.category}</p>
           <h1 class="text-4xl md:text-5xl font-extrabold mb-4" style="color: var(--text-primary)">{entry.data.title}</h1>
           <p class="text-lg max-w-2xl mx-auto" style="color: var(--text-secondary)">{entry.data.description}</p>
         </div>
@@ -136,12 +169,12 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
           <div class="flex-1 prose prose-xl dark:prose-invert leading-relaxed" style="color: var(--text-secondary)">
             <Content />
           </div>
-          <div class="w-full md:w-1/3 min-w-[280px] space-y-6">
+          <div class="w-full md:w-1/3 min-w-[280px]">
             <div class="p-8 rounded-2xl border" style="background: var(--bg-card); border-color: var(--border-color)">
               <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary)">Project Info</h3>
-              <p class="text-sm" style="color: var(--text-secondary)"><strong style="color: var(--text-primary)">Category:</strong> {entry.data.category}</p>
+              <p class="text-sm mb-4" style="color: var(--text-secondary)"><strong style="color: var(--text-primary)">Category:</strong> {entry.data.category}</p>
               {entry.data.canva_link && entry.data.canva_link !== '#' && (
-                <a href={entry.data.canva_link} target="_blank" rel="noopener noreferrer" class="btn-accent inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-full text-sm mt-4 w-full justify-center">
+                <a href={entry.data.canva_link} target="_blank" rel="noopener noreferrer" class="btn-accent inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-full text-sm mt-2 w-full justify-center">
                   OPEN IN CANVA <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                 </a>
               )}
@@ -150,49 +183,67 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
         </div>
       </>
     ) : (
-      <!-- Side by Side Layout -->
       <div class="flex flex-col lg:flex-row gap-16 reveal items-start">
-        <div class="flex-1 w-full lg:sticky lg:top-32 rounded-3xl overflow-hidden shadow-2xl reveal-scale border-4" style="border-color: var(--bg-card)">
+        <div class="flex-1 w-full lg:sticky lg:top-32 rounded-3xl overflow-hidden shadow-2xl border-4" style="border-color: var(--bg-card)">
           <img src={entry.data.image} alt={entry.data.title} class="w-full h-auto object-cover" />
         </div>
         <div class="flex-1 w-full flex flex-col gap-10">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#00C4CC]">{entry.data.category}</p>
           <h1 class="text-4xl font-extrabold" style="color: var(--text-primary)">{entry.data.title}</h1>
           <p class="text-lg" style="color: var(--text-secondary)">{entry.data.description}</p>
-          <div class="prose prose-lg dark:prose-invert w-full max-w-none" style="color: var(--text-secondary)">
-            <Content />
-          </div>
-          <div class="p-8 rounded-3xl border shadow-sm" style="background: var(--bg-card); border-color: var(--border-color)">
-            <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary)">Project Info</h3>
-            <p class="text-sm mb-4" style="color: var(--text-secondary)"><span class="font-semibold" style="color: var(--text-muted)">Category:</span> {entry.data.category}</p>
-            {entry.data.canva_link && entry.data.canva_link !== '#' && (
-              <a href={entry.data.canva_link} target="_blank" rel="noopener noreferrer" class="btn-accent inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-full text-sm">
-                OPEN IN CANVA <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-              </a>
-            )}
-          </div>
+          <div class="prose prose-lg dark:prose-invert" style="color: var(--text-secondary)"><Content /></div>
+          {entry.data.canva_link && entry.data.canva_link !== '#' && (
+            <a href={entry.data.canva_link} target="_blank" rel="noopener noreferrer" class="canva-btn" style="max-width: 220px">
+              <span>Open in Canva</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          )}
         </div>
       </div>
     )}
 
-    <!-- ========== SWIPEABLE FULL GALLERY (All layouts) ========== -->
+    <!-- ========== AUTO-SLIDING GALLERY STRIP ========== -->
     {allImages.length > 1 && (
-      <div class="mt-24 mb-12 max-w-7xl mx-auto reveal">
-        <div class="flex items-center justify-between mb-8 px-2">
-          <h2 class="text-2xl font-bold" style="color: var(--text-primary)">Full Gallery</h2>
-          <div class="flex gap-3">
-            <button id="scroll-left" class="gallery-nav-btn" aria-label="Scroll left">
+      <div class="gallery-section reveal">
+        <div class="gallery-section-header">
+          <div>
+            <h2 class="gallery-section-title">Full Gallery</h2>
+            <p class="gallery-section-sub">Auto-sliding · Swipe or drag to explore</p>
+          </div>
+          <div class="gallery-nav">
+            <button id="gl-prev" class="gallery-nav-btn" aria-label="Previous">
               <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <button id="scroll-right" class="gallery-nav-btn" aria-label="Scroll right">
+            <div class="gallery-progress-wrap">
+              <div class="gallery-progress-bar" id="gl-progress"></div>
+            </div>
+            <button id="gl-next" class="gallery-nav-btn" aria-label="Next">
               <i class="fa-solid fa-chevron-right"></i>
             </button>
           </div>
         </div>
-        <div id="gallery-container" class="gallery-strip">
-          {allImages.map((img: string, index: number) => (
-            <div class="gallery-strip-item">
-              <img src={img} alt={`${entry.data.title} ${index + 1}`} class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" />
-            </div>
+
+        <div class="gallery-track-wrap">
+          <div id="gl-track" class="gallery-track">
+            {allImages.map((img: string, index: number) => (
+              <div class="gallery-slide" data-index={index}>
+                <div class="gallery-slide-inner">
+                  <img src={img} alt={`${entry.data.title} ${index + 1}`} loading="lazy" />
+                  <div class="gallery-slide-label">
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <span class="slide-sep">/</span>
+                    <span>{String(allImages.length).padStart(2, '0')}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Dot indicators -->
+        <div class="gallery-dots" id="gl-dots">
+          {allImages.map((_: string, i: number) => (
+            <button class={`gallery-dot ${i === 0 ? 'active' : ''}`} data-dot={i} aria-label={`Go to slide ${i + 1}`}></button>
           ))}
         </div>
       </div>
@@ -201,212 +252,350 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
   </section>
 
   <style>
-    /* ===== BENTO LAYOUT ===== */
-    .bento-wrapper {
+    /* ===== MAX WIDTH OVERRIDE ===== */
+    .max-w-8xl { max-width: 1536px; }
+
+    /* ===== BACK LINK ===== */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #00C4CC;
+      transition: gap 0.3s ease;
+    }
+    .back-link:hover { gap: 0.75rem; }
+    .back-link i { transition: transform 0.3s ease; }
+    .back-link:hover i { transform: translateX(-4px); }
+
+    /* ===== BENTO PAGE WRAPPER ===== */
+    .bento-page {
       display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 2rem;
+      grid-template-columns: 320px 1fr;
+      gap: 2.5rem;
       align-items: start;
-      margin-bottom: 2rem;
+    }
+    @media (max-width: 1100px) {
+      .bento-page { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 1024px) {
-      .bento-wrapper {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .bento-info-panel {
+    /* ===== SIDEBAR ===== */
+    .bento-sidebar {
       position: sticky;
-      top: 7rem;
+      top: 6.5rem;
+    }
+    @media (max-width: 1100px) {
+      .bento-sidebar { position: static; }
+    }
+
+    .sidebar-inner {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
     }
 
-    @media (max-width: 1024px) {
-      .bento-info-panel {
-        position: static;
-      }
-    }
-
-    .bento-label {
-      display: flex;
+    .sidebar-badge {
+      display: inline-flex;
       align-items: center;
-    }
-
-    .bento-title {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      color: var(--text-primary);
-      letter-spacing: -0.02em;
-      margin: 0;
-    }
-
-    .bento-desc {
-      font-size: 1rem;
-      line-height: 1.75;
-      color: var(--text-secondary);
-    }
-
-    .bento-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      padding: 1.25rem;
-      border-radius: 1rem;
-      border: 1px solid var(--border-color);
-      background: var(--bg-card);
-    }
-
-    .bento-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .bento-meta-item i {
-      width: 1.5rem;
-      text-align: center;
-    }
-
-    .bento-meta-label {
+      gap: 0.5rem;
       font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin: 0;
+      letter-spacing: 0.12em;
+      color: #00C4CC;
     }
 
-    .bento-meta-value {
-      font-size: 0.95rem;
-      font-weight: 600;
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00C4CC;
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,196,204,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(0,196,204,0); }
+    }
+
+    .sidebar-title {
+      font-size: clamp(1.75rem, 3.5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
       color: var(--text-primary);
       margin: 0;
     }
 
-    .bento-date {
+    .sidebar-desc {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .sidebar-stats {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+    .stat-pill i { color: #00C4CC; font-size: 0.75rem; }
+    .stat-pill:hover { border-color: #00C4CC; color: #00C4CC; }
+
+    .canva-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.875rem 1.75rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #00C4CC, #00A3AA);
+      color: white;
       font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .canva-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+    .canva-btn:hover::after { transform: translateX(100%); }
+    .canva-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0,196,204,0.4);
     }
 
-    /* ===== BENTO GRID ===== */
-    .bento-grid {
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border-color);
+    }
+
+    .sidebar-content :global(h2) {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    .sidebar-content :global(h3) {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0.75rem 0 0.4rem;
+    }
+    .sidebar-content :global(p) {
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+    .sidebar-content :global(li) { font-size: 0.875rem; }
+    .sidebar-content :global(strong) { color: var(--text-primary); }
+
+    /* ===== BENTO MOSAIC GRID ===== */
+    .bento-mosaic {
+      position: relative;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: 200px;
-      gap: 0.75rem;
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-rows: 160px;
+      gap: 0.625rem;
     }
 
-    @media (max-width: 640px) {
-      .bento-grid {
+    @media (max-width: 768px) {
+      .bento-mosaic {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 130px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .bento-mosaic {
         grid-template-columns: repeat(2, 1fr);
         grid-auto-rows: 160px;
       }
     }
 
-    .bento-cell {
+    /* Grid cell variants */
+    .bento-hero  { grid-column: span 4; grid-row: span 3; }
+    .bento-tall  { grid-column: span 2; grid-row: span 2; }
+    .bento-sm    { grid-column: span 2; grid-row: span 1; }
+    .bento-wide  { grid-column: span 4; grid-row: span 2; }
+    .bento-md    { grid-column: span 2; grid-row: span 2; }
+    .bento-wide-short { grid-column: span 4; grid-row: span 1; }
+
+    @media (max-width: 768px) {
+      .bento-hero  { grid-column: span 4; grid-row: span 2; }
+      .bento-tall  { grid-column: span 2; grid-row: span 2; }
+      .bento-wide  { grid-column: span 4; grid-row: span 1; }
+      .bento-wide-short { grid-column: span 4; grid-row: span 1; }
+    }
+
+    .bento-item {
       border-radius: 1rem;
       overflow: hidden;
-      background: var(--bg-card);
+      position: relative;
+      cursor: pointer;
+      opacity: 0;
+      transform: scale(0.95) translateY(12px);
+      animation: bentoReveal 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-delay: var(--delay, 0ms);
+    }
+
+    @keyframes bentoReveal {
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .bento-img-wrap {
+      width: 100%;
+      height: 100%;
+      position: relative;
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 16px var(--shadow-color);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: inherit;
+      overflow: hidden;
     }
 
-    .bento-cell:hover {
-      transform: scale(1.02);
-      box-shadow: 0 12px 32px var(--shadow-hover);
-    }
-
-    .bento-cell img {
+    .bento-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
 
-    /* Main large cell: spans 2 cols, 2 rows */
-    .bento-cell-main {
-      grid-column: span 2;
-      grid-row: span 2;
+    .bento-item:hover .bento-img-wrap img {
+      transform: scale(1.08);
     }
 
-    /* Normal small cell */
-    .bento-cell-sm {
-      grid-column: span 1;
-      grid-row: span 1;
-    }
-
-    /* Wide cell: 2 cols */
-    .bento-cell-wide {
-      grid-column: span 2;
-      grid-row: span 1;
-    }
-
-    /* Accent cell with gradient overlay */
-    .bento-cell-accent {
-      position: relative;
-    }
-
-    .bento-cell-accent::after {
-      content: '';
+    /* Shimmer loading effect */
+    .bento-shimmer {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(0, 196, 204, 0.15), transparent);
+      background: linear-gradient(110deg, var(--border-color) 8%, var(--bg-secondary) 18%, var(--border-color) 33%);
+      background-size: 200% 100%;
+      animation: shimmerLoad 1.5s linear infinite;
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .bento-img-wrap img.loaded + .bento-shimmer,
+    .bento-img-wrap:has(img.loaded) .bento-shimmer {
+      opacity: 0;
       pointer-events: none;
-      border-radius: inherit;
     }
 
-    /* Content area below bento */
-    .bento-content-area {
-      padding: 3rem 0 1rem;
-      border-top: 1px solid var(--border-color);
-      margin-top: 2rem;
+    @keyframes shimmerLoad {
+      to { background-position: -200% 0; }
     }
 
-    /* ===== GALLERY STRIP ===== */
-    .gallery-strip {
+    /* Hover overlay with number */
+    .bento-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,196,204,0.7) 0%, rgba(0,163,170,0.5) 100%);
       display: flex;
-      overflow-x: auto;
+      align-items: flex-end;
+      padding: 1rem 1.25rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 2;
+    }
+
+    .bento-item:hover .bento-overlay {
+      opacity: 1;
+    }
+
+    .bento-num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.9);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      transform: translateY(10px);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .bento-item:hover .bento-num {
+      transform: translateY(0);
+    }
+
+    /* Floating count badge */
+    .bento-count-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.875rem;
+      border-radius: 9999px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .bento-count-badge i { color: #00C4CC; font-size: 0.7rem; }
+
+    /* ===== GALLERY SECTION ===== */
+    .gallery-section {
+      margin-top: 5rem;
+    }
+
+    .gallery-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
       gap: 1rem;
-      padding-bottom: 1rem;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
     }
 
-    .gallery-strip::-webkit-scrollbar {
-      display: none;
+    .gallery-section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0;
     }
 
-    .gallery-strip-item {
-      flex: none;
-      width: 80%;
-      max-width: 480px;
-      height: 340px;
-      scroll-snap-align: center;
-      border-radius: 1.5rem;
-      overflow: hidden;
-      border: 2px solid var(--border-color);
-      box-shadow: 0 8px 24px var(--shadow-color);
+    .gallery-section-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin: 0;
+      margin-top: 0.2rem;
     }
 
-    @media (max-width: 640px) {
-      .gallery-strip-item {
-        width: 90%;
-        height: 240px;
-      }
+    .gallery-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .gallery-nav-btn {
-      width: 2.75rem;
-      height: 2.75rem;
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: 50%;
       border: 1px solid var(--border-color);
       background: var(--bg-card);
@@ -415,36 +604,219 @@ const allImages = [entry.data.image, ...gallery].filter(Boolean);
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.25s ease;
-      font-size: 0.85rem;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      font-size: 0.8rem;
     }
-
     .gallery-nav-btn:hover {
       background: #00C4CC;
       color: white;
       border-color: #00C4CC;
-      transform: scale(1.1);
+      transform: scale(1.12);
+      box-shadow: 0 4px 16px rgba(0,196,204,0.3);
+    }
+
+    .gallery-progress-wrap {
+      width: 80px;
+      height: 3px;
+      border-radius: 9999px;
+      background: var(--border-color);
+      overflow: hidden;
+    }
+
+    .gallery-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00C4CC, #00A3AA);
+      border-radius: inherit;
+      transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .gallery-track-wrap {
+      overflow: hidden;
+      border-radius: 1.5rem;
+    }
+
+    .gallery-track {
+      display: flex;
+      gap: 1rem;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      cursor: grab;
+      will-change: transform;
+    }
+
+    .gallery-track:active { cursor: grabbing; }
+
+    .gallery-slide {
+      flex: none;
+      width: min(480px, 80vw);
+    }
+
+    @media (max-width: 640px) {
+      .gallery-slide { width: 88vw; }
+    }
+
+    .gallery-slide-inner {
+      position: relative;
+      height: 360px;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 30px var(--shadow-color);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+    }
+
+    @media (max-width: 640px) {
+      .gallery-slide-inner { height: 260px; }
+    }
+
+    .gallery-slide.active .gallery-slide-inner {
+      transform: scale(1.02);
+      box-shadow: 0 20px 50px rgba(0,196,204,0.2);
+      border-color: rgba(0,196,204,0.3);
+    }
+
+    .gallery-slide-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      display: block;
+    }
+
+    .gallery-slide:hover .gallery-slide-inner img {
+      transform: scale(1.06);
+    }
+
+    .gallery-slide-label {
+      position: absolute;
+      bottom: 0.875rem;
+      right: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 9999px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .slide-sep { opacity: 0.5; }
+
+    /* Dots */
+    .gallery-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .gallery-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: var(--border-color);
+      border: none;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      padding: 0;
+    }
+
+    .gallery-dot.active {
+      background: #00C4CC;
+      width: 20px;
     }
   </style>
 
   <script>
-    function initGallery() {
-      const container = document.getElementById('gallery-container');
-      const leftBtn = document.getElementById('scroll-left');
-      const rightBtn = document.getElementById('scroll-right');
+    // ===== IMAGE SHIMMER REMOVAL =====
+    document.querySelectorAll('.bento-img-wrap img').forEach((img: Element) => {
+      const imgEl = img as HTMLImageElement;
+      const shimmer = imgEl.nextElementSibling as HTMLElement;
+      if (!shimmer) return;
+      const hide = () => { shimmer.style.opacity = '0'; shimmer.style.pointerEvents = 'none'; };
+      if (imgEl.complete) hide();
+      else imgEl.addEventListener('load', hide);
+    });
 
-      if (container && leftBtn && rightBtn) {
-        const getScrollAmount = () => {
-          const card = container.firstElementChild as HTMLElement;
-          return card ? card.offsetWidth + 16 : 400;
-        };
-        leftBtn.addEventListener('click', () => {
-          container.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-        });
-        rightBtn.addEventListener('click', () => {
-          container.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-        });
-      }
+    // ===== GALLERY AUTO-SLIDE =====
+    function initGallery() {
+      const track = document.getElementById('gl-track') as HTMLElement | null;
+      const prev = document.getElementById('gl-prev') as HTMLButtonElement | null;
+      const next = document.getElementById('gl-next') as HTMLButtonElement | null;
+      const progress = document.getElementById('gl-progress') as HTMLElement | null;
+      const dots = document.querySelectorAll<HTMLButtonElement>('.gallery-dot');
+      const slides = document.querySelectorAll<HTMLElement>('.gallery-slide');
+      if (!track || slides.length === 0) return;
+
+      let current = 0;
+      let autoTimer: number | undefined;
+      const AUTO_DELAY = 7000; // 7 seconds auto slide
+
+      // Measure slide width dynamically
+      const getSlideW = () => {
+        const s = slides[0] as HTMLElement;
+        const gap = 16;
+        return s ? s.offsetWidth + gap : 500;
+      };
+
+      const goTo = (index: number, fromUser = false) => {
+        const n = slides.length;
+        current = ((index % n) + n) % n;
+        const offset = current * getSlideW();
+        track.style.transform = `translateX(-${offset}px)`;
+
+        // Dots
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+        // Progress bar
+        if (progress) {
+          progress.style.width = `${((current + 1) / n) * 100}%`;
+        }
+
+        // Active slide class
+        slides.forEach((s, i) => s.classList.toggle('active', i === current));
+
+        if (fromUser) resetAuto();
+      };
+
+      const resetAuto = () => {
+        clearInterval(autoTimer);
+        autoTimer = window.setInterval(() => goTo(current + 1), AUTO_DELAY);
+      };
+
+      // Controls
+      next?.addEventListener('click', () => goTo(current + 1, true));
+      prev?.addEventListener('click', () => goTo(current - 1, true));
+      dots.forEach((d, i) => d.addEventListener('click', () => goTo(i, true)));
+
+      // Drag/touch
+      let startX = 0, isDragging = false;
+      track.addEventListener('mousedown', (e) => { startX = e.clientX; isDragging = true; });
+      track.addEventListener('mousemove', (e) => { if (!isDragging) return; e.preventDefault(); });
+      track.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 50) goTo(dx < 0 ? current + 1 : current - 1, true);
+      });
+      track.addEventListener('mouseleave', () => { isDragging = false; });
+      track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+      track.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 50) goTo(dx < 0 ? current + 1 : current - 1, true);
+      });
+
+      // Pause on hover
+      track.addEventListener('mouseenter', () => clearInterval(autoTimer));
+      track.addEventListener('mouseleave', () => resetAuto());
+
+      // Init
+      goTo(0);
+      resetAuto();
     }
 
     initGallery();

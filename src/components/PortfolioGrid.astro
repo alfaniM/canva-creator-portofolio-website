@@ -2,14 +2,13 @@
 import { getCollection } from 'astro:content';
 import siteData from '../data/site.json';
 
-// Fetch items from Astro Content Collections
 const allPortfolio = await getCollection('portfolio');
 const portfolioItems = allPortfolio.sort((a, b) => a.data.order - b.data.order);
 const { work_categories } = siteData;
 
 interface Props {
-  limit?: number; // Optional limit for Home page
-  showFilters?: boolean; // Whether to show category filters
+  limit?: number;
+  showFilters?: boolean;
 }
 
 const { limit, showFilters = true } = Astro.props;
@@ -34,58 +33,393 @@ const displayItems = limit ? portfolioItems.slice(0, limit) : portfolioItems;
       </p>
     </div>
 
-    <!-- Category tabs -->
+    <!-- Category tabs — Apple glassmorphism style -->
     {showFilters && (
-      <div class="relative w-full mb-12 reveal">
-        <!-- Fade edges for mobile scroll -->
-        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-0 bg-gradient-to-r from-[var(--bg-secondary)] to-transparent z-10 pointer-events-none"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-8 sm:w-0 bg-gradient-to-l from-[var(--bg-secondary)] to-transparent z-10 pointer-events-none"></div>
-        
-        <div id="work-tabs" class="flex flex-nowrap sm:flex-wrap justify-start sm:justify-center gap-3 md:gap-4 overflow-x-auto pb-6 sm:pb-2 pt-2 px-4 sm:px-0 snap-x hide-scrollbar">
-          {work_categories.map((cat, i) => (
-            <button
-              class={`tab-btn shrink-0 snap-center px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 ${i === 0 ? 'active' : ''}`}
-              data-category={cat}
-            >
-              {cat}
-            </button>
-          ))}
+      <div class="tabs-wrap mb-12 reveal">
+        <!-- Fade edges for mobile -->
+        <div class="tabs-fade tabs-fade-left"></div>
+        <div class="tabs-fade tabs-fade-right"></div>
+
+        <!-- Glass pill container -->
+        <div class="tabs-glass-bg">
+          <div id="work-tabs" class="tabs-inner hide-scrollbar">
+            {work_categories.map((cat, i) => (
+              <button
+                class={`tab-pill ${i === 0 ? 'tab-pill-active' : ''}`}
+                data-category={cat}
+              >
+                {i === 0 && <span class="tab-dot"></span>}
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     )}
 
     <!-- Portfolio grid -->
-    <div id="portfolio-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 reveal-stagger">
+    <div id="portfolio-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 reveal-stagger">
       {displayItems.map((item, idx) => (
-        <a 
-          href={`/works/${item.id || item.slug}`} 
-          class="portfolio-card block rounded-2xl overflow-hidden shadow-md reveal transition-transform hover:-translate-y-2 hover:shadow-xl"
+        <a
+          href={`/works/${item.id || item.slug}`}
+          class="portfolio-card group block rounded-2xl overflow-hidden reveal"
           data-category={item.data.category}
           style={`--i:${idx}`}
         >
-          <div class="overflow-hidden h-52 relative">
-            <div class="img-shimmer absolute inset-0"></div>
-            <img src={item.data.image} alt={item.data.title} class="w-full h-full object-cover relative z-10 transition-transform duration-500 hover:scale-110" loading="lazy" />
+          <!-- Image -->
+          <div class="card-img-wrap">
+            <div class="img-shimmer"></div>
+            <img
+              src={item.data.image}
+              alt={item.data.title}
+              class="card-img"
+              loading="lazy"
+            />
+            <!-- Glassmorphism hover overlay -->
+            <div class="card-glass-overlay">
+              <span class="card-overlay-label">View Project</span>
+              <i class="fa-solid fa-arrow-up-right-from-square card-overlay-icon"></i>
+            </div>
+            <!-- Category pill on image -->
+            <div class="card-cat-pill">{item.data.category}</div>
           </div>
-          <div class="p-5" style="background: var(--bg-card)">
-            <span class="text-xs font-semibold text-[#00C4CC] uppercase tracking-wider">{item.data.category}</span>
-            <h3 class="text-lg font-bold mt-1 mb-2" style="color: var(--text-primary)">{item.data.title}</h3>
-            <p class="text-sm leading-relaxed mb-4 line-clamp-2" style="color: var(--text-muted)">{item.data.description}</p>
-            <div class="text-[#00C4CC] text-xs font-semibold inline-flex items-center gap-2">
-              VIEW DETAILS 
-              <i class="fa-solid fa-arrow-right"></i>
+
+          <!-- Content -->
+          <div class="card-body">
+            <h3 class="card-title">{item.data.title}</h3>
+            <p class="card-desc">{item.data.description}</p>
+            <div class="card-cta">
+              <span>VIEW DETAILS</span>
+              <i class="fa-solid fa-arrow-right card-cta-arrow"></i>
             </div>
           </div>
         </a>
       ))}
     </div>
-    
+
     {limit && (
       <div class="mt-12 text-center reveal">
         <a href="/works" class="btn-accent inline-flex items-center gap-2 text-white font-semibold px-8 py-3.5 rounded-full text-sm">
-           SEE ALL WORKS
+          SEE ALL WORKS
+          <i class="fa-solid fa-arrow-right text-xs"></i>
         </a>
       </div>
     )}
   </div>
 </section>
+
+<style>
+  /* ===== GLASSMORPHISM TABS ===== */
+  .tabs-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .tabs-fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3rem;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .tabs-fade-left  { left: 0;  background: linear-gradient(to right, var(--bg-secondary), transparent); }
+  .tabs-fade-right { right: 0; background: linear-gradient(to left,  var(--bg-secondary), transparent); }
+  @media (min-width: 640px) {
+    .tabs-fade-left, .tabs-fade-right { display: none; }
+  }
+
+  /* Outer glass container */
+  .tabs-glass-bg {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 639px) {
+    .tabs-glass-bg {
+      display: block;
+      overflow: hidden;
+    }
+  }
+
+  /* Inner scroll container */
+  .tabs-inner {
+    display: inline-flex;
+    gap: 0.375rem;
+    padding: 0.375rem;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow:
+      0 4px 24px rgba(0,0,0,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.8);
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-padding: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html.dark .tabs-inner {
+    background: rgba(15,23,42,0.65);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow:
+      0 4px 24px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  /* Tab pill button */
+  .tab-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.125rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  .tab-pill:hover:not(.tab-pill-active) {
+    color: var(--text-primary);
+    background: rgba(0,196,204,0.08);
+  }
+
+  .tab-pill-active {
+    background: linear-gradient(135deg, #00C4CC, #00A3AA) !important;
+    color: white !important;
+    box-shadow: 0 4px 14px rgba(0,196,204,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  .tab-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    animation: dotPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes dotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.7); }
+  }
+
+  /* ===== PORTFOLIO CARDS ===== */
+  .portfolio-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 12px var(--shadow-color);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, border-color 0.3s ease;
+  }
+
+  .portfolio-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px var(--shadow-hover);
+    border-color: rgba(0,196,204,0.25);
+  }
+
+  .card-img-wrap {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: var(--bg-card);
+  }
+
+  .img-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, var(--border-color) 8%, var(--bg-secondary) 18%, var(--border-color) 33%);
+    background-size: 200% 100%;
+    animation: shimmerLoad 1.5s linear infinite;
+    z-index: 1;
+    transition: opacity 0.4s ease;
+  }
+
+  @keyframes shimmerLoad {
+    to { background-position: -200% 0; }
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .portfolio-card:hover .card-img {
+    transform: scale(1.07);
+  }
+
+  /* Glassmorphism hover overlay */
+  .card-glass-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(0,196,204,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .portfolio-card:hover .card-glass-overlay {
+    opacity: 1;
+  }
+
+  .card-overlay-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transform: translateY(8px);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .card-overlay-icon {
+    color: rgba(255,255,255,0.8);
+    font-size: 1.1rem;
+    transform: translateY(8px);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1) 0.04s;
+  }
+
+  .portfolio-card:hover .card-overlay-label,
+  .portfolio-card:hover .card-overlay-icon {
+    transform: translateY(0);
+  }
+
+  /* Category pill on image */
+  .card-cat-pill {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.5);
+    color: #00A3AA;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    max-width: calc(100% - 1.5rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  html.dark .card-cat-pill {
+    background: rgba(15,23,42,0.75);
+    border-color: rgba(0,196,204,0.2);
+    color: #00C4CC;
+  }
+
+  /* Card body */
+  .card-body {
+    padding: 1.25rem 1.375rem 1.375rem;
+  }
+
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin: 0 0 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: #00C4CC;
+    text-transform: uppercase;
+  }
+
+  .card-cta-arrow {
+    transition: transform 0.3s ease;
+    font-size: 0.65rem;
+  }
+
+  .portfolio-card:hover .card-cta-arrow {
+    transform: translateX(4px);
+  }
+</style>
+
+<script>
+  function initTabs() {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.tab-pill');
+    const cards = document.querySelectorAll<HTMLElement>('.portfolio-card');
+
+    // Remove shimmer when images load
+    document.querySelectorAll('.card-img-wrap').forEach(wrap => {
+      const img = wrap.querySelector('img') as HTMLImageElement;
+      const shimmer = wrap.querySelector('.img-shimmer') as HTMLElement;
+      if (!img || !shimmer) return;
+      const hide = () => { shimmer.style.opacity = '0'; };
+      if (img.complete) hide(); else img.addEventListener('load', hide);
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Update active tab — remove dot from old, add to new
+        tabs.forEach(t => {
+          t.classList.remove('tab-pill-active');
+          const dot = t.querySelector('.tab-dot');
+          if (dot) dot.remove();
+        });
+        tab.classList.add('tab-pill-active');
+        const dot = document.createElement('span');
+        dot.className = 'tab-dot';
+        tab.prepend(dot);
+
+        const selected = tab.dataset.category || 'All';
+        cards.forEach(card => {
+          const matches = selected === 'All' || card.dataset.category === selected;
+          card.style.display = matches ? '' : 'none';
+          if (matches) {
+            card.style.animation = 'none';
+            card.offsetHeight; // reflow
+            card.style.animation = '';
+          }
+        });
+      });
+    });
+  }
+
+  initTabs();
+  document.addEventListener('astro:after-swap', initTabs);
+</script>

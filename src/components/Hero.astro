@@ -22,12 +22,12 @@ const { personal } = siteData;
       <div class="flex-1 text-center md:text-left order-2 md:order-1">
         <p class="text-[#00C4CC] font-semibold text-sm tracking-widest uppercase mb-3 reveal">Hello, I'm</p>
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 reveal" style="color: var(--text-primary)">
-          {personal.name}<span class="typing-cursor"></span>
+          <span id="hero-typed-name" data-name={personal.name}></span><span class="typing-cursor"></span>
         </h1>
         <p class="text-lg sm:text-xl text-[#00C4CC] font-semibold mb-5 reveal">
           {personal.role}
         </p>
-        <p class="leading-relaxed max-w-lg mx-auto md:mx-0 mb-8 reveal line-clamp-3" style="color: var(--text-secondary)">
+        <p class="leading-relaxed max-w-lg mx-auto md:mx-0 mb-8 reveal" style="color: var(--text-secondary)">
           {personal.bio}
         </p>
         <div class="flex flex-wrap gap-4 justify-center md:justify-start reveal">
@@ -41,21 +41,147 @@ const { personal } = siteData;
         </div>
       </div>
 
-      <!-- Profile image with 3D tilt -->
+      <!-- Profile image with parallax + glassmorphism frame -->
       <div class="flex-1 flex justify-center order-1 md:order-2 reveal-scale">
-        <div class="tilt-wrapper relative">
-          <!-- Floating badges -->
-          <div class="float-badge absolute -top-4 -right-4 z-10 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg" style="background: linear-gradient(135deg, #00C4CC, #00A3AA)">
+        <div class="tilt-wrapper relative" id="parallax-wrap">
+          <!-- Glassmorphism floating badges -->
+          <div class="float-badge glass-badge absolute -top-4 -right-4 z-10 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg">
             <i class="fa-solid fa-star mr-1"></i> Open to Work
           </div>
-          <div class="float-badge absolute -bottom-3 -left-3 z-10 px-4 py-2 rounded-xl text-xs font-bold shadow-lg" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); animation-delay: -1.5s">
+          <div class="float-badge glass-badge-light absolute -bottom-3 -left-3 z-10 px-4 py-2 rounded-xl text-xs font-bold shadow-lg" style="animation-delay: -1.5s">
             <i class="fa-solid fa-pen-nib text-[#00C4CC] mr-1"></i> Since 2019
           </div>
-          <div id="tilt-card" class="tilt-card w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-xl border-4" style="border-color: var(--bg-card)">
-            <img src={personal.photo_url} alt={personal.name} class="w-full h-full object-cover" />
+
+          <!-- Parallax photo frame -->
+          <div id="parallax-photo" class="hero-photo-frame">
+            <div class="hero-photo-ring"></div>
+            <div id="tilt-card" class="tilt-card w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl border-4" style="border-color: var(--bg-card)">
+              <img src={personal.photo_url} alt={personal.name} class="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  /* Glassmorphism badges */
+  .glass-badge {
+    background: linear-gradient(135deg, rgba(0,196,204,0.85), rgba(0,163,170,0.75));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 8px 24px rgba(0,196,204,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  .glass-badge-light {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.5);
+    color: var(--text-primary);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+
+  html.dark .glass-badge-light {
+    background: rgba(30,41,59,0.75);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  /* Parallax photo frame */
+  .hero-photo-frame {
+    position: relative;
+    transition: transform 0.1s linear;
+    will-change: transform;
+  }
+
+  .hero-photo-ring {
+    position: absolute;
+    inset: -12px;
+    border-radius: calc(1.5rem + 12px);
+    border: 2px solid rgba(0,196,204,0.25);
+    animation: ringPulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes ringPulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.02); }
+  }
+</style>
+
+<script>
+  // ===== TYPING ANIMATION =====
+  function initTyping() {
+    const el = document.getElementById('hero-typed-name');
+    if (!el) return;
+    // Get name from the element's parent text context - use data attribute set by Astro
+    const name = el.dataset.name || el.textContent || 'Muhammad Aulia';
+    el.textContent = '';
+
+    let i = 0;
+    const speed = 80;
+    const startDelay = 600;
+
+    const type = () => {
+      if (i < name.length) {
+        el.textContent += name[i];
+        i++;
+        setTimeout(type, speed);
+      }
+    };
+    setTimeout(type, startDelay);
+  }
+
+  // ===== PARALLAX ON MOUSE MOVE =====
+  function initParallax() {
+    const photo = document.getElementById('parallax-photo');
+    if (!photo) return;
+
+    const MAX = 18; // max pixel offset
+
+    const onMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 2;   // -1 to 1
+      const y = (e.clientY / innerHeight - 0.5) * 2;
+      photo.style.transform = `translate(${x * MAX}px, ${y * MAX}px)`;
+    };
+
+    const onLeave = () => {
+      photo.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1)';
+      photo.style.transform = 'translate(0,0)';
+      setTimeout(() => { photo.style.transition = 'transform 0.1s linear'; }, 600);
+    };
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseleave', onLeave);
+  }
+
+  // ===== TILT EFFECT =====
+  function initTilt() {
+    const card = document.getElementById('tilt-card') as HTMLElement | null;
+    if (!card) return;
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `perspective(1000px) rotateY(${x * 15}deg) rotateX(${-y * 15}deg) scale(1.03)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  }
+
+  function init() {
+    initTyping();
+    initParallax();
+    initTilt();
+  }
+
+  init();
+  document.addEventListener('astro:after-swap', init);
+</script>
