@@ -36,15 +36,21 @@ const displayItems = limit ? portfolioItems.slice(0, limit) : portfolioItems;
 
     <!-- Category tabs -->
     {showFilters && (
-      <div id="work-tabs" class="flex flex-wrap justify-center gap-4 mb-12 reveal">
-        {work_categories.map((cat, i) => (
-          <button
-            class={`tab-btn px-5 py-2 text-sm font-medium rounded-full ${i === 0 ? 'active' : ''}`}
-            data-category={cat}
-          >
-            {cat}
-          </button>
-        ))}
+      <div class="relative w-full mb-12 reveal">
+        <!-- Fade edges for mobile scroll -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-0 bg-gradient-to-r from-[var(--bg-secondary)] to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-8 sm:w-0 bg-gradient-to-l from-[var(--bg-secondary)] to-transparent z-10 pointer-events-none"></div>
+        
+        <div id="work-tabs" class="flex flex-nowrap sm:flex-wrap justify-start sm:justify-center gap-3 md:gap-4 overflow-x-auto pb-6 sm:pb-2 pt-2 px-4 sm:px-0 snap-x hide-scrollbar">
+          {work_categories.map((cat, i) => (
+            <button
+              class={`tab-btn shrink-0 snap-center px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 ${i === 0 ? 'active' : ''}`}
+              data-category={cat}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
     )}
 
