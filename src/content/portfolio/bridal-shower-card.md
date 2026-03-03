@@ -1,5 +1,5 @@
 ---
-title: Enggagment Design for Instagram Post
+title: Social Media Post Design
 description: Beautifully crafted bridal shower invitation card with floral
   motifs and pastel watercolor textures.
 image: /uploads/everlens-instagram-post-engagement.png
