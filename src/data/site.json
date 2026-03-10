@@ -1,9 +1,15 @@
 {
+  "contact": {
+    "email": "hello@muhammadaulia.com",
+    "whatsapp": "https://wa.me/6281234567890"
+  },
   "personal": {
     "name": "Muhammad Aulia",
-    "role": "Graphic Designer",
+    "role": "Graphic Designer • Wedding Content Creator",
     "bio": "Passionate graphic designer and active Canva user since 2019. I specialize in turning complex ideas into clean, engaging visuals. I am eager to step up as a Template Creator to design high-quality, versatile templates that help users worldwide bring their ideas to life.",
-    "photo_url": "https://github.com/alfaniM/canva-creator-portofolio-website/blob/main/public/uploads/gemini_generated_image_v5mscyv5mscyv5ms-1-.png?raw=true",
+    "photo_url": [
+      "https://res.cloudinary.com/di2chxi8o/image/upload/v1773160801/edit_hero_img_bd5ed0.jpg"
+    ],
     "badge": {
       "text": "CANVA",
       "subtext": "Creator",
@@ -11,40 +17,6 @@
       "color": "#00C4CC"
     }
   },
-  "contact": {
-    "email": "hello@muhammadaulia.com",
-    "whatsapp": "https://wa.me/6281234567890"
-  },
-  "social_links": [
-    {
-      "platform": "Instagram",
-      "icon": "fa-brands fa-instagram",
-      "url": "https://instagram.com/m.alfaniii",
-      "label": "@m.alfaniii",
-      "color": "#E1306C"
-    },
-    {
-      "platform": "LinkedIn",
-      "icon": "fa-brands fa-linkedin-in",
-      "url": "https://id.linkedin.com/in/alfaniaulia",
-      "label": "Muhammad Aulia",
-      "color": "#0A66C2"
-    },
-    {
-      "platform": "Behance",
-      "icon": "fa-brands fa-behance",
-      "url": "#",
-      "label": "m.alfani",
-      "color": "#1769FF"
-    },
-    {
-      "platform": "Canva",
-      "icon": "fa-solid fa-paintbrush",
-      "url": "https://canva.com",
-      "label": "Canva Profile",
-      "color": "#00C4CC"
-    }
-  ],
   "skills": [
     {
       "name": "Canva",
@@ -87,36 +59,91 @@
       "icon": "fa-solid fa-display"
     }
   ],
-  "services": [
+  "badge": {
+    "text": "-",
+    "subtext": "-",
+    "icon": "-"
+  },
+  "social_links": [
     {
-      "icon": "fa-solid fa-pen-nib",
-      "title": "Brand Identity Design",
-      "description": "Logo, color palette, typography, and full brand guidelines tailored to your business personality and target audience."
+      "platform": "Instagram",
+      "icon": "fa-brands fa-instagram",
+      "url": "https://instagram.com/m.alfaniii",
+      "label": "@m.alfaniii",
+      "color": "#E1306C"
     },
     {
-      "icon": "fa-solid fa-mobile-screen-button",
-      "title": "Social Media Content",
-      "description": "Eye-catching Instagram posts, stories, reels covers, and feed layouts that grow your audience and boost engagement."
+      "platform": "LinkedIn",
+      "icon": "fa-brands fa-linkedin-in",
+      "url": "https://id.linkedin.com/in/alfaniaulia",
+      "label": "Muhammad Aulia",
+      "color": "#0A66C2"
     },
     {
-      "icon": "fa-solid fa-heart",
-      "title": "Wedding & Event Design",
-      "description": "Elegant invitations, save-the-dates, digital wedding packages, and event collateral with a personal touch."
+      "platform": "Behance",
+      "icon": "fa-brands fa-behance",
+      "url": "#",
+      "label": "m.alfani",
+      "color": "#1769FF"
     },
     {
-      "icon": "fa-solid fa-print",
-      "title": "Print & Marketing Material",
-      "description": "Brochures, flyers, posters, and promotional materials optimized for both print and digital distribution."
+      "platform": "Canva",
+      "icon": "fa-solid fa-paintbrush",
+      "url": "https://canva.com",
+      "label": "Canva Profile",
+      "color": "#00C4CC"
+    }
+  ],
+  "work_categories": [
+    "All",
+    "Swana Wedding Organizer",
+    "Elhaqq Tour & Travel",
+    "Everlenss"
+  ],
+  "experience": [
+    {
+      "year": "2025 — Present",
+      "company": "Everlenss",
+      "role": "Creative Designer",
+      "description": "Focus for making social media content, and Canva template design."
     },
     {
-      "icon": "fa-solid fa-display",
-      "title": "Presentation Design",
-      "description": "Professional, visually compelling slide decks for business pitches, reports, and corporate presentations."
+      "year": "2025 — Present",
+      "company": "Swana Wedding Organizer",
+      "role": "Graphic Designer",
+      "description": "Designing elegant wedding invitations, branding materials, and social media content."
     },
     {
-      "icon": "fa-solid fa-image",
-      "title": "Template Creation",
-      "description": "Reusable, fully editable Canva templates designed to help creators and entrepreneurs maintain consistent branding."
+      "year": "2023 — 2024",
+      "company": "Elhaqq Tour & Travel",
+      "role": "Graphic Designer",
+      "description": "Created promotional graphics, brochures, and social media assets for Hajj & Umrah packages."
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Muhammad Aulia delivered stunning wedding invitations that perfectly captured our love story. Every detail was spot-on, and the response from our guests was overwhelming!",
+      "name": "Siti Rahayu",
+      "role": "Bride — Swana Wedding Organizer",
+      "rating": 5
+    },
+    {
+      "quote": "Our Umrah promotional materials looked incredibly professional. Alfan understood our brand instantly and produced designs that genuinely resonated with our clients.",
+      "name": "Ustadz Fauzi",
+      "role": "Director — Elhaqq Tour & Travel",
+      "rating": 5
+    },
+    {
+      "quote": "The Canva templates he created for our brand saved us hours every week. They're beautiful, easy to edit, and our social media has never looked more cohesive.",
+      "name": "Rina Kusuma",
+      "role": "Brand Manager — Everlenss",
+      "rating": 5
+    },
+    {
+      "quote": "Fast turnaround, great communication, and the final poster exceeded all expectations. Highly recommend for any print or social media design needs!",
+      "name": "Ahmad Rizky",
+      "role": "Event Organizer",
+      "rating": 5
     }
   ],
   "tools": [
@@ -157,35 +184,41 @@
       "color": "#D83B01"
     }
   ],
-  "testimonials": [
+  "services": [
     {
-      "quote": "Muhammad Aulia delivered stunning wedding invitations that perfectly captured our love story. Every detail was spot-on, and the response from our guests was overwhelming!",
-      "name": "Siti Rahayu",
-      "role": "Bride — Swana Wedding Organizer",
-      "rating": 5
+      "icon": "fa-solid fa-pen-nib",
+      "title": "Brand Identity Design",
+      "description": "Logo, color palette, typography, and full brand guidelines tailored to your business personality and target audience."
     },
     {
-      "quote": "Our Umrah promotional materials looked incredibly professional. Alfan understood our brand instantly and produced designs that genuinely resonated with our clients.",
-      "name": "Ustadz Fauzi",
-      "role": "Director — Elhaqq Tour & Travel",
-      "rating": 5
+      "icon": "fa-solid fa-mobile-screen-button",
+      "title": "Social Media Content",
+      "description": "Eye-catching Instagram posts, stories, reels covers, and feed layouts that grow your audience and boost engagement."
     },
     {
-      "quote": "The Canva templates he created for our brand saved us hours every week. They're beautiful, easy to edit, and our social media has never looked more cohesive.",
-      "name": "Rina Kusuma",
-      "role": "Brand Manager — Everlenss",
-      "rating": 5
+      "icon": "fa-solid fa-heart",
+      "title": "Wedding & Event Design",
+      "description": "Elegant invitations, save-the-dates, digital wedding packages, and event collateral with a personal touch."
     },
     {
-      "quote": "Fast turnaround, great communication, and the final poster exceeded all expectations. Highly recommend for any print or social media design needs!",
-      "name": "Ahmad Rizky",
-      "role": "Event Organizer",
-      "rating": 5
+      "icon": "fa-solid fa-print",
+      "title": "Print & Marketing Material",
+      "description": "Brochures, flyers, posters, and promotional materials optimized for both print and digital distribution."
+    },
+    {
+      "icon": "fa-solid fa-display",
+      "title": "Presentation Design",
+      "description": "Professional, visually compelling slide decks for business pitches, reports, and corporate presentations."
+    },
+    {
+      "icon": "fa-solid fa-image",
+      "title": "Template Creation",
+      "description": "Reusable, fully editable Canva templates designed to help creators and entrepreneurs maintain consistent branding."
     }
   ],
   "stats": [
     {
-      "number": "50+",
+      "number": "300+",
       "label": "Projects Done"
     },
     {
@@ -200,31 +233,5 @@
       "number": "100%",
       "label": "Passion"
     }
-  ],
-  "experience": [
-    {
-      "year": "2025 — Present",
-      "company": "Everlenss",
-      "role": "Creative Founder",
-      "description": "Founded a creative studio focused on branding, social media content, and Canva template design."
-    },
-    {
-      "year": "2025 — Present",
-      "company": "Swana Wedding Organizer",
-      "role": "Graphic Designer",
-      "description": "Designing elegant wedding invitations, branding materials, and social media content."
-    },
-    {
-      "year": "2023 — 2024",
-      "company": "Elhaqq Tour & Travel",
-      "role": "Graphic Designer",
-      "description": "Created promotional graphics, brochures, and social media assets for Hajj & Umrah packages."
-    }
-  ],
-  "work_categories": [
-    "All",
-    "Swana Wedding Organizer",
-    "Elhaqq Tour & Travel",
-    "Everlenss"
   ]
 }
