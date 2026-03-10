@@ -1,5 +1,5 @@
 ---
-title: Family Gathering
+title: Instagram Caraousel Design
 description: Family Gathering PT. Persada Cipta Usaha
 image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162504/Swana_Team_PT_Persada_Slide_2_uxumzg.png
 category: Everlenss
