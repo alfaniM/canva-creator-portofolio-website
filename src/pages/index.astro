@@ -1,13 +1,113 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import AboutSection from '../components/AboutSection.astro';
+import ToolsGrid from '../components/ToolsGrid.astro';
 import PortfolioGrid from '../components/PortfolioGrid.astro';
+import Timeline from '../components/Timeline.astro';
+import Testimonials from '../components/Testimonials.astro';
 ---
+
 <Layout>
+  <!-- 1. Hero Section -->
   <Hero />
-  
-  <!-- Section connector dots -->
-  <div class="section-dots" style="background: var(--bg-primary)"><span></span><span></span><span></span></div>
-  
-  <PortfolioGrid limit={3} showFilters={false} />
+
+  <!-- Marquee marquee ticker — skills scrolling strip -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track">
+      {['Brand Design', 'Social Media', 'Canva Templates', 'Wedding Design', 'Print Media', 'Typography', 'Branding', 'Poster Design', 'Infographic', 'Presentation'].map(s => (
+        <>
+          <span class="marquee-item">{s}</span>
+          <span class="marquee-sep" aria-hidden="true">✦</span>
+        </>
+      ))}
+      {/* Duplicate for seamless loop */}
+      {['Brand Design', 'Social Media', 'Canva Templates', 'Wedding Design', 'Print Media', 'Typography', 'Branding', 'Poster Design', 'Infographic', 'Presentation'].map(s => (
+        <>
+          <span class="marquee-item">{s}</span>
+          <span class="marquee-sep" aria-hidden="true">✦</span>
+        </>
+      ))}
+    </div>
+  </div>
+
+  <!-- 2. Services I Provide -->
+  <Services />
+
+  <!-- 3. About Me (dark section) -->
+  <AboutSection />
+
+  <!-- 4. My Design Tools -->
+  <ToolsGrid />
+
+  <!-- 5. Featured Portfolio Works -->
+  <PortfolioGrid limit={4} showFilters={false} />
+
+  <!-- 6. Experience Timeline -->
+  <Timeline />
+
+  <!-- 7. Testimonials -->
+  <Testimonials />
 </Layout>
+
+<style>
+  /* ── Marquee strip ── */
+  .marquee-strip {
+    background: linear-gradient(135deg, #00C4CC, #00A3AA);
+    padding: 0.875rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5rem;
+    animation: marqueeScroll 28s linear infinite;
+  }
+
+  .marquee-item {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: white;
+    opacity: 0.9;
+  }
+
+  .marquee-sep {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.6rem;
+  }
+
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── Timeline section wrapper ── */
+  .timeline-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #00C4CC;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .timeline-heading {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .timeline-accent {
+    background: linear-gradient(135deg, #00C4CC, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+  }
+</style>

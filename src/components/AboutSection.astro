@@ -1,0 +1,319 @@
+---
+import siteData from '../data/site.json';
+const { personal, stats, skills } = siteData;
+---
+
+<section id="about" class="about-section py-24 relative overflow-hidden">
+
+  <!-- Background decorative blobs -->
+  <div class="about-blob about-blob-1" aria-hidden="true"></div>
+  <div class="about-blob about-blob-2" aria-hidden="true"></div>
+
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+      <!-- Left: Circular photo WITH orbiting skill tags -->
+      <div class="flex justify-center lg:justify-start reveal-left">
+        <div class="about-photo-wrap">
+
+          <!-- Big teal circle (the orange blob in reference) -->
+          <div class="about-circle-bg" aria-hidden="true"></div>
+
+          <!-- Decorative ring inside circle -->
+          <div class="about-circle-ring" aria-hidden="true"></div>
+
+          <!-- Profile Photo (clipped circle) -->
+          <img
+            src={personal.photo_url}
+            alt={personal.name}
+            class="about-photo"
+            loading="lazy"
+            decoding="async"
+          />
+
+          <!-- Orbiting skill tag pills (same concept as reference) -->
+          {skills.slice(0, 6).map((s, i) => (
+            <span class={`about-skill-pill skill-pill-${i + 1} float-badge`} style={`animation-delay: ${-i * 0.6}s`}>
+              {s.name}
+            </span>
+          ))}
+
+        </div>
+      </div>
+
+      <!-- Right: Text content -->
+      <div class="reveal-right">
+        <p class="section-eyebrow">— About Me</p>
+        <h2 class="about-heading">
+          Who is <em class="about-name-em">{personal.name}?</em>
+        </h2>
+        <p class="about-bio">{personal.bio}</p>
+
+        <!-- Stats row -->
+        <div class="about-stats">
+          {stats.map(s => (
+            <div class="about-stat">
+              <span class="about-stat-num stat-number" data-target={s.number}>{s.number}</span>
+              <span class="about-stat-label">{s.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <!-- CTA -->
+        <div class="flex flex-wrap gap-4 mt-8">
+          <a href="/about" class="about-btn-primary magnetic-btn">
+            <i class="fa-solid fa-user mr-2"></i>More About Me
+            <span class="about-btn-arrow"><i class="fa-solid fa-arrow-right text-xs"></i></span>
+          </a>
+          <a href="/contact" class="about-btn-outline magnetic-btn">
+            <i class="fa-solid fa-paper-plane mr-2"></i>Hire Me
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Section background ── */
+  .about-section {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .about-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .about-blob-1 { width: 400px; height: 400px; top: -100px; left: -100px; background: radial-gradient(circle, #00C4CC, transparent); }
+  .about-blob-2 { width: 350px; height: 350px; bottom: -80px; right: -80px; background: radial-gradient(circle, #a855f7, transparent); }
+
+  /* ── Photo wrap ── */
+  .about-photo-wrap {
+    position: relative;
+    width: 360px;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Big circle bg */
+  .about-circle-bg {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0,196,204,0.55), rgba(0,140,150,0.4));
+    animation: circlePulse 6s ease-in-out infinite;
+  }
+
+  @keyframes circlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+
+  /* Decorative inner ring */
+  .about-circle-ring {
+    position: absolute;
+    width: 310px;
+    height: 310px;
+    border-radius: 50%;
+    border: 2px dashed rgba(0, 196, 204, 0.2);
+    animation: slowSpin 30s linear infinite;
+  }
+  @keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Photo */
+  .about-photo {
+    position: relative;
+    z-index: 3;
+    width: 240px;
+    height: 260px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    /* Nice oval circle crop */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .about-photo-wrap:hover .about-photo { transform: scale(1.04); }
+
+  /* ── Orbiting skill pills ── */
+  .about-skill-pill {
+    position: absolute;
+    z-index: 5;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: default;
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+  .about-skill-pill:hover {
+    background: rgba(0,196,204,0.1);
+    border-color: rgba(0,196,204,0.3);
+    color: #00C4CC;
+    transform: scale(1.07) translateY(-2px) !important;
+  }
+
+  /* Pill positions (orbiting the circle) */
+  .skill-pill-1 { top: 12%;  right: -10px; }
+  .skill-pill-2 { top: 38%;  left: -10px; }
+  .skill-pill-3 { top: 62%;  right: -15px; border-color: rgba(0,196,204,0.2) !important; color: #00C4CC !important; }
+  .skill-pill-4 { bottom: 8%; left: 10%; }
+  .skill-pill-5 { top: 8%;   left: 5%; border-color: rgba(168,85,247,0.2) !important; color: #a855f7 !important; }
+  .skill-pill-6 { bottom: 22%; right: -10px; }
+
+  @media (max-width: 1023px) {
+    .about-photo-wrap { width: 300px; height: 300px; }
+    .about-circle-bg { width: 230px; height: 230px; }
+    .about-circle-ring { width: 260px; height: 260px; }
+    .about-photo { width: 200px; height: 220px; }
+  }
+
+  /* ── Text side ── */
+  .section-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #00C4CC;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .about-heading {
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+  }
+
+  .about-name-em {
+    color: #00C4CC;
+    font-style: italic;
+    font-weight: 800;
+  }
+
+  .about-bio {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    max-width: 520px;
+  }
+
+  /* ── Stats ── */
+  .about-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .about-stat { display: flex; flex-direction: column; gap: 0.2rem; }
+  .about-stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #00C4CC;
+    line-height: 1;
+    transition: transform 0.3s ease;
+  }
+  .about-stat:hover .about-stat-num { transform: scale(1.1); }
+  .about-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Buttons ── */
+  .about-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.75rem 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #00C4CC, #00A3AA);
+    color: white;
+    font-weight: 700;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  .about-btn-primary:hover::after { transform: translateX(100%); }
+  .about-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,196,204,0.4); }
+
+  .about-btn-arrow {
+    width: 2rem; height: 2rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .about-btn-primary:hover .about-btn-arrow { transform: translateX(3px); }
+
+  .about-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.75rem;
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    transition: border-color 0.25s, background 0.25s, transform 0.25s;
+  }
+  .about-btn-outline:hover {
+    border-color: #00C4CC;
+    background: rgba(0,196,204,0.12);
+    transform: translateY(-2px);
+  }
+
+  /* ── Magnetic btn ── */
+  .magnetic-btn { will-change: transform; }
+</style>
+
+<script>
+  function initAboutMagnetic() {
+    document.querySelectorAll<HTMLElement>('#about .magnetic-btn').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top  - r.height / 2;
+        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transition = 'transform 0.4s cubic-bezier(0.16,1,0.3,1)';
+        btn.style.transform = '';
+        setTimeout(() => { btn.style.transition = ''; }, 400);
+      });
+    });
+  }
+
+  initAboutMagnetic();
+  document.addEventListener('astro:after-swap', initAboutMagnetic);
+</script>

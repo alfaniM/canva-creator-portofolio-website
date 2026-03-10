@@ -1,0 +1,181 @@
+---
+import siteData from '../data/site.json';
+const { tools } = siteData;
+---
+
+<section id="tools" class="py-24 relative" style="background: var(--bg-secondary)">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <!-- Section header -->
+    <div class="text-center mb-14 reveal">
+      <p class="section-eyebrow">— My Favorite Tools</p>
+      <h2 class="section-heading">
+        Exploring the Tools<br>
+        <span class="text-gradient">Behind My Designs</span>
+      </h2>
+    </div>
+
+    <!-- Tools grid -->
+    <div class="tools-grid">
+      {tools.map((tool, idx) => (
+        <div class="tool-card reveal" style={`animation-delay: ${idx * 0.07}s`}>
+          <!-- Circular progress ring -->
+          <div class="tool-ring-wrap">
+            <svg class="tool-ring" viewBox="0 0 80 80">
+              <circle class="ring-bg" cx="40" cy="40" r="32" />
+              <circle
+                class="ring-fill"
+                cx="40" cy="40" r="32"
+                stroke={tool.color}
+                style={`stroke-dasharray: ${2 * Math.PI * 32}; stroke-dashoffset: ${2 * Math.PI * 32 * (1 - tool.percent / 100)}`}
+                data-percent={tool.percent}
+              />
+            </svg>
+            <!-- Icon in center -->
+            <div class="tool-icon" style={`color: ${tool.color}`}>
+              <i class={tool.icon}></i>
+            </div>
+          </div>
+          <!-- Percent label -->
+          <p class="tool-percent" style={`color: ${tool.color}`}>{tool.percent}%</p>
+          <!-- Name -->
+          <p class="tool-name">{tool.name}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #00C4CC;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .section-heading {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #00C4CC, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Tools grid ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1.5rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.75rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.35s ease,
+                border-color 0.25s;
+  }
+  .tool-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px var(--shadow-hover);
+    border-color: rgba(0,196,204,0.25);
+  }
+
+  /* ── SVG ring ── */
+  .tool-ring-wrap {
+    position: relative;
+    width: 80px; height: 80px;
+  }
+
+  .tool-ring {
+    width: 80px; height: 80px;
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: var(--border-color);
+    stroke-width: 5;
+  }
+
+  .ring-fill {
+    fill: none;
+    stroke-width: 5;
+    stroke-linecap: round;
+    /* dashoffset will be set by inline style for SSR accuracy */
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .tool-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  .tool-card:hover .tool-icon { transform: scale(1.15); }
+
+  .tool-percent {
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .tool-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+  }
+</style>
+
+<script>
+  // Animate rings on scroll into view
+  function initRings() {
+    const fills = document.querySelectorAll<SVGCircleElement>('.ring-fill');
+    const R = 32;
+    const C = 2 * Math.PI * R; // circumference
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const circle = entry.target as SVGCircleElement;
+          const pct = parseInt(circle.dataset.percent || '0', 10);
+          circle.style.strokeDashoffset = String(C * (1 - pct / 100));
+          obs.unobserve(circle);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    // Start them all at 0 (full dash offset = hidden) then animate on scroll
+    fills.forEach(c => {
+      c.style.strokeDasharray = String(C);
+      c.style.strokeDashoffset = String(C); // start hidden
+      obs.observe(c);
+    });
+  }
+
+  initRings();
+  document.addEventListener('astro:after-swap', initRings);
+</script>

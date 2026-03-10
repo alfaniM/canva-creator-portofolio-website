@@ -1,0 +1,148 @@
+---
+import siteData from '../data/site.json';
+const { services } = siteData;
+---
+
+<section id="services" class="py-24 relative" style="background: var(--bg-primary)">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <!-- Section header -->
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-14 reveal">
+      <div>
+        <p class="section-eyebrow">— What I Do</p>
+        <h2 class="section-heading">
+          Services <span class="text-gradient">I Provide</span>
+        </h2>
+      </div>
+      <a href="/contact" class="mt-4 sm:mt-0 inline-flex items-center gap-2 btn-pill-outline self-start sm:self-auto">
+        View All Services
+        <span class="btn-pill-arrow"><i class="fa-solid fa-arrow-right text-xs"></i></span>
+      </a>
+    </div>
+
+    <!-- Services grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {services.map((s, idx) => (
+        <div
+          class="service-card reveal"
+          style={`animation-delay: ${idx * 0.08}s`}
+        >
+          <div class="service-icon-wrap">
+            <i class={s.icon}></i>
+          </div>
+          <h3 class="service-title">{s.title}</h3>
+          <p class="service-desc">{s.description}</p>
+          <a href="/contact" class="service-learn-more">
+            Learn more <i class="fa-solid fa-arrow-right text-xs ml-1"></i>
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #00C4CC;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-heading {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text-primary);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #00C4CC, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .btn-pill-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1.2rem 0.6rem 1.4rem;
+    border: 2px solid var(--border-color);
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    transition: border-color 0.25s, color 0.25s;
+    white-space: nowrap;
+  }
+  .btn-pill-outline:hover { border-color: #00C4CC; color: #00C4CC; }
+
+  .btn-pill-arrow {
+    width: 1.8rem; height: 1.8rem;
+    border-radius: 50%;
+    background: #00C4CC;
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .btn-pill-outline:hover .btn-pill-arrow { transform: translateX(3px); }
+
+  /* ── Service Cards ── */
+  .service-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem;
+    padding: 2rem 1.75rem;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.35s ease,
+                border-color 0.25s;
+  }
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px var(--shadow-hover);
+    border-color: rgba(0,196,204,0.3);
+  }
+
+  .service-icon-wrap {
+    width: 3rem; height: 3rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0,196,204,0.15), rgba(0,196,204,0.06));
+    color: #00C4CC;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    transition: background 0.3s;
+  }
+  .service-card:hover .service-icon-wrap {
+    background: linear-gradient(135deg, rgba(0,196,204,0.3), rgba(0,196,204,0.1));
+  }
+
+  .service-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+  }
+
+  .service-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .service-learn-more {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #00C4CC;
+    display: inline-flex;
+    align-items: center;
+    transition: gap 0.25s;
+    gap: 0.25rem;
+  }
+  .service-learn-more:hover { gap: 0.5rem; }
+</style>

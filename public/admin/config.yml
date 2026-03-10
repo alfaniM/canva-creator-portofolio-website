@@ -1,46 +1,91 @@
 backend:
   name: git-gateway
   branch: main
-  repo: alfaniM/canva-creator-portofolio-website # TAMBAHKAN BARIS INI (disesuaikan dengan username/repo)
+  repo: alfaniM/canva-creator-portofolio-website
 
+# ============================================================
+# MEDIA STORAGE
+# Files uploaded directly from CMS image widget go here.
+# If you use the Cloudinary media library (recommended),
+# files go to Cloudinary instead and only the URL is saved.
+# ============================================================
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
-media_folder: "public/uploads" # Media files will be stored in the repo under public/uploads
-public_folder: "/uploads" # The src attribute for uploaded media will begin with /uploads
+# ============================================================
+# CLOUDINARY MEDIA LIBRARY (Native Decap CMS Integration)
+# After filling in your cloud_name below, every "image" widget
+# in the CMS will have a "Choose from Cloud" button that opens
+# the full Cloudinary Media Library browser.
+# 
+# HOW TO SET UP (one-time, free):
+#   1. cloudinary.com → free account → copy your Cloud Name
+#   2. Settings → Upload → Upload Presets → Add preset
+#      → Signing mode: Unsigned → Save → copy Preset Name
+#   3. Replace YOUR_CLOUD_NAME and YOUR_UPLOAD_PRESET below
+# ============================================================
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: YOUR_CLOUD_NAME        # ← Replace this
+    upload_preset: YOUR_UPLOAD_PRESET  # ← Replace this (unsigned preset)
+    multiple: true                     # Allow selecting multiple images
 
 collections:
-  - name: "portfolio" # Used in routes, e.g., /admin/collections/portfolio
-    label: "Portfolio Work" # Used in the UI
-    folder: "src/content/portfolio" # The path to the folder where the documents are stored
-    create: true # Allow users to create new documents in this collection
-    slug: "{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
-    fields: # The fields for each document, usually in front matter
+  # ----------------------------------------------------------
+  # PORTFOLIO WORKS
+  # ----------------------------------------------------------
+  - name: "portfolio"
+    label: "Portfolio Work"
+    folder: "src/content/portfolio"
+    create: true
+    slug: "{{slug}}"
+    fields:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Description", name: "description", widget: "text"}
-      - {label: "Image", name: "image", widget: "image"}
-      - {
-          label: "Category", 
-          name: "category", 
-          widget: "select", 
-          options: ["Swana Wedding Organizer", "Elhaqq Tour & Travel", "Everlenss", "Other"]
-        }
-      - {label: "Canva Link", name: "canva_link", widget: "string", required: false}
-      - {label: "Order", name: "order", widget: "number", default: 0, required: false}
-      - {
-          label: "Gallery Images",
-          name: "gallery",
-          widget: "list",
-          required: false,
-          field: {label: "Image", name: "image", widget: "image"}
-        }
-      - {
-          label: "Layout Template", 
-          name: "layout_template", 
-          widget: "select", 
-          options: ["bento", "basic", "side-by-side"],
-          default: "bento"
-        }
-      - {label: "Body", name: "body", widget: "markdown"}
 
+      # Cover image — supports local upload OR Cloudinary CDN URL
+      - label: "Cover Image"
+        name: "image"
+        widget: "image"
+        hint: "Upload a file OR choose from Cloudinary cloud library"
+        required: true
+
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - "Swana Wedding Organizer"
+          - "Elhaqq Tour & Travel"
+          - "Everlenss"
+          - "Other"
+
+      - {label: "Canva Link", name: "canva_link", widget: "string", required: false}
+      - {label: "Display Order", name: "order", widget: "number", default: 0, required: false}
+
+      # Gallery — each item can be local or Cloudinary URL
+      - label: "Gallery Images"
+        name: "gallery"
+        widget: "list"
+        required: false
+        hint: "Add images to the project gallery. You can reorder them here."
+        field:
+          label: "Image"
+          name: "image"
+          widget: "image"
+          hint: "Upload or choose from Cloudinary cloud library"
+
+      - label: "Layout Template"
+        name: "layout_template"
+        widget: "select"
+        options: ["bento", "basic", "side-by-side"]
+        default: "bento"
+
+      - {label: "Body / Description", name: "body", widget: "markdown"}
+
+  # ----------------------------------------------------------
+  # SITE GLOBAL DATA (hero, contact, social links, etc.)
+  # ----------------------------------------------------------
   - name: "site_data"
     label: "Site Global Data"
     files:
@@ -53,15 +98,29 @@ collections:
             widget: "object"
             fields:
               - {label: "Name", name: "name", widget: "string"}
-              - {label: "Role", name: "role", widget: "string"}
+              - {label: "Role / Title", name: "role", widget: "string"}
               - {label: "Bio", name: "bio", widget: "text"}
-              - {label: "Photo URL", name: "photo_url", widget: "image"}
+              # Hero profile photo — upload OR Cloudinary URL
+              - label: "Profile Photo"
+                name: "photo_url"
+                widget: "image"
+                hint: "Upload a file OR choose from Cloudinary → your hero photo updates on next deploy"
+
+          - label: "Badge (Floating circle on hero)"
+            name: "badge"
+            widget: "object"
+            fields:
+              - {label: "Text (top line)", name: "text", widget: "string", default: "CANVA"}
+              - {label: "Sub-text (bottom line)", name: "subtext", widget: "string", default: "Creator"}
+              - {label: "Icon Class (FontAwesome)", name: "icon", widget: "string", default: "fa-solid fa-paintbrush"}
+
           - label: "Contact Info"
             name: "contact"
             widget: "object"
             fields:
               - {label: "Email", name: "email", widget: "string"}
               - {label: "WhatsApp URL", name: "whatsapp", widget: "string", required: false}
+
           - label: "Social Links"
             name: "social_links"
             widget: "list"
@@ -71,17 +130,19 @@ collections:
               - {label: "Profile URL", name: "url", widget: "string"}
               - {label: "Display Label (e.g., @username)", name: "label", widget: "string"}
               - {label: "Brand Color (Hex)", name: "color", widget: "color", default: "#00C4CC"}
+
           - label: "Stats"
             name: "stats"
             widget: "list"
             fields:
-              - {label: "Number", name: "number", widget: "string"}
-              - {label: "Label", name: "label", widget: "string"}
+              - {label: "Number (e.g., 50+)", name: "number", widget: "string"}
+              - {label: "Label (e.g., Projects Done)", name: "label", widget: "string"}
+
           - label: "Experience"
             name: "experience"
             widget: "list"
             fields:
-              - {label: "Year", name: "year", widget: "string"}
+              - {label: "Year Range", name: "year", widget: "string"}
               - {label: "Company", name: "company", widget: "string"}
               - {label: "Role", name: "role", widget: "string"}
               - {label: "Description", name: "description", widget: "text"}

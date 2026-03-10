@@ -3,7 +3,13 @@
     "name": "Muhammad Aulia",
     "role": "Graphic Designer",
     "bio": "Passionate graphic designer and active Canva user since 2019. I specialize in turning complex ideas into clean, engaging visuals. I am eager to step up as a Template Creator to design high-quality, versatile templates that help users worldwide bring their ideas to life.",
-    "photo_url": "https://github.com/alfaniM/canva-creator-portofolio-website/blob/main/public/uploads/gemini_generated_image_v5mscyv5mscyv5ms-1-.png?raw=true"
+    "photo_url": "https://github.com/alfaniM/canva-creator-portofolio-website/blob/main/public/uploads/gemini_generated_image_v5mscyv5mscyv5ms-1-.png?raw=true",
+    "badge": {
+      "text": "CANVA",
+      "subtext": "Creator",
+      "icon": "fa-solid fa-paintbrush",
+      "color": "#00C4CC"
+    }
   },
   "contact": {
     "email": "hello@muhammadaulia.com",
@@ -79,6 +85,102 @@
     {
       "name": "Presentation",
       "icon": "fa-solid fa-display"
+    }
+  ],
+  "services": [
+    {
+      "icon": "fa-solid fa-pen-nib",
+      "title": "Brand Identity Design",
+      "description": "Logo, color palette, typography, and full brand guidelines tailored to your business personality and target audience."
+    },
+    {
+      "icon": "fa-solid fa-mobile-screen-button",
+      "title": "Social Media Content",
+      "description": "Eye-catching Instagram posts, stories, reels covers, and feed layouts that grow your audience and boost engagement."
+    },
+    {
+      "icon": "fa-solid fa-heart",
+      "title": "Wedding & Event Design",
+      "description": "Elegant invitations, save-the-dates, digital wedding packages, and event collateral with a personal touch."
+    },
+    {
+      "icon": "fa-solid fa-print",
+      "title": "Print & Marketing Material",
+      "description": "Brochures, flyers, posters, and promotional materials optimized for both print and digital distribution."
+    },
+    {
+      "icon": "fa-solid fa-display",
+      "title": "Presentation Design",
+      "description": "Professional, visually compelling slide decks for business pitches, reports, and corporate presentations."
+    },
+    {
+      "icon": "fa-solid fa-image",
+      "title": "Template Creation",
+      "description": "Reusable, fully editable Canva templates designed to help creators and entrepreneurs maintain consistent branding."
+    }
+  ],
+  "tools": [
+    {
+      "name": "Canva",
+      "icon": "fa-solid fa-paintbrush",
+      "percent": 98,
+      "color": "#00C4CC"
+    },
+    {
+      "name": "Photoshop",
+      "icon": "fa-solid fa-image",
+      "percent": 85,
+      "color": "#31A8FF"
+    },
+    {
+      "name": "Illustrator",
+      "icon": "fa-solid fa-bezier-curve",
+      "percent": 80,
+      "color": "#FF9A00"
+    },
+    {
+      "name": "Figma",
+      "icon": "fa-brands fa-figma",
+      "percent": 75,
+      "color": "#F24E1E"
+    },
+    {
+      "name": "Capcut",
+      "icon": "fa-solid fa-video",
+      "percent": 88,
+      "color": "#a855f7"
+    },
+    {
+      "name": "MS Office",
+      "icon": "fa-brands fa-microsoft",
+      "percent": 90,
+      "color": "#D83B01"
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Muhammad Aulia delivered stunning wedding invitations that perfectly captured our love story. Every detail was spot-on, and the response from our guests was overwhelming!",
+      "name": "Siti Rahayu",
+      "role": "Bride — Swana Wedding Organizer",
+      "rating": 5
+    },
+    {
+      "quote": "Our Umrah promotional materials looked incredibly professional. Alfan understood our brand instantly and produced designs that genuinely resonated with our clients.",
+      "name": "Ustadz Fauzi",
+      "role": "Director — Elhaqq Tour & Travel",
+      "rating": 5
+    },
+    {
+      "quote": "The Canva templates he created for our brand saved us hours every week. They're beautiful, easy to edit, and our social media has never looked more cohesive.",
+      "name": "Rina Kusuma",
+      "role": "Brand Manager — Everlenss",
+      "rating": 5
+    },
+    {
+      "quote": "Fast turnaround, great communication, and the final poster exceeded all expectations. Highly recommend for any print or social media design needs!",
+      "name": "Ahmad Rizky",
+      "role": "Event Organizer",
+      "rating": 5
     }
   ],
   "stats": [

@@ -2,27 +2,37 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 <Layout title="Admin Tools | Portfolio Manager">
-  <div class="pt-28 pb-20 px-6 max-w-6xl mx-auto min-h-screen" style="color: var(--text-primary)">
+  <div class="pt-28 pb-20 px-6 max-w-7xl mx-auto min-h-screen" style="color: var(--text-primary)">
     
     <div class="mb-10">
       <h1 class="text-4xl font-extrabold mb-3">Admin Tools</h1>
       <p class="text-lg" style="color: var(--text-secondary)">
-        Local utility for bulk importing portfolio items and managing gallery images.
+        Local utility for bulk importing portfolio items, editing images, and uploading to cloud storage.
       </p>
     </div>
 
     <!-- Tool Tabs -->
-    <div class="flex gap-4 border-b mb-8" style="border-color: var(--border-color)">
-      <button class="tool-tab active" data-target="csv">CSV Bulk Import</button>
-      <button class="tool-tab" data-target="gallery">Image Gallery Builder</button>
+    <div class="flex gap-2 border-b mb-8 overflow-x-auto" style="border-color: var(--border-color)">
+      <button class="tool-tab active" data-target="csv">
+        <i class="fa-solid fa-file-csv mr-2"></i>CSV Bulk Import
+      </button>
+      <button class="tool-tab" data-target="gallery">
+        <i class="fa-solid fa-images mr-2"></i>Image Gallery Builder
+      </button>
+      <button class="tool-tab" data-target="cloud">
+        <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Cloud Upload
+      </button>
+      <button class="tool-tab" data-target="media">
+        <i class="fa-solid fa-photo-film mr-2"></i>Media Library
+      </button>
     </div>
 
-    <!-- 1. CSV BULK IMPORT -->
+    <!-- ========== 1. CSV BULK IMPORT ========== -->
     <div id="csv-tool" class="tool-view active glass-panel">
       <h2 class="text-2xl font-bold mb-4">CSV to Portfolio Items</h2>
       <p class="mb-4 text-sm max-w-2xl" style="color: var(--text-secondary)">
-        Paste your CSV data here. It should have headers: <code>title, description, image, category, canva_link, order, layout_template</code>. 
-        Clicking 'Generate ZIP' will create a zip file with <code>.md</code> files ready to extract into <code>src/content/portfolio/</code>.
+        Paste your CSV data here. Headers: <code>title, description, image, category, canva_link, order, layout_template</code>. 
+        Clicking 'Generate ZIP' creates <code>.md</code> files ready to extract into <code>src/content/portfolio/</code>.
       </p>
       
       <textarea id="csv-input" class="w-full h-48 p-4 rounded-xl border mb-4 font-mono text-sm" 
@@ -35,55 +45,271 @@ import Layout from '../../layouts/Layout.astro';
       </button>
     </div>
 
-    <!-- 2. IMAGE GALLERY BUILDER -->
+    <!-- ========== 2. IMAGE GALLERY BUILDER ========== -->
     <div id="gallery-tool" class="tool-view hidden glass-panel">
-      <h2 class="text-2xl font-bold mb-4">Mass Image Upload & Reorder</h2>
-      <p class="mb-4 text-sm max-w-2xl" style="color: var(--text-secondary)">
-        Select or drop multiple images here. Drag to reorder them (Instagram style). Click an image to crop it. 
-        When done, export a ZIP containing the images for <code>public/uploads/</code> and get the YAML code to paste into your CMS.
+      <h2 class="text-2xl font-bold mb-2">Image Gallery Builder</h2>
+      <p class="mb-6 text-sm max-w-2xl" style="color: var(--text-secondary)">
+        Drag &amp; drop or paste a URL to add images. Reorder by dragging. Click an image to crop, rotate, or adjust it. Export a ZIP or upload to cloud.
       </p>
+
+      <!-- URL Import Row -->
+      <div class="flex gap-3 mb-6">
+        <input id="gallery-url-input" type="text" placeholder="Paste image URL or Google Drive share link…"
+          class="flex-1 px-4 py-2.5 rounded-xl border text-sm"
+          style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+        <button id="btn-gallery-add-url" class="btn-outline whitespace-nowrap">
+          <i class="fa-solid fa-link mr-2"></i>Add URL
+        </button>
+      </div>
 
       <!-- Dropzone -->
       <div id="dropzone" class="border-2 border-dashed rounded-2xl p-10 text-center mb-8 transition-colors cursor-pointer" 
         style="border-color: #00C4CC; background: rgba(0,196,204,0.05)">
-        <i class="fa-solid fa-cloud-arrow-up text-4xl text-[#00C4CC] mb-4"></i>
-        <p class="text-lg font-bold">Drag & Drop images here</p>
-        <p class="text-sm" style="color: var(--text-muted)">or click to select files (.jpg, .png, .webp)</p>
+        <i class="fa-solid fa-cloud-arrow-up text-5xl text-[#00C4CC] mb-4 block"></i>
+        <p class="text-lg font-bold">Drag &amp; Drop images here</p>
+        <p class="text-sm mt-1" style="color: var(--text-muted)">or click to select files — .jpg, .png, .webp, .gif — multiple allowed</p>
         <input type="file" id="file-input" multiple accept="image/*" class="hidden" />
       </div>
 
       <!-- Sorting Grid -->
-      <div id="sortable-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-8 min-h-[100px]">
+      <div id="sortable-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 mb-8 min-h-[80px]">
         <!-- Images injected here by JS -->
       </div>
 
       <!-- Actions -->
       <div class="flex flex-wrap gap-4 items-center">
         <button id="btn-export-gallery" class="btn-primary">
-          <i class="fa-solid fa-download mr-2"></i> Export Gallery ZIP
+          <i class="fa-solid fa-file-zipper mr-2"></i>Export ZIP
         </button>
         <button id="btn-copy-yaml" class="btn-outline hidden">
-          <i class="fa-solid fa-copy mr-2"></i> Copy YAML snippet
+          <i class="fa-solid fa-copy mr-2"></i>Copy YAML
         </button>
+        <span id="gallery-count" class="text-sm" style="color: var(--text-muted)"></span>
         <button id="btn-clear-gallery" class="text-red-500 text-sm font-bold ml-auto hover:underline">
-          Clear All
+          <i class="fa-solid fa-trash mr-1"></i>Clear All
         </button>
       </div>
 
       <pre id="yaml-output" class="mt-6 p-4 rounded-xl hidden text-sm font-mono" style="background: var(--bg-secondary); overflow-x: auto; color: #00C4CC;"></pre>
     </div>
+
+    <!-- ========== 3. CLOUD UPLOAD ========== -->
+    <div id="cloud-tool" class="tool-view hidden">
+
+      <!-- Settings Panel -->
+      <div class="glass-panel mb-6">
+        <div class="flex items-center gap-3 mb-4">
+          <i class="fa-brands fa-cloudflare text-2xl" style="color:#00C4CC"></i>
+          <h2 class="text-2xl font-bold">Cloudinary CDN Settings</h2>
+          <span class="ml-auto text-xs px-3 py-1 rounded-full font-bold" style="background:rgba(0,196,204,0.15); color:#00C4CC;">Free Tier: 25GB</span>
+        </div>
+        <p class="text-sm mb-4" style="color: var(--text-secondary)">
+          Create a free account at <a href="https://cloudinary.com" target="_blank" class="underline text-[#00C4CC]">cloudinary.com</a>, 
+          then go to <strong>Settings → Upload → Upload Presets</strong> and create an <strong>Unsigned</strong> preset.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">Cloud Name</label>
+            <input id="cloud-name" type="text" placeholder="e.g. my-cloud-name"
+              class="w-full px-4 py-2.5 rounded-xl border text-sm"
+              style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">Upload Preset (Unsigned)</label>
+            <input id="upload-preset" type="text" placeholder="e.g. portfolio_unsigned"
+              class="w-full px-4 py-2.5 rounded-xl border text-sm"
+              style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+          </div>
+        </div>
+        <div class="flex items-center gap-4 mt-4">
+          <button id="btn-save-settings" class="btn-primary">
+            <i class="fa-solid fa-floppy-disk mr-2"></i>Save Settings
+          </button>
+          <span id="settings-status" class="text-sm" style="color: var(--text-muted)"></span>
+        </div>
+      </div>
+
+      <!-- Cloud Dropzone -->
+      <div class="glass-panel">
+        <h3 class="text-xl font-bold mb-4">Upload Images to Cloud</h3>
+
+        <!-- URL Import Row -->
+        <div class="flex gap-3 mb-5">
+          <input id="cloud-url-input" type="text" placeholder="Paste direct image URL or Google Drive share link…"
+            class="flex-1 px-4 py-2.5 rounded-xl border text-sm"
+            style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+          <button id="btn-cloud-add-url" class="btn-outline whitespace-nowrap">
+            <i class="fa-solid fa-link mr-2"></i>Add URL
+          </button>
+        </div>
+
+        <!-- Cloud Dropzone -->
+        <div id="cloud-dropzone" class="border-2 border-dashed rounded-2xl p-10 text-center mb-6 transition-colors cursor-pointer" 
+          style="border-color: #a855f7; background: rgba(168,85,247,0.05)">
+          <i class="fa-solid fa-cloud-arrow-up text-5xl mb-4 block" style="color:#a855f7"></i>
+          <p class="text-lg font-bold">Drop images to upload to Cloudinary</p>
+          <p class="text-sm mt-1" style="color: var(--text-muted)">or click to select — multiple files allowed</p>
+          <input type="file" id="cloud-file-input" multiple accept="image/*" class="hidden" />
+        </div>
+
+        <!-- Upload Queue -->
+        <div id="upload-queue" class="space-y-3 mb-6">
+          <!-- Upload items injected by JS -->
+        </div>
+
+        <!-- Upload Actions -->
+        <div class="flex flex-wrap gap-4 items-center">
+          <button id="btn-upload-all" class="btn-cloud hidden">
+            <i class="fa-solid fa-rocket mr-2"></i>Upload All to Cloud
+          </button>
+          <button id="btn-copy-cloud-yaml" class="btn-outline hidden">
+            <i class="fa-solid fa-copy mr-2"></i>Copy YAML Snippet
+          </button>
+          <button id="btn-clear-cloud" class="text-red-500 text-sm font-bold ml-auto hover:underline">
+            <i class="fa-solid fa-trash mr-1"></i>Clear
+          </button>
+        </div>
+
+        <!-- Cloud YAML Output -->
+        <pre id="cloud-yaml-output" class="mt-6 p-4 rounded-xl hidden text-sm font-mono" style="background: var(--bg-secondary); overflow-x: auto; color: #a855f7;"></pre>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Crop Modal -->
-  <dialog id="crop-modal" class="bg-transparent backdrop:bg-black/80 backdrop:backdrop-blur-sm p-0 border-0 w-full max-w-4xl">
-    <div class="glass-panel p-6 m-4 flex flex-col items-center">
-      <h3 class="text-xl font-bold mb-4 w-full text-white">Crop Image</h3>
-      <div class="w-full max-h-[60vh] bg-black/50 overflow-hidden rounded-xl mb-4 relative flex justify-center items-center">
-        <img id="crop-image-target" class="max-w-full max-h-[60vh] block" src="" alt="To crop" />
+    <!-- ========== 4. MEDIA LIBRARY ========== -->
+    <div id="media-tool" class="tool-view hidden">
+
+      <!-- Settings row -->
+      <div class="glass-panel mb-6">
+        <div class="flex flex-wrap items-end gap-4">
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">Cloud Name</label>
+            <input id="ml-cloud-name" type="text" placeholder="your-cloud-name"
+              class="w-full px-4 py-2.5 rounded-xl border text-sm"
+              style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+          </div>
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">API Key</label>
+            <input id="ml-api-key" type="text" placeholder="Cloudinary API Key"
+              class="w-full px-4 py-2.5 rounded-xl border text-sm"
+              style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+          </div>
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">API Secret</label>
+            <input id="ml-api-secret" type="password" placeholder="Cloudinary API Secret"
+              class="w-full px-4 py-2.5 rounded-xl border text-sm"
+              style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+          </div>
+          <button id="btn-ml-load" class="btn-primary whitespace-nowrap">
+            <i class="fa-solid fa-rotate mr-2"></i>Load Images
+          </button>
+        </div>
+        <p class="mt-3 text-xs" style="color: var(--text-muted)">
+          <i class="fa-solid fa-lock mr-1"></i>
+          Credentials are only saved in your browser's localStorage and are never sent anywhere except directly to Cloudinary's API.
+          Find your API Key &amp; Secret in <a href="https://console.cloudinary.com" target="_blank" class="underline text-[#a855f7]">console.cloudinary.com</a> → API Keys.
+        </p>
       </div>
-      <div class="flex gap-4 w-full justify-end">
-        <button id="btn-crop-cancel" class="px-6 py-2 rounded-full font-bold text-white hover:bg-white/10">Cancel</button>
-        <button id="btn-crop-save" class="btn-primary">Apply Crop</button>
+
+      <!-- Status / search bar -->
+      <div class="flex items-center gap-4 mb-5">
+        <input id="ml-search" type="text" placeholder="Search images by name…"
+          class="flex-1 px-4 py-2.5 rounded-xl border text-sm"
+          style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary)" />
+        <span id="ml-status" class="text-sm whitespace-nowrap" style="color: var(--text-muted)"></span>
+      </div>
+
+      <!-- Usage hint -->
+      <div class="rounded-xl p-4 mb-6 text-sm" style="background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.2); color: var(--text-secondary)">
+        <i class="fa-solid fa-circle-info mr-2" style="color:#a855f7"></i>
+        <strong>How to use:</strong> Click <strong>Copy URL</strong> on any image → then paste it into the Netlify CMS image field (URL tab).
+        Or click <strong>Use as Hero Photo</strong> / <strong>Use in Gallery</strong> to get the exact YAML to paste.
+      </div>
+
+      <!-- Image grid -->
+      <div id="ml-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div id="ml-empty" class="col-span-5 text-center py-20" style="color: var(--text-muted)">
+          <i class="fa-solid fa-images text-4xl mb-3 block opacity-30"></i>
+          <p>Load your Cloudinary images to get started</p>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-3 mt-8">
+        <button id="btn-ml-prev" class="btn-outline hidden"><i class="fa-solid fa-chevron-left mr-2"></i>Prev</button>
+        <button id="btn-ml-next" class="btn-cloud hidden">Next<i class="fa-solid fa-chevron-right ml-2"></i></button>
+      </div>
+
+      <!-- Detail / Use modal (inline callout) -->
+      <div id="ml-use-panel" class="hidden mt-6 p-5 rounded-2xl" style="background: rgba(0,196,204,0.07); border: 1px solid rgba(0,196,204,0.2)">
+        <h4 class="font-bold mb-2 text-[#00C4CC]">Use this image ↓</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--text-muted)">Hero Profile Photo — paste into site.json</p>
+            <code id="ml-use-hero" class="block px-4 py-2 rounded-xl text-xs break-all cursor-pointer hover:bg-white/10 transition"
+              style="background: var(--bg-secondary); color: #00C4CC" title="Click to copy"></code>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--text-muted)">Portfolio Cover / Gallery entry YAML</p>
+            <code id="ml-use-yaml" class="block px-4 py-2 rounded-xl text-xs break-all cursor-pointer hover:bg-white/10 transition"
+              style="background: var(--bg-secondary); color: #a855f7" title="Click to copy"></code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- ========== ADVANCED CROP MODAL ========== -->
+  <dialog id="crop-modal" class="bg-transparent backdrop:bg-black/80 backdrop:backdrop-blur-sm p-0 border-0 w-full max-w-5xl">
+    <div class="glass-panel p-6 m-4 flex flex-col">
+      <div class="flex items-center gap-3 mb-5">
+        <h3 class="text-xl font-bold text-white flex-1">Edit Image</h3>
+        <button id="btn-crop-cancel" class="px-5 py-2 rounded-full font-bold text-white hover:bg-white/10 text-sm">Cancel</button>
+        <button id="btn-crop-save" class="btn-primary text-sm">Apply &amp; Save</button>
+      </div>
+
+      <!-- Aspect Ratio + Transform Controls -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="text-xs font-bold uppercase tracking-wider self-center mr-2" style="color: var(--text-muted)">Ratio:</span>
+        <button class="crop-ratio-btn active" data-ratio="NaN">Free</button>
+        <button class="crop-ratio-btn" data-ratio="1">1 : 1</button>
+        <button class="crop-ratio-btn" data-ratio="1.3333">4 : 3</button>
+        <button class="crop-ratio-btn" data-ratio="1.7778">16 : 9</button>
+        <button class="crop-ratio-btn" data-ratio="0.75">3 : 4</button>
+        <button class="crop-ratio-btn" data-ratio="0.5625">9 : 16</button>
+        <div class="ml-auto flex gap-2">
+          <button class="icon-btn" id="btn-rotate-left" title="Rotate Left"><i class="fa-solid fa-rotate-left"></i></button>
+          <button class="icon-btn" id="btn-rotate-right" title="Rotate Right"><i class="fa-solid fa-rotate-right"></i></button>
+          <button class="icon-btn" id="btn-flip-h" title="Flip Horizontal"><i class="fa-solid fa-arrows-left-right"></i></button>
+          <button class="icon-btn" id="btn-flip-v" title="Flip Vertical"><i class="fa-solid fa-arrows-up-down"></i></button>
+        </div>
+      </div>
+
+      <!-- Cropper Image -->
+      <div class="w-full bg-black/50 overflow-hidden rounded-xl mb-4 relative flex justify-center items-center" style="max-height: 50vh">
+        <img id="crop-image-target" class="max-w-full block" style="max-height: 50vh" src="" alt="To crop" />
+      </div>
+
+      <!-- Adjustments -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label class="flex justify-between text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">
+            <span>Brightness</span><span id="brightness-val">100%</span>
+          </label>
+          <input type="range" id="slider-brightness" min="0" max="200" value="100" class="adj-slider w-full" />
+        </div>
+        <div>
+          <label class="flex justify-between text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">
+            <span>Contrast</span><span id="contrast-val">100%</span>
+          </label>
+          <input type="range" id="slider-contrast" min="0" max="200" value="100" class="adj-slider w-full" />
+        </div>
+        <div>
+          <label class="flex justify-between text-xs font-bold mb-1 uppercase tracking-wider" style="color: var(--text-muted)">
+            <span>Saturation</span><span id="saturation-val">100%</span>
+          </label>
+          <input type="range" id="slider-saturation" min="0" max="300" value="100" class="adj-slider w-full" />
+        </div>
       </div>
     </div>
   </dialog>
@@ -98,11 +324,13 @@ import Layout from '../../layouts/Layout.astro';
     }
     
     .tool-tab {
-      padding: 1rem 1.5rem;
+      padding: 0.875rem 1.25rem;
       font-weight: 700;
+      font-size: 0.9rem;
       color: var(--text-muted);
       border-bottom: 2px solid transparent;
       transition: all 0.3s ease;
+      white-space: nowrap;
     }
     .tool-tab:hover { color: var(--text-primary); }
     .tool-tab.active {
@@ -117,15 +345,25 @@ import Layout from '../../layouts/Layout.astro';
       background: linear-gradient(135deg, #00C4CC, #00A3AA);
       color: white; font-weight: 700; padding: 0.75rem 1.5rem;
       border-radius: 9999px; transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex; align-items: center;
     }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,196,204,0.3); }
 
     .btn-outline {
       border: 2px solid #00C4CC; color: #00C4CC;
-      font-weight: 700; padding: 0.6rem 1.5rem;
+      font-weight: 700; padding: 0.6rem 1.25rem;
       border-radius: 9999px; transition: background 0.2s;
+      display: inline-flex; align-items: center;
     }
     .btn-outline:hover { background: rgba(0,196,204,0.1); }
+
+    .btn-cloud {
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: white; font-weight: 700; padding: 0.75rem 1.5rem;
+      border-radius: 9999px; transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex; align-items: center;
+    }
+    .btn-cloud:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(168,85,247,0.35); }
 
     /* Sortable grid items */
     .grid-img-wrap {
@@ -136,143 +374,267 @@ import Layout from '../../layouts/Layout.astro';
       cursor: grab;
       border: 2px solid transparent;
       background: var(--bg-card);
+      transition: border-color 0.2s;
     }
     .grid-img-wrap:active { cursor: grabbing; }
     .grid-img-wrap:hover { border-color: #00C4CC; }
     .grid-img { width: 100%; height: 100%; object-fit: cover; }
     
     .img-actions {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; gap: 1rem;
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; gap: 0.5rem;
       opacity: 0; transition: opacity 0.2s;
     }
     .grid-img-wrap:hover .img-actions { opacity: 1; }
     
     .action-btn {
-      width: 2.5rem; height: 2.5rem; border-radius: 50%;
-      background: white; color: black; display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s;
+      width: 2.25rem; height: 2.25rem; border-radius: 50%;
+      background: white; color: #111; display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s; font-size: 0.85rem;
     }
     .action-btn:hover { transform: scale(1.1); }
     
-    .sortable-ghost { opacity: 0.4; }
+    .sortable-ghost { opacity: 0.35; outline: 2px dashed #00C4CC; }
     .sortable-drag { cursor: grabbing !important; }
+
+    /* Crop modal controls */
+    .crop-ratio-btn {
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .crop-ratio-btn:hover, .crop-ratio-btn.active {
+      border-color: #00C4CC;
+      color: #00C4CC;
+      background: rgba(0,196,204,0.1);
+    }
+
+    .icon-btn {
+      width: 2.25rem; height: 2.25rem; border-radius: 0.5rem;
+      background: rgba(255,255,255,0.08); color: white;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .icon-btn:hover { background: rgba(255,255,255,0.18); }
+
+    .adj-slider {
+      -webkit-appearance: none;
+      height: 5px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.15);
+      outline: none;
+    }
+    .adj-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #00C4CC;
+      cursor: pointer;
+    }
+
+    /* Upload queue item */
+    .upload-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .upload-thumb { width: 3rem; height: 3rem; border-radius: 0.5rem; object-fit: cover; flex-shrink: 0; }
+    .upload-info { flex: 1; min-width: 0; }
+    .upload-name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .upload-bar-wrap { height: 4px; background: rgba(255,255,255,0.1); border-radius: 9999px; margin-top: 0.4rem; }
+    .upload-bar { height: 100%; border-radius: 9999px; background: linear-gradient(90deg, #a855f7, #7c3aed); width: 0%; transition: width 0.3s; }
+    .upload-status {
+      font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+      padding: 0.25rem 0.65rem; border-radius: 9999px;
+    }
+    .status-pending { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+    .status-uploading { background: rgba(168,85,247,0.2); color: #a855f7; }
+    .status-done { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .status-error { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+    .upload-url {
+      font-size: 0.7rem; color: #00C4CC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      cursor: pointer; text-decoration: underline; margin-top: 2px;
+    }
+
+    /* ---- Media Library Cards ---- */
+    .ml-card {
+      border-radius: 0.875rem;
+      overflow: hidden;
+      cursor: pointer;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .ml-card:hover { border-color: #a855f7; transform: translateY(-2px); }
+
+    .ml-thumb-wrap {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+    .ml-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .ml-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .ml-card:hover .ml-overlay { opacity: 1; }
+
+    .ml-action-btn {
+      width: 2.25rem; height: 2.25rem; border-radius: 50%;
+      background: white; color: #111;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; transition: transform 0.15s;
+    }
+    .ml-action-btn:hover { transform: scale(1.12); }
+
+    .ml-name {
+      font-size: 0.7rem; font-weight: 600;
+      padding: 0.35rem 0.5rem 0 0.5rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ml-size {
+      font-size: 0.65rem; padding: 0.15rem 0.5rem 0.45rem;
+      color: var(--text-muted);
+    }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 
-  <!-- External libraries for ZIP, Sorting, and Cropping -->
+  <!-- External libraries -->
   <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
   <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
   <script>
-    // ===== TAB LOGIC =====
+    // =====================================================================
+    // TAB LOGIC
+    // =====================================================================
     document.querySelectorAll('.tool-tab').forEach(tab => {
       tab.addEventListener('click', (e) => {
         document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tool-view').forEach(v => v.classList.remove('active'));
-        
-        const target = (e.target as HTMLElement).dataset.target;
-        (e.target as HTMLElement).classList.add('active');
-        document.getElementById(`${target}-tool`)?.classList.add('active');
+        document.querySelectorAll('.tool-view').forEach(v => { v.classList.remove('active'); v.classList.add('hidden'); });
+        const target = (e.currentTarget as HTMLElement).dataset.target;
+        (e.currentTarget as HTMLElement).classList.add('active');
+        const view = document.getElementById(`${target}-tool`);
+        view?.classList.remove('hidden');
+        view?.classList.add('active');
       });
     });
 
-    // ===== 1. CSV BULK IMPORT =====
+    // =====================================================================
+    // 1. CSV BULK IMPORT
+    // =====================================================================
     document.getElementById('btn-csv-zip')?.addEventListener('click', async () => {
       const csvData = (document.getElementById('csv-input') as HTMLTextAreaElement).value.trim();
       if (!csvData) return alert('Please paste CSV data first');
-
       const lines = csvData.split('\n');
       if (lines.length < 2) return alert('CSV must have a header row and at least one data row');
-
       const headers = lines[0].split(',').map(h => h.trim());
-      const zip = new window.JSZip();
-      
+      const zip = new (window as any).JSZip();
       for (let i = 1; i < lines.length; i++) {
-        // Simple split (doesn't handle commas inside quotes, but fine for simple cases)
         const cols = lines[i].split(',').map(c => c.trim());
         if (cols.length < headers.length) continue;
-
-        let fm = '---\n';
-        let slug = '';
+        let fm = '---\n'; let slug = '';
         headers.forEach((h, idx) => {
           if (h === 'title') slug = cols[idx].toLowerCase().replace(/[^a-z0-9]+/g, '-');
           if (cols[idx]) fm += `${h}: ${cols[idx]}\n`;
         });
         fm += '---\n';
-
         if (!slug) slug = `item-${i}`;
         zip.file(`${slug}.md`, fm);
       }
-
       const content = await zip.generateAsync({ type: 'blob' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(content);
-      a.download = 'portfolio-items.zip';
-      a.click();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(content);
+      a.download = 'portfolio-items.zip'; a.click();
     });
 
-    // ===== 2. IMAGE GALLERY BUILDER =====
+    // =====================================================================
+    // 2. IMAGE GALLERY BUILDER
+    // =====================================================================
     interface GalleryFile {
-      id: string;
-      file: File;
-      url: string;
+      id: string; file: File | null; url: string;
+      name: string; brightness: number; contrast: number; saturation: number;
     }
-    
     let galleryFiles: GalleryFile[] = [];
     let cropper: any = null;
     let currentCropId: string | null = null;
-    
+    let currentFlipH = 1; let currentFlipV = 1;
+
     const dropzone = document.getElementById('dropzone');
     const fileInput = document.getElementById('file-input') as HTMLInputElement;
     const grid = document.getElementById('sortable-grid');
+    const galleryCount = document.getElementById('gallery-count');
 
-    // Init sortable
-    new window.Sortable(grid, {
-      animation: 150,
-      ghostClass: 'sortable-ghost',
-      dragClass: 'sortable-drag',
+    new (window as any).Sortable(grid, {
+      animation: 150, ghostClass: 'sortable-ghost', dragClass: 'sortable-drag',
       onEnd: () => {
-        // Rebuild array based on DOM order
         const newArray: GalleryFile[] = [];
         grid?.querySelectorAll('.grid-img-wrap').forEach(el => {
           const id = (el as HTMLElement).dataset.id;
           const found = galleryFiles.find(f => f.id === id);
           if (found) newArray.push(found);
         });
-        galleryFiles = newArray;
-        updateYamlOutput();
+        galleryFiles = newArray; updateYamlOutput();
       }
     });
 
-    // Dropzone logic
     dropzone?.addEventListener('click', () => fileInput.click());
-    dropzone?.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.borderColor = '#fff'; });
-    dropzone?.addEventListener('dragleave', () => dropzone.style.borderColor = '#00C4CC');
-    dropzone?.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.style.borderColor = '#00C4CC';
-      handleFiles(e.dataTransfer?.files);
+    dropzone?.addEventListener('dragover', (e) => { e.preventDefault(); (dropzone as HTMLElement).style.background = 'rgba(0,196,204,0.12)'; });
+    dropzone?.addEventListener('dragleave', () => (dropzone as HTMLElement).style.background = 'rgba(0,196,204,0.05)');
+    dropzone?.addEventListener('drop', (e: DragEvent) => {
+      e.preventDefault(); (dropzone as HTMLElement).style.background = 'rgba(0,196,204,0.05)';
+      handleGalleryFiles((e as any).dataTransfer?.files);
     });
-    fileInput.addEventListener('change', (e) => handleFiles((e.target as HTMLInputElement).files));
-    
+    fileInput.addEventListener('change', (e) => handleGalleryFiles((e.target as HTMLInputElement).files));
+
+    // Gallery URL import
+    document.getElementById('btn-gallery-add-url')?.addEventListener('click', () => addImageFromUrl(
+      (document.getElementById('gallery-url-input') as HTMLInputElement).value.trim(),
+      'gallery-url-input'
+    ));
+    document.getElementById('gallery-url-input')?.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter') {
+        addImageFromUrl((document.getElementById('gallery-url-input') as HTMLInputElement).value.trim(), 'gallery-url-input');
+      }
+    });
+
     function generateId() { return Math.random().toString(36).substring(2, 9); }
 
-    function handleFiles(files: FileList | null | undefined) {
+    function driveToDirectUrl(url: string): string {
+      const m = url.match(/\/file\/d\/([^/]+)/);
+      if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+      return url;
+    }
+
+    function addImageFromUrl(rawUrl: string, inputId: string) {
+      if (!rawUrl) return;
+      const url = driveToDirectUrl(rawUrl);
+      const name = url.split('/').pop()?.split('?')[0] || 'image.jpg';
+      const gFile: GalleryFile = { id: generateId(), file: null, url, name, brightness: 100, contrast: 100, saturation: 100 };
+      galleryFiles.push(gFile); renderGalleryItem(gFile); updateYamlOutput();
+      (document.getElementById(inputId) as HTMLInputElement).value = '';
+    }
+
+    function handleGalleryFiles(files: FileList | null | undefined) {
       if (!files) return;
-      
       Array.from(files).forEach(file => {
         if (!file.type.startsWith('image/')) return;
         const gFile: GalleryFile = {
-          id: generateId(),
-          file: file,
-          url: URL.createObjectURL(file)
+          id: generateId(), file, url: URL.createObjectURL(file),
+          name: file.name, brightness: 100, contrast: 100, saturation: 100
         };
-        galleryFiles.push(gFile);
-        renderGalleryItem(gFile);
+        galleryFiles.push(gFile); renderGalleryItem(gFile);
       });
       updateYamlOutput();
     }
@@ -280,142 +642,547 @@ import Layout from '../../layouts/Layout.astro';
     function renderGalleryItem(gFile: GalleryFile) {
       if (!grid) return;
       const wrap = document.createElement('div');
-      wrap.className = 'grid-img-wrap';
-      wrap.dataset.id = gFile.id;
-      
+      wrap.className = 'grid-img-wrap'; wrap.dataset.id = gFile.id;
       wrap.innerHTML = `
         <img src="${gFile.url}" class="grid-img" />
         <div class="img-actions">
-          <button class="action-btn btn-crop" title="Crop"><i class="fa-solid fa-crop"></i></button>
-          <button class="action-btn btn-del" title="Delete" style="color:red"><i class="fa-solid fa-trash"></i></button>
+          <button class="action-btn btn-crop" title="Edit"><i class="fa-solid fa-sliders"></i></button>
+          <button class="action-btn btn-del" title="Remove" style="color:red"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);padding:0.25rem 0.4rem;">
+          <p style="font-size:0.6rem;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${gFile.name}</p>
         </div>
       `;
-
-      wrap.querySelector('.btn-del')?.addEventListener('click', () => {
+      wrap.querySelector('.btn-del')?.addEventListener('click', (e) => {
+        e.stopPropagation();
         galleryFiles = galleryFiles.filter(f => f.id !== gFile.id);
-        wrap.remove();
-        updateYamlOutput();
+        wrap.remove(); updateYamlOutput();
       });
-
-      wrap.querySelector('.btn-crop')?.addEventListener('click', () => {
-        openCropper(gFile.id);
+      wrap.querySelector('.btn-crop')?.addEventListener('click', (e) => {
+        e.stopPropagation(); openCropper(gFile.id);
       });
-
       grid.appendChild(wrap);
     }
 
-    // Cropper handling
+    // =====================================================================
+    // ADVANCED CROP/EDIT MODAL
+    // =====================================================================
     const cropModal = document.getElementById('crop-modal') as HTMLDialogElement;
     const cropImg = document.getElementById('crop-image-target') as HTMLImageElement;
+    
+    const sliderBrightness = document.getElementById('slider-brightness') as HTMLInputElement;
+    const sliderContrast = document.getElementById('slider-contrast') as HTMLInputElement;
+    const sliderSaturation = document.getElementById('slider-saturation') as HTMLInputElement;
+
+    function updateCropFilter() {
+      const b = sliderBrightness.value; const c = sliderContrast.value; const s = sliderSaturation.value;
+      cropImg.style.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+      (document.getElementById('brightness-val') as HTMLElement).textContent = `${b}%`;
+      (document.getElementById('contrast-val') as HTMLElement).textContent = `${c}%`;
+      (document.getElementById('saturation-val') as HTMLElement).textContent = `${s}%`;
+    }
+    sliderBrightness.addEventListener('input', updateCropFilter);
+    sliderContrast.addEventListener('input', updateCropFilter);
+    sliderSaturation.addEventListener('input', updateCropFilter);
+
+    // Aspect ratio buttons
+    document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.crop-ratio-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const ratio = parseFloat((btn as HTMLElement).dataset.ratio || 'NaN');
+        if (cropper) cropper.setAspectRatio(isNaN(ratio) ? NaN : ratio);
+      });
+    });
+
+    document.getElementById('btn-rotate-left')?.addEventListener('click', () => cropper?.rotate(-90));
+    document.getElementById('btn-rotate-right')?.addEventListener('click', () => cropper?.rotate(90));
+    document.getElementById('btn-flip-h')?.addEventListener('click', () => {
+      currentFlipH *= -1; cropper?.scaleX(currentFlipH);
+    });
+    document.getElementById('btn-flip-v')?.addEventListener('click', () => {
+      currentFlipV *= -1; cropper?.scaleY(currentFlipV);
+    });
 
     function openCropper(id: string) {
       const gFile = galleryFiles.find(f => f.id === id);
       if (!gFile) return;
-      currentCropId = id;
+      currentCropId = id; currentFlipH = 1; currentFlipV = 1;
       
+      // Reset sliders to saved values
+      sliderBrightness.value = String(gFile.brightness);
+      sliderContrast.value = String(gFile.contrast);
+      sliderSaturation.value = String(gFile.saturation);
+      updateCropFilter();
+
+      // Reset ratio buttons
+      document.querySelectorAll('.crop-ratio-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.crop-ratio-btn[data-ratio="NaN"]')?.classList.add('active');
+
       cropImg.src = gFile.url;
       cropModal.showModal();
-      
-      if (cropper) cropper.destroy();
-      cropper = new window.Cropper(cropImg, {
-        viewMode: 1,
-        dragMode: 'move',
-        autoCropArea: 1,
-        restore: false,
-        guides: true,
-        highlight: false,
-        cropBoxMovable: true,
-        cropBoxResizable: true,
-        toggleDragModeOnDblclick: false,
-      });
+      if (cropper) { cropper.destroy(); cropper = null; }
+      cropImg.onload = () => {
+        cropImg.style.filter = `brightness(${gFile.brightness}%) contrast(${gFile.contrast}%) saturate(${gFile.saturation}%)`;
+        cropper = new (window as any).Cropper(cropImg, {
+          viewMode: 1, dragMode: 'move', autoCropArea: 1,
+          restore: false, guides: true, highlight: false,
+          cropBoxMovable: true, cropBoxResizable: true, toggleDragModeOnDblclick: false,
+        });
+      };
+      if (cropImg.complete) cropImg.onload(null as any);
     }
 
     document.getElementById('btn-crop-cancel')?.addEventListener('click', () => {
-      cropModal.close();
-      if (cropper) cropper.destroy();
+      cropModal.close(); if (cropper) { cropper.destroy(); cropper = null; }
     });
 
     document.getElementById('btn-crop-save')?.addEventListener('click', () => {
       if (!cropper || !currentCropId) return;
+      const b = parseInt(sliderBrightness.value); const c = parseInt(sliderContrast.value); const s = parseInt(sliderSaturation.value);
       
-      cropper.getCroppedCanvas({
-         maxWidth: 2000,
-         maxHeight: 2000
-      }).toBlob((blob: Blob | null) => {
+      const canvas = cropper.getCroppedCanvas({ maxWidth: 2400, maxHeight: 2400 });
+      
+      // Apply CSS filter adjustments to a second canvas
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = canvas.width; finalCanvas.height = canvas.height;
+      const ctx = finalCanvas.getContext('2d')!;
+      ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+      ctx.drawImage(canvas, 0, 0);
+
+      finalCanvas.toBlob((blob: Blob | null) => {
         if (!blob) return;
         const index = galleryFiles.findIndex(f => f.id === currentCropId);
         if (index === -1) return;
-        
-        const oldFile = galleryFiles[index].file;
-        const newFile = new File([blob], oldFile.name, { type: 'image/jpeg' });
-        
+        const oldName = galleryFiles[index].name;
+        const newFile = new File([blob], oldName, { type: 'image/jpeg' });
         galleryFiles[index].file = newFile;
         galleryFiles[index].url = URL.createObjectURL(newFile);
+        galleryFiles[index].brightness = b; galleryFiles[index].contrast = c; galleryFiles[index].saturation = s;
         
-        const wrap = grid?.querySelector(`[data-id="${currentCropId}"] img`) as HTMLImageElement;
-        if (wrap) wrap.src = galleryFiles[index].url;
+        const imgEl = grid?.querySelector(`[data-id="${currentCropId}"] .grid-img`) as HTMLImageElement;
+        if (imgEl) imgEl.src = galleryFiles[index].url;
         
-        cropModal.close();
-        cropper.destroy();
-      }, 'image/jpeg', 0.9);
+        cropModal.close(); if (cropper) { cropper.destroy(); cropper = null; }
+        updateYamlOutput();
+      }, 'image/jpeg', 0.92);
     });
 
-    // Export & YAML Logic
+    // Export & YAML
     const yamlOut = document.getElementById('yaml-output');
     const copyBtn = document.getElementById('btn-copy-yaml');
 
     function updateYamlOutput() {
+      if (!galleryCount) return;
+      galleryCount.textContent = galleryFiles.length ? `${galleryFiles.length} image${galleryFiles.length > 1 ? 's' : ''}` : '';
       if (!yamlOut || !copyBtn) return;
-      if (galleryFiles.length === 0) {
-        yamlOut.classList.add('hidden');
-        copyBtn.classList.add('hidden');
-        return;
-      }
-      
+      if (galleryFiles.length === 0) { yamlOut.classList.add('hidden'); copyBtn.classList.add('hidden'); return; }
       let yaml = `gallery:\n`;
       galleryFiles.forEach(f => {
-        // Safe filename: replace spaces etc
-        const cleanName = f.file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
-        yaml += `  - /uploads/${cleanName}\n`;
+        if (f.url.startsWith('blob:') || f.url.startsWith('/') || !f.url.startsWith('http')) {
+          const cleanName = f.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
+          yaml += `  - /uploads/${cleanName}\n`;
+        } else {
+          yaml += `  - ${f.url}\n`;
+        }
       });
-      
-      yamlOut.textContent = yaml;
-      yamlOut.classList.remove('hidden');
-      copyBtn.classList.remove('hidden');
+      yamlOut.textContent = yaml; yamlOut.classList.remove('hidden'); copyBtn.classList.remove('hidden');
     }
 
     copyBtn?.addEventListener('click', () => {
-      if (!yamlOut) return;
-      navigator.clipboard.writeText(yamlOut.textContent || '');
-      const original = copyBtn.innerHTML;
-      copyBtn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Copied!';
-      setTimeout(() => copyBtn.innerHTML = original, 2000);
+      navigator.clipboard.writeText(yamlOut?.textContent || '');
+      const orig = copyBtn.innerHTML; copyBtn.innerHTML = '<i class="fa-solid fa-check mr-2"></i>Copied!';
+      setTimeout(() => copyBtn.innerHTML = orig, 2000);
     });
 
     document.getElementById('btn-clear-gallery')?.addEventListener('click', () => {
       if (!confirm('Clear all images?')) return;
-      galleryFiles = [];
-      if (grid) grid.innerHTML = '';
-      updateYamlOutput();
-      fileInput.value = '';
+      galleryFiles = []; if (grid) grid.innerHTML = ''; updateYamlOutput(); fileInput.value = '';
     });
 
     document.getElementById('btn-export-gallery')?.addEventListener('click', async () => {
       if (galleryFiles.length === 0) return alert('No images to export');
-      
-      const zip = new window.JSZip();
-      const folder = zip.folder('uploads');
-      
-      galleryFiles.forEach(f => {
-        const cleanName = f.file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
-        folder?.file(cleanName, f.file);
-      });
-      
+      const zip = new (window as any).JSZip(); const folder = zip.folder('uploads');
+      for (const f of galleryFiles) {
+        const cleanName = f.name.replace(/[^a-zA-Z0-9.\-_]/g, '-');
+        if (f.file) { folder?.file(cleanName, f.file); }
+        else {
+          try {
+            const resp = await fetch(f.url);
+            const blob = await resp.blob(); folder?.file(cleanName, blob);
+          } catch { /* skip remote-only */ }
+        }
+      }
       const content = await zip.generateAsync({ type: 'blob' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(content);
-      a.download = 'gallery-images.zip';
-      a.click();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(content);
+      a.download = 'gallery-images.zip'; a.click();
+    });
+
+    // =====================================================================
+    // 3. CLOUD UPLOAD (CLOUDINARY)
+    // =====================================================================
+    interface CloudItem { id: string; url: string; name: string; file: File | null; status: 'pending'|'uploading'|'done'|'error'; cdnUrl: string; }
+    let cloudItems: CloudItem[] = [];
+
+    // Load saved settings
+    const savedCloudName = localStorage.getItem('cld_cloud_name') || '';
+    const savedPreset = localStorage.getItem('cld_upload_preset') || '';
+    (document.getElementById('cloud-name') as HTMLInputElement).value = savedCloudName;
+    (document.getElementById('upload-preset') as HTMLInputElement).value = savedPreset;
+    if (savedCloudName && savedPreset) {
+      (document.getElementById('settings-status') as HTMLElement).textContent = '✓ Settings saved';
+    }
+
+    document.getElementById('btn-save-settings')?.addEventListener('click', () => {
+      const cn = (document.getElementById('cloud-name') as HTMLInputElement).value.trim();
+      const pr = (document.getElementById('upload-preset') as HTMLInputElement).value.trim();
+      if (!cn || !pr) return alert('Please enter both Cloud Name and Upload Preset');
+      localStorage.setItem('cld_cloud_name', cn); localStorage.setItem('cld_upload_preset', pr);
+      const st = document.getElementById('settings-status') as HTMLElement;
+      st.textContent = '✓ Settings saved!'; st.style.color = '#22c55e';
+      setTimeout(() => { st.textContent = 'Saved to browser'; st.style.color = ''; }, 2000);
+    });
+
+    // Cloud dropzone
+    const cloudDropzone = document.getElementById('cloud-dropzone');
+    const cloudFileInput = document.getElementById('cloud-file-input') as HTMLInputElement;
+
+    cloudDropzone?.addEventListener('click', () => cloudFileInput.click());
+    cloudDropzone?.addEventListener('dragover', (e) => { e.preventDefault(); (cloudDropzone as HTMLElement).style.background = 'rgba(168,85,247,0.12)'; });
+    cloudDropzone?.addEventListener('dragleave', () => (cloudDropzone as HTMLElement).style.background = 'rgba(168,85,247,0.05)');
+    cloudDropzone?.addEventListener('drop', (e: DragEvent) => {
+      e.preventDefault(); (cloudDropzone as HTMLElement).style.background = 'rgba(168,85,247,0.05)';
+      handleCloudFiles((e as any).dataTransfer?.files);
+    });
+    cloudFileInput.addEventListener('change', (e) => handleCloudFiles((e.target as HTMLInputElement).files));
+
+    // Cloud URL import
+    document.getElementById('btn-cloud-add-url')?.addEventListener('click', () => addCloudUrl(
+      (document.getElementById('cloud-url-input') as HTMLInputElement).value.trim(), 'cloud-url-input'
+    ));
+    document.getElementById('cloud-url-input')?.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter') {
+        addCloudUrl((document.getElementById('cloud-url-input') as HTMLInputElement).value.trim(), 'cloud-url-input');
+      }
+    });
+
+    function addCloudUrl(rawUrl: string, inputId: string) {
+      if (!rawUrl) return;
+      const url = driveToDirectUrl(rawUrl);
+      const name = url.split('/').pop()?.split('?')[0] || 'image.jpg';
+      const item: CloudItem = { id: generateId(), url, name, file: null, status: 'pending', cdnUrl: '' };
+      cloudItems.push(item); renderCloudItem(item); updateUploadBtn();
+      (document.getElementById(inputId) as HTMLInputElement).value = '';
+    }
+
+    function handleCloudFiles(files: FileList | null | undefined) {
+      if (!files) return;
+      Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const item: CloudItem = {
+          id: generateId(), url: URL.createObjectURL(file),
+          name: file.name, file, status: 'pending', cdnUrl: ''
+        };
+        cloudItems.push(item); renderCloudItem(item);
+      });
+      updateUploadBtn();
+    }
+
+    function renderCloudItem(item: CloudItem) {
+      const queue = document.getElementById('upload-queue');
+      if (!queue) return;
+      const div = document.createElement('div');
+      div.className = 'upload-item'; div.dataset.id = item.id;
+      div.innerHTML = `
+        <img class="upload-thumb" src="${item.url}" alt="" onerror="this.style.display='none'" />
+        <div class="upload-info">
+          <div class="upload-name">${item.name}</div>
+          <div class="upload-bar-wrap"><div class="upload-bar" id="bar-${item.id}"></div></div>
+          <div class="upload-url hidden" id="url-${item.id}"></div>
+        </div>
+        <span class="upload-status status-pending" id="status-${item.id}">Pending</span>
+        <button class="action-btn btn-del-cloud" title="Remove" style="color:red;flex-shrink:0">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      `;
+      div.querySelector('.btn-del-cloud')?.addEventListener('click', () => {
+        cloudItems = cloudItems.filter(c => c.id !== item.id);
+        div.remove(); updateUploadBtn(); updateCloudYaml();
+      });
+      div.querySelector('.upload-url')?.addEventListener('click', () => {
+        const url = item.cdnUrl;
+        if (url) navigator.clipboard.writeText(url);
+      });
+      queue.appendChild(div);
+    }
+
+    function setCloudItemStatus(id: string, status: 'pending'|'uploading'|'done'|'error', progress = 0, cdnUrl = '') {
+      const statusEl = document.getElementById(`status-${id}`);
+      const barEl = document.getElementById(`bar-${id}`);
+      const urlEl = document.getElementById(`url-${id}`);
+      if (statusEl) {
+        statusEl.className = `upload-status status-${status}`;
+        statusEl.textContent = status === 'uploading' ? `${progress}%` : status.charAt(0).toUpperCase() + status.slice(1);
+      }
+      if (barEl) barEl.style.width = `${progress}%`;
+      if (urlEl && cdnUrl) {
+        urlEl.textContent = cdnUrl; urlEl.classList.remove('hidden');
+        urlEl.title = 'Click to copy URL';
+      }
+      const itemIdx = cloudItems.findIndex(c => c.id === id);
+      if (itemIdx !== -1) { cloudItems[itemIdx].status = status; if (cdnUrl) cloudItems[itemIdx].cdnUrl = cdnUrl; }
+    }
+
+    function updateUploadBtn() {
+      const btn = document.getElementById('btn-upload-all');
+      if (cloudItems.length > 0) btn?.classList.remove('hidden');
+      else btn?.classList.add('hidden');
+    }
+
+    function updateCloudYaml() {
+      const done = cloudItems.filter(c => c.status === 'done' && c.cdnUrl);
+      const pre = document.getElementById('cloud-yaml-output');
+      const copyCloudBtn = document.getElementById('btn-copy-cloud-yaml');
+      if (!pre || !copyCloudBtn) return;
+      if (done.length === 0) { pre.classList.add('hidden'); copyCloudBtn.classList.add('hidden'); return; }
+      let yaml = `gallery:\n`;
+      done.forEach(c => yaml += `  - ${c.cdnUrl}\n`);
+      pre.textContent = yaml; pre.classList.remove('hidden'); copyCloudBtn.classList.remove('hidden');
+    }
+
+    document.getElementById('btn-copy-cloud-yaml')?.addEventListener('click', () => {
+      const pre = document.getElementById('cloud-yaml-output');
+      navigator.clipboard.writeText(pre?.textContent || '');
+      const btn = document.getElementById('btn-copy-cloud-yaml') as HTMLButtonElement;
+      const orig = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i>Copied!';
+      setTimeout(() => btn.innerHTML = orig, 2000);
+    });
+
+    document.getElementById('btn-clear-cloud')?.addEventListener('click', () => {
+      if (cloudItems.length > 0 && !confirm('Clear all uploads?')) return;
+      cloudItems = [];
+      const queue = document.getElementById('upload-queue'); if (queue) queue.innerHTML = '';
+      updateUploadBtn(); updateCloudYaml(); cloudFileInput.value = '';
+      document.getElementById('btn-copy-cloud-yaml')?.classList.add('hidden');
+      document.getElementById('cloud-yaml-output')?.classList.add('hidden');
+    });
+
+    async function uploadToCloudinary(item: CloudItem) {
+      const cloudName = (document.getElementById('cloud-name') as HTMLInputElement).value.trim();
+      const preset = (document.getElementById('upload-preset') as HTMLInputElement).value.trim();
+      if (!cloudName || !preset) {
+        alert('Please save your Cloudinary Cloud Name and Upload Preset first.');
+        return;
+      }
+      setCloudItemStatus(item.id, 'uploading', 5);
+      
+      try {
+        const formData = new FormData();
+        formData.append('upload_preset', preset);
+        
+        if (item.file) {
+          formData.append('file', item.file);
+        } else {
+          // Upload from URL
+          formData.append('file', item.url);
+        }
+
+        const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+        
+        // Use XMLHttpRequest for progress tracking
+        await new Promise<void>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', uploadUrl);
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              const pct = Math.round((e.loaded / e.total) * 90) + 5;
+              setCloudItemStatus(item.id, 'uploading', pct);
+            }
+          };
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              const resp = JSON.parse(xhr.responseText);
+              setCloudItemStatus(item.id, 'done', 100, resp.secure_url);
+              updateCloudYaml(); resolve();
+            } else {
+              reject(new Error(xhr.responseText));
+            }
+          };
+          xhr.onerror = () => reject(new Error('Network error'));
+          xhr.send(formData);
+        });
+      } catch (err) {
+        console.error(err);
+        setCloudItemStatus(item.id, 'error', 0);
+      }
+    }
+
+    document.getElementById('btn-upload-all')?.addEventListener('click', async () => {
+      const pending = cloudItems.filter(c => c.status === 'pending' || c.status === 'error');
+      if (pending.length === 0) return alert('No pending images to upload');
+      // Upload concurrently (max 3 at a time)
+      const chunks = [];
+      for (let i = 0; i < pending.length; i += 3) chunks.push(pending.slice(i, i + 3));
+      for (const chunk of chunks) {
+        await Promise.all(chunk.map(item => uploadToCloudinary(item)));
+      }
+    });
+
+    // =====================================================================
+    // 4. MEDIA LIBRARY (Cloudinary browser)
+    // =====================================================================
+
+    // Load saved credentials
+    const mlCloudNameInput = document.getElementById('ml-cloud-name') as HTMLInputElement;
+    const mlApiKeyInput = document.getElementById('ml-api-key') as HTMLInputElement;
+    const mlApiSecretInput = document.getElementById('ml-api-secret') as HTMLInputElement;
+    const mlStatus = document.getElementById('ml-status') as HTMLElement;
+    const mlGrid = document.getElementById('ml-grid') as HTMLElement;
+    const mlSearch = document.getElementById('ml-search') as HTMLInputElement;
+    const mlUsePanel = document.getElementById('ml-use-panel') as HTMLElement;
+
+    mlCloudNameInput.value = localStorage.getItem('ml_cloud_name') || localStorage.getItem('cld_cloud_name') || '';
+    mlApiKeyInput.value = localStorage.getItem('ml_api_key') || '';
+    mlApiSecretInput.value = localStorage.getItem('ml_api_secret') || '';
+
+    let mlAllImages: any[] = [];
+    let mlNextCursor: string | null = null;
+    let mlPrevCursor: string | null = null;
+    let mlCurrentCursor: string | null = null;
+
+    // SHA-1 for signed Cloudinary Admin API requests (runs entirely in browser)
+    async function sha1Hex(message: string): Promise<string> {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function loadCloudinaryImages(cursor: string | null = null) {
+      const cloudName = mlCloudNameInput.value.trim();
+      const apiKey = mlApiKeyInput.value.trim();
+      const apiSecret = mlApiSecretInput.value.trim();
+
+      if (!cloudName || !apiKey || !apiSecret) {
+        alert('Please enter your Cloudinary Cloud Name, API Key, and API Secret.');
+        return;
+      }
+
+      // Save to localStorage
+      localStorage.setItem('ml_cloud_name', cloudName);
+      localStorage.setItem('ml_api_key', apiKey);
+      localStorage.setItem('ml_api_secret', apiSecret);
+
+      mlStatus.textContent = 'Loading…';
+      mlGrid.innerHTML = '<div class="col-span-5 text-center py-16"><i class="fa-solid fa-spinner fa-spin text-3xl" style="color:#a855f7"></i><p class="mt-3" style="color:var(--text-muted)">Fetching images from Cloudinary…</p></div>';
+
+      try {
+        const timestamp = Math.floor(Date.now() / 1000);
+        // Build params string (alphabetical, required for Cloudinary signature)
+        let paramStr = `max_results=30&timestamp=${timestamp}&type=upload`;
+        if (cursor) paramStr += `&next_cursor=${cursor}`;
+        const signature = await sha1Hex(`${paramStr}${apiSecret}`);
+
+        let url = `https://api.cloudinary.com/v1_1/${cloudName}/resources/image?max_results=30&type=upload&timestamp=${timestamp}&api_key=${apiKey}&signature=${signature}`;
+        if (cursor) url += `&next_cursor=${cursor}`;
+
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(await resp.text());
+        const data = await resp.json();
+
+        mlAllImages = data.resources || [];
+        mlNextCursor = data.next_cursor || null;
+        mlCurrentCursor = cursor;
+
+        renderMlGrid(mlAllImages);
+        mlStatus.textContent = `${mlAllImages.length} images loaded`;
+
+        // Pagination buttons
+        const prevBtn = document.getElementById('btn-ml-prev') as HTMLButtonElement;
+        const nextBtn = document.getElementById('btn-ml-next') as HTMLButtonElement;
+        prevBtn.classList.toggle('hidden', !mlPrevCursor);
+        nextBtn.classList.toggle('hidden', !mlNextCursor);
+
+      } catch (err: any) {
+        mlGrid.innerHTML = `<div class="col-span-5 text-center py-16 text-red-400"><i class="fa-solid fa-triangle-exclamation text-3xl mb-3 block"></i><p>${err.message || 'Failed to load images'}</p></div>`;
+        mlStatus.textContent = 'Error';
+      }
+    }
+
+    function renderMlGrid(images: any[]) {
+      const searchTerm = mlSearch.value.toLowerCase();
+      const filtered = searchTerm
+        ? images.filter(img => img.public_id.toLowerCase().includes(searchTerm))
+        : images;
+
+      if (filtered.length === 0) {
+        mlGrid.innerHTML = '<div class="col-span-5 text-center py-16" style="color:var(--text-muted)"><i class="fa-solid fa-magnifying-glass text-3xl mb-3 block opacity-30"></i><p>No images match your search</p></div>';
+        return;
+      }
+
+      mlGrid.innerHTML = '';
+      filtered.forEach(img => {
+        // Build optimized thumbnail URL (w_300 via Cloudinary transformations)
+        const thumbUrl = img.secure_url.replace('/upload/', '/upload/w_300,c_fill,q_auto,f_auto/');
+        const card = document.createElement('div');
+        card.className = 'ml-card';
+        card.innerHTML = `
+          <div class="ml-thumb-wrap">
+            <img class="ml-thumb" src="${thumbUrl}" alt="${img.public_id}" loading="lazy" onerror="this.src='${img.secure_url}'" />
+            <div class="ml-overlay">
+              <button class="ml-action-btn ml-copy-btn" title="Copy URL"><i class="fa-solid fa-copy"></i></button>
+              <button class="ml-action-btn ml-use-btn" title="Get usage snippets"><i class="fa-solid fa-code"></i></button>
+            </div>
+          </div>
+          <p class="ml-name">${img.public_id.split('/').pop()}</p>
+          <p class="ml-size">${img.width}×${img.height} · ${Math.round(img.bytes / 1024)}KB</p>
+        `;
+        card.querySelector('.ml-copy-btn')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          navigator.clipboard.writeText(img.secure_url);
+          const btn = card.querySelector('.ml-copy-btn') as HTMLElement;
+          btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+          setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-copy"></i>', 2000);
+        });
+        card.querySelector('.ml-use-btn')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showMlUsePanel(img.secure_url);
+        });
+        card.addEventListener('click', () => showMlUsePanel(img.secure_url));
+        mlGrid.appendChild(card);
+      });
+    }
+
+    function showMlUsePanel(url: string) {
+      const heroCode = document.getElementById('ml-use-hero') as HTMLElement;
+      const yamlCode = document.getElementById('ml-use-yaml') as HTMLElement;
+      heroCode.textContent = `"photo_url": "${url}"`;
+      yamlCode.textContent = `image: "${url}"\n# or in gallery:\ngallery:\n  - "${url}"`;
+      mlUsePanel.classList.remove('hidden');
+      mlUsePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      heroCode.onclick = () => { navigator.clipboard.writeText(heroCode.textContent || ''); heroCode.style.opacity = '0.5'; setTimeout(() => heroCode.style.opacity = '1', 800); };
+      yamlCode.onclick = () => { navigator.clipboard.writeText(yamlCode.textContent || ''); yamlCode.style.opacity = '0.5'; setTimeout(() => yamlCode.style.opacity = '1', 800); };
+    }
+
+    document.getElementById('btn-ml-load')?.addEventListener('click', () => {
+      mlPrevCursor = null; mlCurrentCursor = null; loadCloudinaryImages(null);
+    });
+
+    document.getElementById('btn-ml-next')?.addEventListener('click', () => {
+      mlPrevCursor = mlCurrentCursor; loadCloudinaryImages(mlNextCursor);
+    });
+
+    document.getElementById('btn-ml-prev')?.addEventListener('click', () => {
+      mlNextCursor = mlCurrentCursor; loadCloudinaryImages(mlPrevCursor);
+    });
+
+    mlSearch.addEventListener('input', () => renderMlGrid(mlAllImages));
+
+    // Auto-load media library when tab is clicked (only once if already loaded)
+    document.querySelector('[data-target="media"]')?.addEventListener('click', () => {
+      if (mlAllImages.length === 0 && mlCloudNameInput.value && mlApiKeyInput.value && mlApiSecretInput.value) {
+        loadCloudinaryImages(null);
+      }
     });
 
   </script>

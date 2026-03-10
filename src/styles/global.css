@@ -755,3 +755,40 @@ html.dark .deco-cross::after {
     opacity: 1;
   }
 }
+
+/* ========== NAV CONTACT PILL BUTTON ========== */
+.nav-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+  background: linear-gradient(135deg, #00C4CC, #00A3AA);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  white-space: nowrap;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.nav-contact-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 196, 204, 0.4);
+}
+
+.nav-contact-arrow {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.25s;
+  flex-shrink: 0;
+}
+
+.nav-contact-btn:hover .nav-contact-arrow {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateX(2px);
+}

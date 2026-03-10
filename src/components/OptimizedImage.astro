@@ -1,16 +1,13 @@
 ---
 /**
- * OptimizedImage — Smart image component for the portfolio.
+ * OptimizedImage — Smart image component with blur-up LQIP.
  *
  * Strategy:
- *  • Local images  → Astro's <Image /> → Sharp converts to WebP at build time
- *  • Remote URLs   → <Image /> with inferSize, Sharp rewrites to WebP via
- *                    the Astro dev-server / Netlify image CDN at request time
- *  • Unsupported   → plain <img> with loading/decoding/fetchpriority attrs
- *                    (never happens in practice for this site)
+ *  • Remote URLs   → Astro's <Image /> → Sharp converts to WebP
+ *  • Local/CMS     → plain <img> with all perf attributes
+ *  • All images    → CSS blur-up placeholder that fades out on load
  *
- * Result: ~30-80 % smaller files, same visual quality (quality=82),
- * zero layout shift (width/height always present), and proper lazy-loading.
+ * Result: ~30-80% smaller files, zero layout shift, perceived-instant loads.
  */
 import { Image } from 'astro:assets';
 
@@ -40,42 +37,84 @@ const {
   inferSize = false,
 } = Astro.props;
 
-// Detect remote URLs — Astro's Image component needs explicit width/height
-// OR inferSize:true for remote images. We use inferSize for truly unknown sizes.
 const isRemote = src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//');
 ---
 
-{isRemote ? (
-  <!-- Remote image: Astro fetches, Sharp processes, serves WebP -->
-  <Image
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    inferSize={inferSize || undefined}
-    quality={quality}
-    format="webp"
-    loading={loading}
-    fetchpriority={fetchpriority}
-    sizes={sizes}
-    class={className}
-    style="object-fit: cover; display: block;"
-  />
-) : (
-  <!-- For truly dynamic paths (CMS uploads stored in /public) use a plain
-       img with all the right performance attributes. Images uploaded via
-       Decap CMS land in /public/uploads/ — they're hashed filenames that
-       can't be statically imported, so we apply the browser-native attrs. -->
-  <img
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    loading={loading}
-    decoding="async"
-    fetchpriority={fetchpriority}
-    sizes={sizes}
-    class={className}
-    style="object-fit: cover; display: block;"
-  />
-)}
+<div class="optimized-img-wrap" style={`aspect-ratio: ${width}/${height};`}>
+  {isRemote ? (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      inferSize={inferSize || undefined}
+      quality={quality}
+      format="webp"
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+      sizes={sizes}
+      class={`optimized-img ${className}`}
+      style="object-fit: cover; display: block;"
+      onload="this.parentElement.classList.add('img-loaded')"
+    />
+  ) : (
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchpriority}
+      sizes={sizes}
+      class={`optimized-img ${className}`}
+      style="object-fit: cover; display: block;"
+      onload="this.parentElement.classList.add('img-loaded')"
+    />
+  )}
+</div>
+
+<style>
+  .optimized-img-wrap {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-card, #f3f4f6);
+  }
+
+  /* Blur-up placeholder shimmer */
+  .optimized-img-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(110deg, var(--border-color, #e5e7eb) 8%, var(--bg-secondary, #f9fafb) 18%, var(--border-color, #e5e7eb) 33%);
+    background-size: 200% 100%;
+    animation: shimmerBlur 1.5s linear infinite;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Fade out the placeholder when image loads */
+  .optimized-img-wrap.img-loaded::before {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .optimized-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .optimized-img-wrap.img-loaded .optimized-img {
+    opacity: 1;
+  }
+
+  @keyframes shimmerBlur {
+    to { background-position: -200% 0; }
+  }
+</style>

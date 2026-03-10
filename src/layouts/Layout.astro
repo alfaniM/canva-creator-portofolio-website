@@ -22,6 +22,11 @@ const { title = `${siteData.personal.name} — ${siteData.personal.role}`, descr
     <!-- View Transitions for seamless SPA-like navigation -->
     <ClientRouter />
 
+    <!-- Preconnect for hero image host (GitHub) -->
+    <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
+    <link rel="preconnect" href="https://github.com" crossorigin />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,11 +80,15 @@ const { title = `${siteData.personal.name} — ${siteData.personal.role}`, descr
           <a href="/" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">Home</a>
           <a href="/about" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">About</a>
           <a href="/works" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">Work</a>
-          <a href="/contact" class="nav-link text-sm font-medium transition-colors hover:text-[#00C4CC]" style="color: var(--text-secondary)">Contact</a>
           <!-- Dark mode toggle -->
           <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
             <i class="fa-solid fa-moon"></i>
           </button>
+          <!-- Contact Me pill CTA -->
+          <a href="/contact" class="nav-contact-btn">
+            Contact Me
+            <span class="nav-contact-arrow"><i class="fa-solid fa-arrow-right text-xs"></i></span>
+          </a>
         </div>
         <div class="flex items-center gap-3 md:hidden">
           <button id="theme-toggle-mobile" class="theme-toggle" aria-label="Toggle dark mode">
@@ -124,17 +133,13 @@ const { title = `${siteData.personal.name} — ${siteData.personal.role}`, descr
             M<span class="text-[#00C4CC]">A</span>
           </a>
           <div class="flex justify-center gap-4 mb-6">
+            {siteData.social_links.map(link => (
+              <a href={link.url} class="social-icon magnetic-hover" style={`color: var(--text-muted)`} aria-label={link.platform} target="_blank" rel="noopener">
+                <i class={link.icon}></i>
+              </a>
+            ))}
             <a href={`mailto:${siteData.contact.email}`} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="Email">
               <i class="fa-solid fa-envelope"></i>
-            </a>
-            <a href={siteData.contact.instagram} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="Instagram">
-              <i class="fa-brands fa-instagram"></i>
-            </a>
-            <a href={siteData.contact.linkedin} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="LinkedIn">
-              <i class="fa-brands fa-linkedin-in"></i>
-            </a>
-            <a href={siteData.contact.behance} class="social-icon magnetic-hover" style="color: var(--text-muted)" aria-label="Behance">
-              <i class="fa-brands fa-behance"></i>
             </a>
           </div>
           <p class="text-sm" style="color: var(--text-muted)">&copy; {new Date().getFullYear()} {siteData.personal.name}. All rights reserved.</p>
