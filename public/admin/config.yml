@@ -29,7 +29,6 @@ media_library:
   config:
     cloud_name: di2chxi8o
     upload_preset: portofolio_upload
-    multiple: true
 
 collections:
   # ----------------------------------------------------------

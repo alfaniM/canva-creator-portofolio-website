@@ -1,17 +1,16 @@
 ---
 title: Family Gathering
 description: Family Gathering PT. Persada Cipta Usaha
-image:
-  - https://res.cloudinary.com/di2chxi8o/image/upload/v1773162504/Swana_Team_PT_Persada_Slide_2_uxumzg.png
+image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162504/Swana_Team_PT_Persada_Slide_2_uxumzg.png
 category: Swana Wedding Organizer
 order: 0
 gallery:
-  - - https://res.cloudinary.com/di2chxi8o/image/upload/v1773162508/3_bmxg1w.png
-  - - https://res.cloudinary.com/di2chxi8o/image/upload/v1773162507/4_ucakdb.png
-  - - https://res.cloudinary.com/di2chxi8o/image/upload/v1773162511/5_irsdwg.png
-  - - https://res.cloudinary.com/di2chxi8o/image/upload/v1773162513/6_jsphnt.png
-  - - https://res.cloudinary.com/di2chxi8o/image/upload/v1773162509/7_te3vna.png
-  - - https://res.cloudinary.com/di2chxi8o/image/upload/v1773162507/Swana_Team_Slide_3_wxzpn1.png
+  - image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162508/3_bmxg1w.png
+  - image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162507/4_ucakdb.png
+  - image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162511/5_irsdwg.png
+  - image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162513/6_jsphnt.png
+  - image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162509/7_te3vna.png
+  - image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773162507/Swana_Team_Slide_3_wxzpn1.png
 layout_template: bento
 ---
 ## Design Strategy: Family Gathering PT Persada Cipta Usaha
