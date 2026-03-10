@@ -27,9 +27,9 @@ public_folder: "/uploads"
 media_library:
   name: cloudinary
   config:
-    cloud_name: YOUR_CLOUD_NAME        # ← Replace this
-    upload_preset: YOUR_UPLOAD_PRESET  # ← Replace this (unsigned preset)
-    multiple: true                     # Allow selecting multiple images
+    cloud_name: di2chxi8o
+    upload_preset: portofolio_upload
+    multiple: true
 
 collections:
   # ----------------------------------------------------------
