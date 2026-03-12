@@ -4,7 +4,7 @@ description: Professional multi-page brochure layout for Hajj & Umrah travel
   packages, detailing itineraries and accommodations.
 image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773333599/Untitled_design_ck5ff7.png
 category: Elhaqq Tour & Travel
-canva_link: https://canva.com
+canva_link: https://www.canva.com/design/DAFck5NRcxQ/_qOw2PAGA4tHtKQFsrf04w/edit?utm_content=DAFck5NRcxQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 order: 5
 gallery:
   - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333242/1_ub9m2l.jpg
