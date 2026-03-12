@@ -70,7 +70,7 @@ const categories = ['All', ...Array.from(categorySet)];
     >
       {displayItems.map((item, idx) => (
         <a
-          href={`/works/${item.id || item.slug}`}
+          href={`/works/${(item.id || item.slug).replace(/\.md$/, '')}`}
           class="portfolio-card group block rounded-2xl overflow-hidden"
           data-category={item.data.category}
           style={`--i:${idx}`}
