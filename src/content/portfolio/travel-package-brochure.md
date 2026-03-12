@@ -11,7 +11,7 @@ gallery:
   - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333241/Umroh_Plus_Mesir_Turki_-_Ahla_svr8bs.jpg
   - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333240/Umroh_Akbar_Pak_Soleh_ydpjot.jpg
   - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333240/Pak_Soleh_2_k7qifk.jpg
-layout_template: side-by-side
+layout_template: bento
 ---
 ## Comprehensive Information Design
 
