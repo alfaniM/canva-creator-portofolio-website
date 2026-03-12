@@ -5,7 +5,6 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
   adapter: vercel(),
   vite: {
     plugins: [tailwindcss()]
@@ -31,7 +30,5 @@ export default defineConfig({
       { protocol: 'https', hostname: 'raw.githubusercontent.com' },
       { protocol: 'https', hostname: 'media.githubusercontent.com' },
     ],
-    // Default quality used by <Image /> when no quality prop is passed
-    defaultImageQuality: 80,
   },
 });
