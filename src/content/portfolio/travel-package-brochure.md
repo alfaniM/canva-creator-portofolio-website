@@ -13,19 +13,17 @@ gallery:
   - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333240/Pak_Soleh_2_k7qifk.jpg
 layout_template: side-by-side
 ---
-
 ## Comprehensive Information Design
 
 Brochures for travel agencies need to pack a tremendous amount of logistical information without overwhelming the reader.
 
 ### Structuring the Content
+
 We utilized a strict grid system to organize:
-- Day-by-day itineraries
-- Flight details
-- Hotel accommodations (Makkah & Madinah)
-- Pricing tiers
+
+* Day-by-day itineraries
+* Flight details
+* Hotel accommodations (Makkah & Madinah)
+* Pricing tiers
 
 By using distinct iconography for amenities (Wi-Fi, Meals, Transport), we reduced text clutter significantly.
-
-### The Final Output
-A **12-page premium booklet** on matte-finish paper — a tangible, high-quality guide for prospective pilgrims.
