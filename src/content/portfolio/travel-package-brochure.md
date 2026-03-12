@@ -1,18 +1,17 @@
-﻿---
-title: "Travel Package Brochure"
-description: "Professional multi-page brochure layout for Hajj & Umrah travel packages, detailing itineraries and accommodations."
-image: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1470&auto=format&fit=crop"
-category: "Elhaqq Tour & Travel"
-canva_link: "https://canva.com"
+---
+title: Travel Package Brochure
+description: Professional multi-page brochure layout for Hajj & Umrah travel
+  packages, detailing itineraries and accommodations.
+image: https://res.cloudinary.com/di2chxi8o/image/upload/v1773333599/Untitled_design_ck5ff7.png
+category: Elhaqq Tour & Travel
+canva_link: https://canva.com
 order: 5
-layout_template: "bento"
 gallery:
-  - "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1469&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1469&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1470&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1482849297070-f4fae2173efe?q=80&w=1527&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1470&auto=format&fit=crop"
-  - "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1469&auto=format&fit=crop"
+  - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333242/1_ub9m2l.jpg
+  - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333241/Umroh_Plus_Mesir_Turki_-_Ahla_svr8bs.jpg
+  - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333240/Umroh_Akbar_Pak_Soleh_ydpjot.jpg
+  - https://res.cloudinary.com/di2chxi8o/image/upload/v1773333240/Pak_Soleh_2_k7qifk.jpg
+layout_template: basic
 ---
 
 ## Comprehensive Information Design
