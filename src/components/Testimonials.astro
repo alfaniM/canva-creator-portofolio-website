@@ -34,7 +34,11 @@ const { testimonials } = siteData;
           <!-- Author -->
           <div class="testimonial-author">
             <div class="author-avatar">
-              {t.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+              {t.photo ? (
+                <img src={t.photo} alt={`${t.name}'s profile picture`} class="w-full h-full object-cover rounded-full" />
+              ) : (
+                t.name.split(' ').map(n => n[0]).join('').slice(0, 2)
+              )}
             </div>
             <div>
               <p class="author-name">{t.name}</p>
